@@ -161,6 +161,7 @@ public class CalculatorApp extends JFrame {
 		btnDot.addActionListener(new BtnHandler());
 	}
 
+	
 		//메소드 안에 변수를 선언하면 지역변수이기 때문에 블럭을 나가면 초기화 된다.
 		//Q: 독립적으로 된다면 왜 각 버튼사이에는 문제없이 적용되는가?
 	public class BtnHandler implements ActionListener{
@@ -187,6 +188,7 @@ public class CalculatorApp extends JFrame {
 			}
 			*/
 			
+			// Number, Arithmetic Operator, initial function
 			String actionCommand = e.getActionCommand();
 			
 			switch(actionCommand) {
@@ -209,7 +211,35 @@ public class CalculatorApp extends JFrame {
 			case "0": output+="0"; label.setText(output); break;
 			}
 			
+			if(actionCommand == "<") {
+				if(output.length()==1) {
+					output="";
+					label.setText("0");
+				}
+				if(label.getText() == "0") {
+					return;
+				} else {
+					output = output.substring(0, output.length()-1);
+					label.setText(output);
+				}
+				return;
+			}	
 			
+			//not working
+			if(actionCommand == "+/-") {
+				if(Integer.parseInt(label.getText())==0) return;
+				if(Integer.parseInt(label.getText())>0) {
+					output = "-"+output;
+					label.setText(output);
+				} 
+				if(Integer.parseInt(label.getText())<0) {
+					output = output.substring(1);
+					label.setText(output);
+				}
+				return;
+			}
+			
+			/*  Ver: 2 
 			int preNum, postNum;
 			if(actionCommand == "=") {
 				if(output.indexOf("-") != -1) {
@@ -233,36 +263,51 @@ public class CalculatorApp extends JFrame {
 					output = Integer.toString(preNum/postNum);
 				}
 				label.setText(output);
+				return;
 			}
+			*/
 			
-			/*
-			String[] tempA;
-			int preNum, postNum;
-			if(eventSource == btnEqual) {
+			
+			/**
+			 * [문제점 1.]
+			 * Exception 발생 이유: break; 없이 연산자배열 operA[]에 대한
+			 * for문을 끝까지 진행하여 operator 및 인덱스가 '/' 에 고정되다시피함.
+			 *  
+			 * [문제점 2.]
+			 * switch ~ case 문에서 조건에 맞는 명령을 수행하면 break;를 통해
+			 * 빠져 나가야하는데 break;를 생략하여 case "oper"이후의 명령을 다 수행함. 
+			 */
+
+			// Ver: 1 연산(+-*)에 대해서 StringIndexOutOfBoundsException 발생
+			
+			if(actionCommand == "=") {
 				
-				tempA = new String[]{"+","-","x","/"};
+				String[] operA = new String[]{"+","-","x","/"};
 				int index=-1;
-				for(int i=0; i<tempA.length; i++) {
-					index= output.indexOf(tempA[i]);
-					oper=tempA[i];
+				for(int i=0; i<operA.length; i++) {
+					index= output.lastIndexOf(operA[i]);
+					if(index != -1) break;
 				}
 				
-				preNum=Integer.parseInt(output.substring(0, index));
-				postNum=Integer.parseInt(output.substring(index+1));
+				int num1=Integer.parseInt(output.substring(0, index));
+				String oper = output.substring(index, index+1);
+				int num2=Integer.parseInt(output.substring(index+1));
 				
 				switch (oper) {
 				case "+":
-					output = Integer.toString(preNum+postNum);
+					output = (num1+num2)+""; break;
 				case "-":
-					output = Integer.toString(preNum-postNum);
-				case "*":
-					output = Integer.toString(preNum*postNum);
+					output = (num1-num2)+""; break;
+				case "x":
+					output = (num1*num2)+""; break;
 				case "/":
-					output = Integer.toString(preNum/postNum);
+					output = (num1/num2)+""; break;
 				}
 				label.setText(output);
+				if(output=="0") output="";
+				return;
 			}
-			*/
+			//
 		
 				
 			

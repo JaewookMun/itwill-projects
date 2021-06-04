@@ -34,7 +34,7 @@ public class LoginPanel extends JPanel {
 	public LoginPanel() {
 		super();
 		loginImage = new ImageIcon(getClass().getResource("/images/login.jpg")).getImage();
-		setSize(mainFrame.DEFAULT_WIDTH, mainFrame.DEFAULT_HEIGHT);
+		setSize(ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT);
 		setLayout(null);
 		
 		
@@ -103,7 +103,7 @@ public class LoginPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
-					mainFrame.isLogOn = true;
+					ERPsysApp.isLogOn = true;
 					setVisible(false);
 				} else if(idField.getText()== null || pwField.getText()== null ){
 					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
@@ -118,7 +118,7 @@ public class LoginPanel extends JPanel {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
-		g.drawImage(loginImage, 0, 0, mainFrame.DEFAULT_WIDTH, mainFrame.DEFAULT_HEIGHT, this);
+		g.drawImage(loginImage, 0, 0, ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT, this);
 	
 	}
 }

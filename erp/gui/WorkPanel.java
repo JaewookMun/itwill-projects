@@ -21,7 +21,7 @@ public class WorkPanel extends JPanel {
 	public WorkPanel() {
 		super();
 		
-		setSize(mainFrame.DEFAULT_WIDTH, mainFrame.DEFAULT_HEIGHT);
+		setSize(ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT);
 		setLayout(new BorderLayout());
 		
 		

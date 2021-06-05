@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,7 +27,8 @@ public class LoginPanel extends JPanel {
 	private Image loginImage;
 	
 	private String adminId = "admin";
-	private String adminPw = "a1234";
+	private String adminPw = "admin12";
+	
 	
 	private JTextField idField;
 	private JPasswordField pwField;
@@ -58,7 +61,7 @@ public class LoginPanel extends JPanel {
 		
 		JLabel loginLogo = new JLabel("Log-in");
 		loginLogo.setForeground(SystemColor.textHighlight);
-		loginLogo.setFont(new Font("Gill Sans MT", Font.PLAIN, 50));
+		loginLogo.setFont(new Font("Arial", Font.BOLD, 50));
 		loginLogo.setBounds(837, 122, 178, 63);
 		add(loginLogo);
 		
@@ -97,15 +100,17 @@ public class LoginPanel extends JPanel {
 		add(loginBtn);
 
 		
+		idField.addKeyListener(new KeyEventHandler());
+		pwField.addKeyListener(new KeyEventHandler());
+		
 		loginBtn.addActionListener(new ActionListener() {
-			
 			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
 					ERPsysApp.isLogOn = true;
 					setVisible(false);
-				} else if(idField.getText()== null || pwField.getText()== null ){
+				} else if(idField.getText()== null && pwField.getText()== null ){
 					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(null, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", "에러", JOptionPane.ERROR_MESSAGE);
@@ -116,9 +121,28 @@ public class LoginPanel extends JPanel {
 		setVisible(true);
 	}
 	
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.drawImage(loginImage, 0, 0, ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT, this);
-	
 	}
+	
+	public class KeyEventHandler extends KeyAdapter {
+		@SuppressWarnings("deprecation")
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
+					ERPsysApp.isLogOn = true;
+					setVisible(false);
+
+				} else if(idField.getText() == "" && pwField.getText() == "" ){
+					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", "에러", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+	}
+	
 }

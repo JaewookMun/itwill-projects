@@ -22,8 +22,8 @@ public class ERPsysApp extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		isLogOn=false;
 		
-		logPanel = new LoginPanel();
 		workPanel = new WorkPanel();
+		logPanel = new LoginPanel();
 		getContentPane().add(workPanel);
 		getContentPane().add(logPanel);
 		workPanel.setVisible(isLogOn);
@@ -42,11 +42,12 @@ public class ERPsysApp extends JFrame {
 			while(true) {
 				if(isLogOn==true) {
 					workPanel.setVisible(true);
+					setContentPane(workPanel);
 					//setResizable(true);
 					break;
 				}
 				//Question ? WHY?? 위에서도 repaint()를 사용하는데 왜 아래에 없으면 안되는가?
-				workPanel.repaint();
+				repaint();
 			}
 		}
 	}

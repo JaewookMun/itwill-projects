@@ -1,8 +1,9 @@
 package erp.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,16 +18,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 public class WorkPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JButton logoutBtn, infoBtn, exitBtn;
-	private JButton register, update;
-	private JButton readBtn;
+	
 	private JPanel westPanel;
+	private JButton registerBtn, update;
+	
+	private JButton saveBtn, uploadBtn;
+	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6;
+	
 	
 	
 	public WorkPanel() {
@@ -36,17 +41,16 @@ public class WorkPanel extends JPanel {
 		setLayout(new BorderLayout());
 		
 		
-		//[tool bar]
+		//[tool bar] - 기본배경색 Color(240,240,240) 
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
-		toolbar.setBackground(new Color(240,240,240));
+		toolbar.setBackground(UIManager.getColor("ToolBar.highlight"));
 		
 		infoBtn = new JButton("정보");
 		logoutBtn=new JButton("로그아웃");
 		exitBtn = new JButton("종료");
 		
 		JLabel title = new JLabel("재고관리 시스템");
-		title.setVerticalAlignment(SwingConstants.BOTTOM);
 		title.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 15));
 		
 		/*
@@ -64,36 +68,126 @@ public class WorkPanel extends JPanel {
 		toolbar.add(logoutBtn);
 		toolbar.addSeparator();
 		toolbar.add(exitBtn);
-		for(int i=0; i<95; i++) {
-			toolbar.addSeparator();
-		}
-		toolbar.add(title);
 		
+			for(int i=0; i<96; i++) {
+				toolbar.addSeparator();
+			}
+			
+		toolbar.add(title);
 		add(toolbar, BorderLayout.NORTH);
+		
+
+		
+		/**  [메인화면 - 좌우분할]
+		 *   좌측 : 메뉴바  /  우측 : 메인기능 
+		 */
 		
 		JSplitPane split1st = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		
 		
 		westPanel = new JPanel();
-		
 		JLabel list = new JLabel("목록");
-		register=new JButton("제품등록");
+		registerBtn=new JButton("제품등록");
+		JLabel blankLbl = new JLabel(" ");
 		update=new JButton("정보변경");
 		
 		list.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		//register.setBorder(new EmptyBorder);
 		
 		westPanel.add(list);
-		westPanel.add(register);
+		westPanel.add(registerBtn);
+		westPanel.add(blankLbl);
 		westPanel.add(update);
 		
 		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
 		westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		
-		add(westPanel, BorderLayout.WEST);
+		/**
+		 *  [JPanels for Inventory Register]
+		 *  
+		 *  register tab : JSplitPane으로 상하분할
+		 *  
+		 *  상부 : inputPanel
+		 *  	- gridPanel
+		 *            in six regSubPanel
+		 *  		- JLabel1 & JTextField1  (regLabel1 & regField1)
+		 *  		-    ...
+		 *  		- JLabel6 & JTextField6  (regLabel6 & regField6)
+		 *  	
+		 *  
+		 *  하부 : tablePane
+		 */
+		
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.setFont(new Font("Arial", Font.PLAIN, 14));
+		
+		//CRUD - 상하분할
+		JSplitPane split2nd = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		
+		JPanel inputPanel = new JPanel();
+		JPanel regSubPanel1, regSubPanel2, regSubPanel3, regSubPanel4, regSubPanel5, regSubPanel6;
+		JPanel gridPanel = new JPanel(new GridLayout(2, 0));
 		
 		
+		JLabel regLabel1, regLabel2, regLabel3, regLabel4, regLabel5, regLabel6;
 		
+		
+		regSubPanel1=new JPanel();
+		regSubPanel2=new JPanel();
+		regSubPanel3=new JPanel();
+		regSubPanel4=new JPanel();
+		regSubPanel5=new JPanel();
+		regSubPanel6=new JPanel();
+		
+		//
+		regLabel1 = new JLabel("제품명 :");
+		regLabel2 = new JLabel("제품코드 :");
+		regLabel3 = new JLabel("Lot No :");
+		regLabel4 = new JLabel("수량 :");
+		regLabel5 = new JLabel("생산일자 :");
+		regLabel6 = new JLabel("만료일자 :");
+
+		regFieldC1 = new JTextField(15);
+		regFieldC2 = new JTextField(15);
+		regFieldC3 = new JTextField(15);
+		regFieldC4 = new JTextField(15);
+		regFieldC5 = new JTextField(15);
+		regFieldC6 = new JTextField(15);
+		
+		saveBtn = new JButton("저장");
+		uploadBtn = new JButton("업로드");
+		
+		regSubPanel1.add(regLabel1);
+		regSubPanel1.add(regFieldC1);
+		
+		regSubPanel2.add(regLabel2);
+		regSubPanel2.add(regFieldC2);
+
+		regSubPanel3.add(regLabel3);
+		regSubPanel3.add(regFieldC3);
+		
+		regSubPanel4.add(regLabel4);
+		regSubPanel4.add(regFieldC4);
+		
+		regSubPanel5.add(regLabel5);
+		regSubPanel5.add(regFieldC5);
+		
+		regSubPanel6.add(regLabel6);
+		regSubPanel6.add(regFieldC6);
+		
+		gridPanel.add(regSubPanel1);
+		gridPanel.add(regSubPanel2);
+		gridPanel.add(regSubPanel3);
+		gridPanel.add(regSubPanel4);
+		gridPanel.add(regSubPanel5);
+		gridPanel.add(regSubPanel6);
+		
+		inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+		inputPanel.add(gridPanel);
+		inputPanel.add(saveBtn);
+		inputPanel.add(uploadBtn);
+				
 		
 		/*
 		 * 프로젝트 진행을 위한 임시정의 
@@ -110,98 +204,97 @@ public class WorkPanel extends JPanel {
 		 *     	   >>  S20201016R1
 		 */
 		
-		JTabbedPane tabs = new JTabbedPane();
+		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
 		
-		
-		JSplitPane split2nd = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		
-		JPanel inputPanel = new JPanel();
-		JPanel[] conPanels = new JPanel[3];
-		
-		for(int i=0; i<conPanels.length; i++) {
-			conPanels[i]=new JPanel();
-		}
-		
-		String[] columns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		
-		String[][] rows = {
+		String[][] regRows = {
+				{"","","","","",""}
 				// JTable을 위한 임시데이터
+				/*
 				{"예) Camera-R30","R3067","S20201016R1","200","20201016","20301015"},
 				{"Battery-T21","T2166","S20210314T2","150","20210314","20310313"},
 				{"Board-D40","D4066","A20191223D2","300","20191223","20341222"},
 				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
 				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
 				{"Fabric-C18","C1870","A20210421C2","600","20210421","20360420"}
+				*/
 		};
 		
-		DefaultTableModel tableData = new DefaultTableModel(rows, columns);
-		JScrollPane tablePane = new JScrollPane(new JTable(tableData));
-		
-		
-		//
-		JLabel pName = new JLabel("제품명 :");
-		JTextField nameFd = new JTextField(10);
-		JLabel pCode = new JLabel("제품코드 :");
-		JTextField codeFd = new JTextField(10);
-		JLabel lotNo = new JLabel("Lot No :");
-		JTextField lotFd = new JTextField(10);
-		
-		JLabel qty = new JLabel("수량 :");
-		JTextField qtyFd = new JTextField(10);
-		JLabel mfgDate = new JLabel("생산일자 :");
-		JTextField mDateFd = new JTextField(10);
-		JLabel exDate = new JLabel("만료일자 :");
-		JTextField exDateFd = new JTextField(10);
-		
-		readBtn = new JButton("조회");
-		
-		
-		
-		conPanels[0].add(pName);
-		conPanels[0].add(nameFd);
-		conPanels[0].add(pCode);
-		conPanels[0].add(codeFd);
-		conPanels[0].add(lotNo);
-		conPanels[0].add(lotFd);
-		
-		conPanels[1].add(qty);
-		conPanels[1].add(qtyFd);
-		conPanels[1].add(mfgDate);
-		conPanels[1].add(mDateFd);
-		conPanels[1].add(exDate);
-		conPanels[1].add(exDateFd);
-		
-		conPanels[2].add(readBtn);
-		
-		inputPanel.setLayout(new BorderLayout());
-		inputPanel.add(conPanels[0], BorderLayout.NORTH);
-		inputPanel.add(conPanels[1], BorderLayout.CENTER);
-		inputPanel.add(conPanels[2], BorderLayout.SOUTH);
-		
-		
-		/*
-		inputPanel.add(pName);
-		inputPanel.add(nameFd);
-		inputPanel.add(pCode);
-		inputPanel.add(codeFd);
-		inputPanel.add(lotNo);
-		inputPanel.add(lotFd);
-		inputPanel.add(qty);
-		inputPanel.add(qtyFd);
-		inputPanel.add(mfgDate);
-		inputPanel.add(mDateFd);
-		inputPanel.add(exDate);
-		inputPanel.add(exDateFd);
-		inputPanel.add(readBtn);
-		*/
+		DefaultTableModel regTableData = new DefaultTableModel(regRows, regColumns);
+		JScrollPane regTablePane = new JScrollPane(new JTable(regTableData));
 		
 		split2nd.setTopComponent(inputPanel);
-		split2nd.setBottomComponent(tablePane);
+		split2nd.setBottomComponent(regTablePane);
 		split2nd.setDividerSize(8);
-				
+		split2nd.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 		
-		tabs.addTab("create", split2nd);
-		tabs.addTab("read", new JLabel());
+		
+		
+		/**
+		 *   [Panels for Inventory Search, Update and Delete]
+		 *   
+		 *   패널 3개로 상중하 분할
+		 *   
+		 *   (상부)
+		 *    검색기능 컴포넌트 배치 패널
+		 *   
+		 *   (중부)
+		 *	  table
+		 *   
+		 *   (하부)
+		 *    수정기능 컴포넌트 배치 패널
+		 *   
+		 */
+		
+		JPanel readPanel = new JPanel(new BorderLayout(0, 15));
+		readPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+		
+		JPanel rTopPanel = new JPanel();
+		
+		//JPanel rBotPanel = new JPanel();
+		
+		//Top
+		
+		JLabel readLabel1, readLabel2, readLabel3;
+		JTextField readField1, readField2, readField3;
+		
+		
+		readLabel1=new JLabel("제품명");
+		readLabel2=new JLabel("제품코드");
+		readLabel3=new JLabel("Lot No");
+		
+		readField1=new JTextField(15);
+		readField2=new JTextField(15);
+		readField3=new JTextField(15);
+		
+		rTopPanel.add(readLabel1);
+		rTopPanel.add(readField1);
+		rTopPanel.add(readLabel2);
+		rTopPanel.add(readField2);
+		rTopPanel.add(readLabel3);
+		rTopPanel.add(readField3);
+		
+		readPanel.add(rTopPanel, BorderLayout.NORTH);
+		
+		// 중앙 테이블
+		String[] readColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
+		
+		String[][] readRows = {
+				{"","","","","",""}
+		};
+		
+		DefaultTableModel readTableData = new DefaultTableModel(readRows, readColumns);
+		JScrollPane readTablePane = new JScrollPane(new JTable(readTableData));
+		
+		readPanel.add(readTablePane, BorderLayout.CENTER);
+		
+		// Bottom
+		
+		
+		
+		
+		// 전체탭 관리
+		tabs.addTab("register", split2nd);
+		tabs.addTab("read", readPanel);
 		tabs.addTab("update", new JLabel());
 		tabs.addTab("delete", new JLabel());
 		
@@ -210,7 +303,7 @@ public class WorkPanel extends JPanel {
 		tabs.setEnabledAt(2, false);
 		tabs.setEnabledAt(3, false);
 		//index번호로 JTabbedpane의 활성화 창 선택
-		tabs.setSelectedIndex(0);
+		tabs.setSelectedIndex(1);
 		
 		split1st.setLeftComponent(westPanel);
 		split1st.setRightComponent(tabs);

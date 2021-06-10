@@ -1,6 +1,7 @@
 package erp.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -11,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -29,9 +31,9 @@ public class WorkPanel extends JPanel {
 	private JPanel westPanel;
 	private JButton registerBtn, update;
 	
-	private JButton saveBtn, uploadBtn;
+	private JButton addBtn, removeBtn, saveBtn, uploadBtn;
 	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6;
-	
+	private JButton searchBtn;
 	
 	
 	public WorkPanel() {
@@ -47,8 +49,14 @@ public class WorkPanel extends JPanel {
 		toolbar.setBackground(UIManager.getColor("ToolBar.highlight"));
 		
 		infoBtn = new JButton("정보");
+		infoBtn.setFocusPainted(false);
+
 		logoutBtn=new JButton("로그아웃");
+		logoutBtn.setFocusPainted(false);
+
 		exitBtn = new JButton("종료");
+		exitBtn.setFocusPainted(false);
+
 		
 		JLabel title = new JLabel("재고관리 시스템");
 		title.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 15));
@@ -122,6 +130,7 @@ public class WorkPanel extends JPanel {
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.setFont(new Font("Arial", Font.PLAIN, 14));
 		
+		
 		//CRUD - 상하분할
 		JSplitPane split2nd = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		
@@ -147,7 +156,8 @@ public class WorkPanel extends JPanel {
 		regLabel4 = new JLabel("수량 :");
 		regLabel5 = new JLabel("생산일자 :");
 		regLabel6 = new JLabel("만료일자 :");
-
+		
+		
 		regFieldC1 = new JTextField(15);
 		regFieldC2 = new JTextField(15);
 		regFieldC3 = new JTextField(15);
@@ -155,8 +165,18 @@ public class WorkPanel extends JPanel {
 		regFieldC5 = new JTextField(15);
 		regFieldC6 = new JTextField(15);
 		
+		//더 효율적인 방법이 존재할 것 같은데 잘 모르겠음..
+		JTextField[] regFdArr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6};
+		
+		addBtn = new JButton("추가");
+		removeBtn = new JButton("제거");
 		saveBtn = new JButton("저장");
 		uploadBtn = new JButton("업로드");
+		
+		addBtn.setFocusPainted(false);
+		removeBtn.setFocusPainted(false);
+		saveBtn.setFocusPainted(false);
+		uploadBtn.setFocusPainted(false);
 		
 		regSubPanel1.add(regLabel1);
 		regSubPanel1.add(regFieldC1);
@@ -185,6 +205,8 @@ public class WorkPanel extends JPanel {
 		
 		inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
 		inputPanel.add(gridPanel);
+		inputPanel.add(addBtn);
+		inputPanel.add(removeBtn);
 		inputPanel.add(saveBtn);
 		inputPanel.add(uploadBtn);
 				
@@ -204,10 +226,14 @@ public class WorkPanel extends JPanel {
 		 *     	   >>  S20201016R1
 		 */
 		
+		//
 		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
 		
-		String[][] regRows = {
-				{"","","","","",""}
+		String[][] regRows = new String[0][6]; 
+		/*	
+		{
+				
+			    //{"","","","","",""}
 				// JTable을 위한 임시데이터
 				/*
 				{"예) Camera-R30","R3067","S20201016R1","200","20201016","20301015"},
@@ -216,8 +242,9 @@ public class WorkPanel extends JPanel {
 				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
 				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
 				{"Fabric-C18","C1870","A20210421C2","600","20210421","20360420"}
-				*/
+				//
 		};
+		*/
 		
 		DefaultTableModel regTableData = new DefaultTableModel(regRows, regColumns);
 		JScrollPane regTablePane = new JScrollPane(new JTable(regTableData));
@@ -266,12 +293,18 @@ public class WorkPanel extends JPanel {
 		readField2=new JTextField(15);
 		readField3=new JTextField(15);
 		
+		searchBtn=new JButton("검색");
+		searchBtn.setFocusPainted(false);
+		
+		
 		rTopPanel.add(readLabel1);
 		rTopPanel.add(readField1);
 		rTopPanel.add(readLabel2);
 		rTopPanel.add(readField2);
 		rTopPanel.add(readLabel3);
 		rTopPanel.add(readField3);
+		
+		rTopPanel.add(searchBtn);
 		
 		readPanel.add(rTopPanel, BorderLayout.NORTH);
 		
@@ -298,17 +331,44 @@ public class WorkPanel extends JPanel {
 		tabs.addTab("update", new JLabel());
 		tabs.addTab("delete", new JLabel());
 		
+		JPanel tab1 = new JPanel();
+		JLabel lbTab1 = new JLabel("register ");
+		JButton exit1 = new JButton("x");
+		exit1.setSize(5, 5);
+		exit1.setBackground(null);
+		exit1.setBorderPainted(false);
+		exit1.setBorder(null);
+		exit1.setForeground(Color.GRAY);
+		exit1.setAlignmentY(TOP_ALIGNMENT);
+		tab1.add(lbTab1);
+		tab1.add(exit1);
+		tab1.setOpaque(false);
+		
+		tabs.setTabComponentAt(0, tab1);
+		tabs.setBackgroundAt(0, Color.WHITE);
+		
+		
 		
 		//tab에 대한 접근여부 설정
 		tabs.setEnabledAt(2, false);
 		tabs.setEnabledAt(3, false);
 		//index번호로 JTabbedpane의 활성화 창 선택
-		tabs.setSelectedIndex(1);
+		tabs.setSelectedIndex(0);
 		
 		split1st.setLeftComponent(westPanel);
 		split1st.setRightComponent(tabs);
 		split1st.setDividerSize(5);
 		add(split1st, BorderLayout.CENTER);
+
+		
+		/**
+		 *  [이벤트 핸들러] - ( ) : 구현 예정
+		 *  JToolbar func k : (info), logout, exit
+		 *  westPanel func k
+		 *  inputPanel func k : add, remove, (save), (update)
+		 *  
+		 */
+		
 		
 		logoutBtn.addActionListener(new ActionListener() {
 			
@@ -326,6 +386,51 @@ public class WorkPanel extends JPanel {
 			}
 			
 		});
+		
+		// regFdarr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6}
+		// regFieldC1.getText(), regFieldC2.getText(), regFieldC3.getText(), regFieldC4.getText(), regFieldC5.getText(), regFieldC6.getText()
+		addBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(regFdArr[0].getText().equals("")
+						&& regFdArr[1].getText().equals("")
+						&& regFdArr[2].getText().equals("")
+						&& regFdArr[3].getText().equals("")
+						&& regFdArr[4].getText().equals("")
+						&& regFdArr[5].getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+
+					Object[] regValues= new Object[regFdArr.length];
+					for(int i=0; i<regFdArr.length; i++) {
+						regValues[i]=regFdArr[i].getText();
+					}
+					regTableData.addRow(regValues);
+				}
+			}
+		});
+		
+
+		//int row = regTableData.getRowCount();
+		//regTableData.removeRow(row-1);
+		removeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(regTableData.getRowCount()==0) return;
+				regTableData.removeRow(regTableData.getRowCount()-1);
+				
+			}
+		});
+		
+		/*
+		String[][] regRows = {
+				{"","","","","",""}
+				// JTable을 위한 임시데이터
+				/*
+				{"예) Camera-R30","R3067","S20201016R1","200","20201016","20301015"},
+		};
+		 */
 		
 		
 	}

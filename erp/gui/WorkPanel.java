@@ -417,9 +417,12 @@ public class WorkPanel extends JPanel {
 		removeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(regTableData.getRowCount()==0) return;
-				regTableData.removeRow(regTableData.getRowCount()-1);
-				
+				if(regTableData.getRowCount()==0) {
+					JOptionPane.showMessageDialog(null, "[에러] 제거할 수 있는 항목이 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					regTableData.removeRow(regTableData.getRowCount()-1);
+				}
 			}
 		});
 		

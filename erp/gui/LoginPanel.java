@@ -110,6 +110,7 @@ public class LoginPanel extends JPanel {
 				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
 					ERPsysApp.isLogOn = true;
 					setVisible(false);
+					JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
 				} else if(idField.getText()== null && pwField.getText()== null ){
 					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
 				} else {
@@ -135,6 +136,7 @@ public class LoginPanel extends JPanel {
 				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
 					ERPsysApp.isLogOn = true;
 					setVisible(false);
+					JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
 
 				} else if(idField.getText() == "" && pwField.getText() == "" ){
 					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);

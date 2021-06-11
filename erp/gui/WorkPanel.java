@@ -31,11 +31,12 @@ public class WorkPanel extends JPanel {
 	private JPanel westPanel;
 	private JButton registerBtn, update;
 	
-	private JButton addBtn, removeBtn, saveBtn, uploadBtn;
+	private JButton addBtn, removeBtn, saveBtn;
 	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6;
 	private JButton searchBtn;
 	
 	
+	@SuppressWarnings("serial")
 	public WorkPanel() {
 		super();
 		
@@ -157,7 +158,6 @@ public class WorkPanel extends JPanel {
 		regLabel5 = new JLabel("생산일자 :");
 		regLabel6 = new JLabel("만료일자 :");
 		
-		
 		regFieldC1 = new JTextField(15);
 		regFieldC2 = new JTextField(15);
 		regFieldC3 = new JTextField(15);
@@ -168,15 +168,13 @@ public class WorkPanel extends JPanel {
 		//더 효율적인 방법이 존재할 것 같은데 잘 모르겠음..
 		JTextField[] regFdArr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6};
 		
-		addBtn = new JButton("추가");
+		addBtn = new JButton("등록");
 		removeBtn = new JButton("제거");
 		saveBtn = new JButton("저장");
-		uploadBtn = new JButton("업로드");
 		
 		addBtn.setFocusPainted(false);
 		removeBtn.setFocusPainted(false);
 		saveBtn.setFocusPainted(false);
-		uploadBtn.setFocusPainted(false);
 		
 		regSubPanel1.add(regLabel1);
 		regSubPanel1.add(regFieldC1);
@@ -208,7 +206,6 @@ public class WorkPanel extends JPanel {
 		inputPanel.add(addBtn);
 		inputPanel.add(removeBtn);
 		inputPanel.add(saveBtn);
-		inputPanel.add(uploadBtn);
 				
 		
 		/*
@@ -226,28 +223,27 @@ public class WorkPanel extends JPanel {
 		 *     	   >>  S20201016R1
 		 */
 		
-		//
+		
 		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		
 		String[][] regRows = new String[0][6]; 
-		/*	
-		{
-				
-			    //{"","","","","",""}
-				// JTable을 위한 임시데이터
-				/*
-				{"예) Camera-R30","R3067","S20201016R1","200","20201016","20301015"},
-				{"Battery-T21","T2166","S20210314T2","150","20210314","20310313"},
-				{"Board-D40","D4066","A20191223D2","300","20191223","20341222"},
-				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
-				{"Sponge-G80","G8083","A20191130G1","400","20191130","20341129"},
-				{"Fabric-C18","C1870","A20210421C2","600","20210421","20360420"}
-				//
-		};
-		*/
 		
-		DefaultTableModel regTableData = new DefaultTableModel(regRows, regColumns);
-		JScrollPane regTablePane = new JScrollPane(new JTable(regTableData));
+		JScrollPane regTablePane;
+		JTable regTable;
+		DefaultTableModel regTableData;
+		
+		regTableData = new DefaultTableModel(regRows, regColumns) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		regTable = new JTable(regTableData);
+		regTable.getTableHeader().setReorderingAllowed(false);
+		regTable.getTableHeader().setResizingAllowed(false);
+		
+		regTablePane = new JScrollPane(regTable);
 		
 		split2nd.setTopComponent(inputPanel);
 		split2nd.setBottomComponent(regTablePane);
@@ -310,13 +306,27 @@ public class WorkPanel extends JPanel {
 		
 		// 중앙 테이블
 		String[] readColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		
 		String[][] readRows = {
 				{"","","","","",""}
 		};
 		
-		DefaultTableModel readTableData = new DefaultTableModel(readRows, readColumns);
-		JScrollPane readTablePane = new JScrollPane(new JTable(readTableData));
+		JScrollPane readTablePane;
+		JTable readTable;
+		DefaultTableModel readTableData;
+		
+		readTableData = new DefaultTableModel(readRows, readColumns) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		
+		readTable=new JTable(readTableData);
+		readTable.getTableHeader().setReorderingAllowed(false);
+		readTable.getTableHeader().setResizingAllowed(false);
+		
+		readTablePane = new JScrollPane(readTable);
 		
 		readPanel.add(readTablePane, BorderLayout.CENTER);
 		
@@ -375,6 +385,7 @@ public class WorkPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ERPsysApp("Margin - Inventory Management System");
+				
 			}
 		});
 
@@ -423,6 +434,14 @@ public class WorkPanel extends JPanel {
 				} else {
 					regTableData.removeRow(regTableData.getRowCount()-1);
 				}
+			}
+		});
+		
+		saveBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showOptionDialog(null, "입력된 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
+					, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 			}
 		});
 		

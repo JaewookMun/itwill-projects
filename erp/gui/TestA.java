@@ -34,7 +34,7 @@ public class TestA extends JFrame {
 		setLocationRelativeTo(null);
 		JPanel workPanel = new WorkPanel();
 		setContentPane(workPanel);
-		
+		setResizable(false);
 		
 		setVisible(true);
 	}

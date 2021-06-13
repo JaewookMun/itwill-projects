@@ -33,7 +33,6 @@ public class ERPsysApp extends JFrame {
 		
 		IsLogging logThread = new IsLogging();
 		logThread.start();
-		
 	}
 	
 	public class IsLogging extends Thread {

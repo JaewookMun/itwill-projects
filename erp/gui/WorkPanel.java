@@ -7,10 +7,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,8 +21,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import erp.data.Inventory;
+import erp.data.TempInven;
 
 public class WorkPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -29,11 +35,19 @@ public class WorkPanel extends JPanel {
 	private JButton logoutBtn, infoBtn, exitBtn;
 	
 	private JPanel westPanel;
-	private JButton registerBtn, update;
+	private DefaultMutableTreeNode registration, readNupdate;
 	
+	private String[] products= {"============","Camera-R30", "Battery-T21", "Board-D40", "Sponge-G80", "Fabric-C18"};
+	private JComboBox<String> regComBox;
+	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5;
 	private JButton addBtn, removeBtn, saveBtn;
-	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6;
-	private JButton searchBtn;
+	
+	
+	private JComboBox<String> readComBox;
+	private JTextField readField;
+	private JButton searchBtn, deleteBtn;
+	
+	private JButton tabX1, tabX2;
 	
 	
 	@SuppressWarnings("serial")
@@ -94,22 +108,21 @@ public class WorkPanel extends JPanel {
 		JSplitPane split1st = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		
 		
-		westPanel = new JPanel();
-		JLabel list = new JLabel("목록");
-		registerBtn=new JButton("제품등록");
-		JLabel blankLbl = new JLabel(" ");
-		update=new JButton("정보변경");
+		westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JTree jTree;
+		DefaultMutableTreeNode treeList = new DefaultMutableTreeNode("재고관리");
 		
-		list.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		//register.setBorder(new EmptyBorder);
+		registration = new DefaultMutableTreeNode("재고등록");
+		readNupdate = new DefaultMutableTreeNode("재고조회/변경");
 		
-		westPanel.add(list);
-		westPanel.add(registerBtn);
-		westPanel.add(blankLbl);
-		westPanel.add(update);
+		treeList.add(registration);
+		treeList.add(readNupdate);
 		
-		westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
-		westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		jTree = new JTree(treeList);
+		jTree.setOpaque(false);
+		
+		westPanel.add(jTree);
+		westPanel.setBackground(null);
 		
 		
 		/**
@@ -158,15 +171,19 @@ public class WorkPanel extends JPanel {
 		regLabel5 = new JLabel("생산일자 :");
 		regLabel6 = new JLabel("만료일자 :");
 		
+		//regFieldC1 = new JTextField(15);
+		regComBox = new JComboBox<String>(products);
+		regComBox.setBackground(Color.WHITE);
 		regFieldC1 = new JTextField(15);
+		regFieldC1.setFocusable(false);
+		regFieldC1.setBackground(null);
 		regFieldC2 = new JTextField(15);
 		regFieldC3 = new JTextField(15);
 		regFieldC4 = new JTextField(15);
 		regFieldC5 = new JTextField(15);
-		regFieldC6 = new JTextField(15);
 		
 		//더 효율적인 방법이 존재할 것 같은데 잘 모르겠음..
-		JTextField[] regFdArr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6};
+		JTextField[] regFdArr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5};
 		
 		addBtn = new JButton("등록");
 		removeBtn = new JButton("제거");
@@ -177,22 +194,22 @@ public class WorkPanel extends JPanel {
 		saveBtn.setFocusPainted(false);
 		
 		regSubPanel1.add(regLabel1);
-		regSubPanel1.add(regFieldC1);
+		regSubPanel1.add(regComBox);
 		
 		regSubPanel2.add(regLabel2);
-		regSubPanel2.add(regFieldC2);
+		regSubPanel2.add(regFieldC1);
 
 		regSubPanel3.add(regLabel3);
-		regSubPanel3.add(regFieldC3);
+		regSubPanel3.add(regFieldC2);
 		
 		regSubPanel4.add(regLabel4);
-		regSubPanel4.add(regFieldC4);
+		regSubPanel4.add(regFieldC3);
 		
 		regSubPanel5.add(regLabel5);
-		regSubPanel5.add(regFieldC5);
+		regSubPanel5.add(regFieldC4);
 		
 		regSubPanel6.add(regLabel6);
-		regSubPanel6.add(regFieldC6);
+		regSubPanel6.add(regFieldC5);
 		
 		gridPanel.add(regSubPanel1);
 		gridPanel.add(regSubPanel2);
@@ -225,7 +242,10 @@ public class WorkPanel extends JPanel {
 		
 		
 		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		String[][] regRows = new String[0][6]; 
+		//String[][] regRows = new String[0][6]; 
+		String[][] regRows = {
+				{"Battery-T21","T2166","S20210314T2","150","20210314","20310313"}
+		}; 
 		
 		JScrollPane regTablePane;
 		JTable regTable;
@@ -240,9 +260,19 @@ public class WorkPanel extends JPanel {
 		};
 		
 		regTable = new JTable(regTableData);
+
 		regTable.getTableHeader().setReorderingAllowed(false);
 		regTable.getTableHeader().setResizingAllowed(false);
 		
+		regTable.setRowHeight(23);
+		/*
+		regTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+		regTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+		regTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		regTable.getColumnModel().getColumn(3).setPreferredWidth(50);
+		regTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+		regTable.getColumnModel().getColumn(5).setPreferredWidth(100);
+		*/
 		regTablePane = new JScrollPane(regTable);
 		
 		split2nd.setTopComponent(inputPanel);
@@ -273,42 +303,42 @@ public class WorkPanel extends JPanel {
 		
 		JPanel rTopPanel = new JPanel();
 		
-		//JPanel rBotPanel = new JPanel();
 		
 		//Top
 		
-		JLabel readLabel1, readLabel2, readLabel3;
-		JTextField readField1, readField2, readField3;
+		JLabel readLabel1, readLabel2;
 		
+		readLabel1=new JLabel("조회 대상: ");
+		readLabel2=new JLabel("Lot No: ");
 		
-		readLabel1=new JLabel("제품명");
-		readLabel2=new JLabel("제품코드");
-		readLabel3=new JLabel("Lot No");
+		String[] readProducts = {"================", "Total Inventory", "Camera-R30 (R3067)", "Battery-T21 (T2166)", 
+				"Board-D40 (D4066)", "Sponge-G80 (G8083)", "Fabric-C18 (C1870)"};
 		
-		readField1=new JTextField(15);
-		readField2=new JTextField(15);
-		readField3=new JTextField(15);
+		readComBox = new JComboBox<String>(readProducts) ;
+		readComBox.setBackground(Color.WHITE);
+		readField = new JTextField(15);
 		
 		searchBtn=new JButton("검색");
+		deleteBtn=new JButton("삭제");
 		searchBtn.setFocusPainted(false);
+		deleteBtn.setFocusPainted(false);
 		
 		
 		rTopPanel.add(readLabel1);
-		rTopPanel.add(readField1);
+		rTopPanel.add(readComBox);
 		rTopPanel.add(readLabel2);
-		rTopPanel.add(readField2);
-		rTopPanel.add(readLabel3);
-		rTopPanel.add(readField3);
+		rTopPanel.add(readField);
 		
 		rTopPanel.add(searchBtn);
+		rTopPanel.add(deleteBtn);
+		rTopPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
+		
 		
 		readPanel.add(rTopPanel, BorderLayout.NORTH);
 		
 		// 중앙 테이블
 		String[] readColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		String[][] readRows = {
-				{"","","","","",""}
-		};
+		String[][] readRows = new String[0][6];
 		
 		JScrollPane readTablePane;
 		JTable readTable;
@@ -325,6 +355,8 @@ public class WorkPanel extends JPanel {
 		readTable=new JTable(readTableData);
 		readTable.getTableHeader().setReorderingAllowed(false);
 		readTable.getTableHeader().setResizingAllowed(false);
+		readTable.setRowHeight(23);
+		
 		
 		readTablePane = new JScrollPane(readTable);
 		
@@ -338,32 +370,47 @@ public class WorkPanel extends JPanel {
 		// 전체탭 관리
 		tabs.addTab("register", split2nd);
 		tabs.addTab("read", readPanel);
-		tabs.addTab("update", new JLabel());
-		tabs.addTab("delete", new JLabel());
+		//tabs.addTab("update", new JLabel());
+		//tabs.addTab("delete", new JLabel());
 		
 		JPanel tab1 = new JPanel();
-		JLabel lbTab1 = new JLabel("register ");
-		JButton exit1 = new JButton("x");
-		exit1.setSize(5, 5);
-		exit1.setBackground(null);
-		exit1.setBorderPainted(false);
-		exit1.setBorder(null);
-		exit1.setForeground(Color.GRAY);
-		exit1.setAlignmentY(TOP_ALIGNMENT);
+		JLabel lbTab1 = new JLabel("재고등록  ");
+		tabX1 = new JButton("x");
+		tabX1.setSize(5, 5);
+		tabX1.setBackground(null);
+		tabX1.setBorderPainted(false);
+		tabX1.setBorder(null);
+		tabX1.setForeground(Color.GRAY);
+		
 		tab1.add(lbTab1);
-		tab1.add(exit1);
+		tab1.add(tabX1);
 		tab1.setOpaque(false);
 		
+		JPanel tab2 = new JPanel();
+		JLabel lbTab2 = new JLabel("재고조회/변경  ");
+		tabX2 = new JButton("x");
+		tabX2.setSize(5, 5);
+		tabX2.setBackground(null);
+		tabX2.setBorderPainted(false);
+		tabX2.setBorder(null);
+		tabX2.setForeground(Color.GRAY);
+		tab2.add(lbTab2);
+		tab2.add(tabX2);
+		tab2.setOpaque(false);
+
 		tabs.setTabComponentAt(0, tab1);
 		tabs.setBackgroundAt(0, Color.WHITE);
+	
+		tabs.setTabComponentAt(1, tab2);
+		tabs.setBackgroundAt(1, Color.WHITE);
 		
 		
 		
 		//tab에 대한 접근여부 설정
-		tabs.setEnabledAt(2, false);
-		tabs.setEnabledAt(3, false);
+		//tabs.setEnabledAt(2, false);
+		//tabs.setEnabledAt(3, false);
 		//index번호로 JTabbedpane의 활성화 창 선택
-		tabs.setSelectedIndex(0);
+		tabs.setSelectedIndex(1);
 		
 		split1st.setLeftComponent(westPanel);
 		split1st.setRightComponent(tabs);
@@ -398,25 +445,48 @@ public class WorkPanel extends JPanel {
 			
 		});
 		
+		
+		
+		
+		regComBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch (regComBox.getSelectedItem().toString()) {
+				case "Camera-R30" 	: regFieldC1.setText("R3067"); break;
+				case "Battery-T21" 	: regFieldC1.setText("T2166"); break;
+				case "Board-D40" 	: regFieldC1.setText("D4066"); break;
+				case "Sponge-G80" 	: regFieldC1.setText("G8083"); break;
+				case "Fabric-C18" 	: regFieldC1.setText("C1870"); break;
+				default : regFieldC1.setText(""); break;
+				}
+			}
+		});
+		
 		// regFdarr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6}
 		// regFieldC1.getText(), regFieldC2.getText(), regFieldC3.getText(), regFieldC4.getText(), regFieldC5.getText(), regFieldC6.getText()
 		addBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(regFdArr[0].getText().equals("")
+				if(regComBox.getSelectedItem().toString().equals("============")
+						&& regFdArr[0].getText().equals("")
 						&& regFdArr[1].getText().equals("")
 						&& regFdArr[2].getText().equals("")
 						&& regFdArr[3].getText().equals("")
-						&& regFdArr[4].getText().equals("")
-						&& regFdArr[5].getText().equals("")) {
+						&& regFdArr[4].getText().equals("")) {
+
 					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
+					
 				} else {
 
-					Object[] regValues= new Object[regFdArr.length];
+					Object[] regValues= new Object[regFdArr.length+1];
+					
+					regValues[0]=regComBox.getSelectedItem().toString();
+					
 					for(int i=0; i<regFdArr.length; i++) {
-						regValues[i]=regFdArr[i].getText();
+						regValues[i+1]=regFdArr[i].getText();
 					}
+					
 					regTableData.addRow(regValues);
 				}
 			}
@@ -440,20 +510,140 @@ public class WorkPanel extends JPanel {
 		saveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showOptionDialog(null, "입력된 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
+				int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
 					, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 			}
 		});
 		
-		/*
-		String[][] regRows = {
-				{"","","","","",""}
-				// JTable을 위한 임시데이터
-				/*
-				{"예) Camera-R30","R3067","S20201016R1","200","20201016","20301015"},
-		};
-		 */
 		
+		searchBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(readTableData.getRowCount() != 0) {
+					for(int i=0; i<readTableData.getRowCount(); i++) {
+						readTableData.removeRow(i);
+					}
+				}
+				
+				if(readComBox.getSelectedItem().toString().equals("================") && readField.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else if(readComBox.getSelectedItem().toString().equals("Total Inventory")) {
+					
+					TempInven ins = TempInven.instance;
+					ArrayList<Inventory> camera = ins.getList(0);
+					ArrayList<Inventory> battery = ins.getList(1);
+					ArrayList<Inventory> board = ins.getList(2);
+					ArrayList<Inventory> sponge = ins.getList(3);
+					ArrayList<Inventory> fabric = ins.getList(4);
+					
+					Object[] readRows= new Object[6];
+					
+					for(int i=0; i<camera.size(); i++) {
+						readRows[0]=camera.get(i).getpName();
+						readRows[1]=camera.get(i).getpCode();
+						readRows[2]=camera.get(i).getLotId();
+						readRows[3]=camera.get(i).getQty();
+						readRows[4]=camera.get(i).getMfgDate();
+						readRows[5]=camera.get(i).getExDate();
+						
+						readTableData.addRow(readRows);
+					}
+
+					for(int i=0; i<battery.size(); i++) {
+						readRows[0]=battery.get(i).getpName();
+						readRows[1]=battery.get(i).getpCode();
+						readRows[2]=battery.get(i).getLotId();
+						readRows[3]=battery.get(i).getQty();
+						readRows[4]=battery.get(i).getMfgDate();
+						readRows[5]=battery.get(i).getExDate();
+						
+						readTableData.addRow(readRows);
+					}
+					
+					for(int i=0; i<board.size(); i++) {
+						readRows[0]=board.get(i).getpName();
+						readRows[1]=board.get(i).getpCode();
+						readRows[2]=board.get(i).getLotId();
+						readRows[3]=board.get(i).getQty();
+						readRows[4]=board.get(i).getMfgDate();
+						readRows[5]=board.get(i).getExDate();
+						
+						readTableData.addRow(readRows);
+					}
+					
+					for(int i=0; i<sponge.size(); i++) {
+						readRows[0]=sponge.get(i).getpName();
+						readRows[1]=sponge.get(i).getpCode();
+						readRows[2]=sponge.get(i).getLotId();
+						readRows[3]=sponge.get(i).getQty();
+						readRows[4]=sponge.get(i).getMfgDate();
+						readRows[5]=sponge.get(i).getExDate();
+						
+						readTableData.addRow(readRows);
+					}
+					
+					for(int i=0; i<fabric.size(); i++) {
+						readRows[0]=fabric.get(i).getpName();
+						readRows[1]=fabric.get(i).getpCode();
+						readRows[2]=fabric.get(i).getLotId();
+						readRows[3]=fabric.get(i).getQty();
+						readRows[4]=fabric.get(i).getMfgDate();
+						readRows[5]=fabric.get(i).getExDate();
+						
+						readTableData.addRow(readRows);
+					}
+				}
+				
+			}
+		});
+		
+		deleteBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(readTable.getSelectedRow() == -1) {
+					JOptionPane.showMessageDialog(null, "[에러] 삭제할 대상이 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				} else {
+					
+					int dialogResult = JOptionPane.showConfirmDialog(null, "선택 대상을 삭제하시겠습니까?\n[주의] 삭제된 항목은 복구할 수 없습니다.", "Confirm Message", JOptionPane.YES_NO_OPTION);
+					int[] index =null;
+					
+					if(dialogResult==JOptionPane.YES_OPTION) {
+						if(readTable.getSelectedRowCount() == 1) {
+							readTableData.removeRow(readTable.getSelectedRow());
+						} else {
+							//Q: 여러 줄일 떄 한번에 삭제되지 않는이유가 무엇인가??
+							index = readTable.getSelectedRows();
+							for(int i=0; i<readTable.getSelectedRows().length; i++) {
+								readTableData.removeRow(index[i]);
+							}
+							return;
+						}
+						
+					} else return;
+					
+				}
+				
+			}
+		});
+
+		
+		tabX1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tabs.remove(tabs.getSelectedIndex());
+			}
+		});
+		
+		tabX2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tabs.remove(tabs.getSelectedIndex());				
+			}
+		});
 		
 	}
 }

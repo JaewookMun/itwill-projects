@@ -2,6 +2,7 @@ package erp.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -23,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.UIManager;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -45,7 +48,7 @@ public class WorkPanel extends JPanel {
 	
 	private JComboBox<String> readComBox;
 	private JTextField readField;
-	private JButton searchBtn, deleteBtn;
+	private JButton searchBtn, updateBtn, deleteBtn;
 	
 	private JButton tabX1, tabX2;
 	
@@ -318,9 +321,12 @@ public class WorkPanel extends JPanel {
 		readComBox.setBackground(Color.WHITE);
 		readField = new JTextField(15);
 		
+		//edit or delete the selected item after searching.
 		searchBtn=new JButton("검색");
+		updateBtn=new JButton("변경");
 		deleteBtn=new JButton("삭제");
 		searchBtn.setFocusPainted(false);
+		updateBtn.setFocusPainted(false);
 		deleteBtn.setFocusPainted(false);
 		
 		
@@ -330,6 +336,7 @@ public class WorkPanel extends JPanel {
 		rTopPanel.add(readField);
 		
 		rTopPanel.add(searchBtn);
+		rTopPanel.add(updateBtn);
 		rTopPanel.add(deleteBtn);
 		rTopPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
 		
@@ -366,7 +373,6 @@ public class WorkPanel extends JPanel {
 		
 		
 		
-		
 		// 전체탭 관리
 		tabs.addTab("register", split2nd);
 		tabs.addTab("read", readPanel);
@@ -375,12 +381,13 @@ public class WorkPanel extends JPanel {
 		
 		JPanel tab1 = new JPanel();
 		JLabel lbTab1 = new JLabel("재고등록  ");
-		tabX1 = new JButton("x");
-		tabX1.setSize(5, 5);
-		tabX1.setBackground(null);
+		tabX1 = new JButton("X");
+		//tabX1.setSize(5, 5);
+		tabX1.setBorder(BorderFactory.createEtchedBorder());
 		tabX1.setBorderPainted(false);
-		tabX1.setBorder(null);
 		tabX1.setForeground(Color.GRAY);
+		tabX1.setContentAreaFilled(false);
+		tabX1.setToolTipText("close this tab");
 		
 		tab1.add(lbTab1);
 		tab1.add(tabX1);
@@ -388,12 +395,14 @@ public class WorkPanel extends JPanel {
 		
 		JPanel tab2 = new JPanel();
 		JLabel lbTab2 = new JLabel("재고조회/변경  ");
-		tabX2 = new JButton("x");
-		tabX2.setSize(5, 5);
-		tabX2.setBackground(null);
+		tabX2 = new JButton("X");
+		//tabX2.setSize(5, 5);
+		tabX2.setBorder(BorderFactory.createEtchedBorder());
 		tabX2.setBorderPainted(false);
-		tabX2.setBorder(null);
 		tabX2.setForeground(Color.GRAY);
+		tabX2.setContentAreaFilled(false);
+		tabX2.setToolTipText("close this tab");
+		
 		tab2.add(lbTab2);
 		tab2.add(tabX2);
 		tab2.setOpaque(false);
@@ -410,7 +419,10 @@ public class WorkPanel extends JPanel {
 		//tabs.setEnabledAt(2, false);
 		//tabs.setEnabledAt(3, false);
 		//index번호로 JTabbedpane의 활성화 창 선택
-		tabs.setSelectedIndex(1);
+		//tabs.setSelectedIndex(1);
+		
+		//tabs.setVisible(false);
+		
 		
 		split1st.setLeftComponent(westPanel);
 		split1st.setRightComponent(tabs);
@@ -432,7 +444,7 @@ public class WorkPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ERPsysApp("Margin - Inventory Management System");
-				
+
 			}
 		});
 
@@ -445,6 +457,40 @@ public class WorkPanel extends JPanel {
 			
 		});
 		
+		jTree.addTreeSelectionListener(new TreeSelectionListener() {
+			
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent();
+				if(selectedNode.toString().equals("재고등록")) {
+					// find more efficient way
+					tabs.setEnabledAt(0, true);
+					tab1.setVisible(true);
+					tabs.setBackgroundAt(0, Color.WHITE);
+					for(Component c : split2nd.getComponents()) {
+						c.setVisible(true);
+					}
+					
+				} 
+				
+				if(selectedNode.toString().equals("재고조회/변경")) {
+					
+					tabs.setEnabledAt(1, true);
+					tab2.setVisible(true);
+					tabs.setBackgroundAt(1, Color.WHITE);
+					for(Component c : readPanel.getComponents()) {
+						c.setVisible(true);
+					}
+					
+				} else 
+					return;
+			}
+		});
+		
+		/*
+		 * "재고등록");
+		readNupdate = new DefaultMutableTreeNode("재고조회/변경")
+		 */
 		
 		
 		
@@ -512,6 +558,12 @@ public class WorkPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
 					, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				
+				//JOption.YES_OPTION (==0)인 경우 시행할 코드 작성.
+				if(dialogResult==0) {
+					
+					return;
+				} else return;
 			}
 		});
 		
@@ -598,6 +650,21 @@ public class WorkPanel extends JPanel {
 			}
 		});
 		
+		updateBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(readTable.getSelectedRowCount()==0) {
+					return;
+				} else if (readTable.getSelectedRowCount()==1) {
+					new UpdateDialog(null, "update");
+
+				} else {
+					
+				}
+			}
+		});
+		
+		
 		deleteBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -606,7 +673,8 @@ public class WorkPanel extends JPanel {
 					return;
 				} else {
 					
-					int dialogResult = JOptionPane.showConfirmDialog(null, "선택 대상을 삭제하시겠습니까?\n[주의] 삭제된 항목은 복구할 수 없습니다.", "Confirm Message", JOptionPane.YES_NO_OPTION);
+					int dialogResult = JOptionPane.showConfirmDialog(null, "  선택된 대상을 서버에서 삭제하시겠습니까?    \n  [주의] 삭제된 내용은 복구가 불가능합니다.    \n", 
+							"Confirm Message", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
 					int[] index =null;
 					
 					if(dialogResult==JOptionPane.YES_OPTION) {
@@ -627,13 +695,19 @@ public class WorkPanel extends JPanel {
 				
 			}
 		});
-
 		
 		tabX1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tabs.remove(tabs.getSelectedIndex());
+				//tabs.remove(tabs.getSelectedIndex());
+				tabs.setEnabledAt(0, false);
+				tab1.setVisible(false);
+				tabs.setBackgroundAt(0, null);
+				for(Component c : split2nd.getComponents()) {
+					c.setVisible(false);
+				}
+				
 			}
 		});
 		
@@ -641,9 +715,17 @@ public class WorkPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tabs.remove(tabs.getSelectedIndex());				
+				//tabs.remove(tabs.getSelectedIndex());				
+				tabs.setEnabledAt(1, false);
+				tab2.setVisible(false);
+				tabs.setBackgroundAt(1, null);
+				for(Component c : readPanel.getComponents()) {
+					c.setVisible(false);
+				}
+			
 			}
 		});
 		
-	}
+		setVisible(true);
+	} //WorkPanel 생성자
 }

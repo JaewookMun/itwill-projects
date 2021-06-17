@@ -35,7 +35,8 @@ import erp.data.TempInven;
 public class WorkPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private JButton logoutBtn, infoBtn, exitBtn;
+	protected JButton logoutBtn;
+	private JButton infoBtn, exitBtn;
 	
 	private JPanel westPanel;
 	private DefaultMutableTreeNode registration, readNupdate;
@@ -58,6 +59,7 @@ public class WorkPanel extends JPanel {
 		super();
 		
 		setSize(ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT);
+		
 		setLayout(new BorderLayout());
 		
 		
@@ -109,7 +111,6 @@ public class WorkPanel extends JPanel {
 		 */
 		
 		JSplitPane split1st = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		
 		
 		westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JTree jTree;
@@ -423,7 +424,6 @@ public class WorkPanel extends JPanel {
 		
 		//tabs.setVisible(false);
 		
-		
 		split1st.setLeftComponent(westPanel);
 		split1st.setRightComponent(tabs);
 		split1st.setDividerSize(5);
@@ -439,15 +439,7 @@ public class WorkPanel extends JPanel {
 		 */
 		
 		
-		logoutBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new ERPsysApp("Margin - Inventory Management System");
-
-			}
-		});
-
+		
 		exitBtn.addActionListener(new ActionListener() {
 			
 			@Override

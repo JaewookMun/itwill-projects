@@ -4,20 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.SystemColor;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import java.awt.SystemColor;
 
 public class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -26,13 +21,12 @@ public class LoginPanel extends JPanel {
 	
 	private Image loginImage;
 	
-	private String adminId = "admin";
-	private String adminPw = "admin12";
 	
 	
-	private JTextField idField;
-	private JPasswordField pwField;
-	private JButton loginBtn;
+	
+	protected JTextField idField;
+	protected JPasswordField pwField;
+	protected JButton loginBtn;
 	
 	public LoginPanel() {
 		super();
@@ -100,25 +94,6 @@ public class LoginPanel extends JPanel {
 		add(loginBtn);
 
 		
-		idField.addKeyListener(new KeyEventHandler());
-		pwField.addKeyListener(new KeyEventHandler());
-		
-		loginBtn.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
-					ERPsysApp.isLogOn = true;
-					setVisible(false);
-					JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
-				} else if(idField.getText()== null && pwField.getText()== null ){
-					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(null, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", "에러", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-		
 		setVisible(true);
 	}
 	
@@ -128,23 +103,5 @@ public class LoginPanel extends JPanel {
 		g.drawImage(loginImage, 0, 0, ERPsysApp.DEFAULT_WIDTH, ERPsysApp.DEFAULT_HEIGHT, this);
 	}
 	
-	public class KeyEventHandler extends KeyAdapter {
-		@SuppressWarnings("deprecation")
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()==KeyEvent.VK_ENTER) {
-				if(idField.getText().equals(adminId) && pwField.getText().equals(adminPw)) {
-					ERPsysApp.isLogOn = true;
-					setVisible(false);
-					JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
-
-				} else if(idField.getText() == "" && pwField.getText() == "" ){
-					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(null, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", "에러", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		}
-	}
 	
 }

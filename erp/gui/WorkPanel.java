@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,8 +31,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import erp.data.Inventory;
-import erp.data.TempInven;
+import erp.data.ProductDAO;
+import erp.data.ProductDTO;
 
 public class WorkPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -247,15 +249,14 @@ public class WorkPanel extends JPanel {
 		
 		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
 		//String[][] regRows = new String[0][6]; 
-		String[][] regRows = {
-				{"Battery-T21","T2166","S20210314T2","150","20210314","20310313"}
-		}; 
+		String[][] regRows = {}; 
 		
 		JScrollPane regTablePane;
 		JTable regTable;
 		DefaultTableModel regTableData;
 		
 		regTableData = new DefaultTableModel(regRows, regColumns) {
+			// 테이블 행 선택 가능 - 개별 셀 수정 x
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -264,11 +265,13 @@ public class WorkPanel extends JPanel {
 		};
 		
 		regTable = new JTable(regTableData);
-
+		// 테이블 행을 클릭할 수 없다. - 컴퍼넌트 자체가 선택이 안됨.
+		//regTable.setEnabled(false);
 		regTable.getTableHeader().setReorderingAllowed(false);
 		regTable.getTableHeader().setResizingAllowed(false);
 		
 		regTable.setRowHeight(23);
+		
 		/*
 		regTable.getColumnModel().getColumn(0).setPreferredWidth(100);
 		regTable.getColumnModel().getColumn(1).setPreferredWidth(100);
@@ -358,13 +361,13 @@ public class WorkPanel extends JPanel {
 				// TODO Auto-generated method stub
 				return false;
 			}
-		};
-		
+		}; 
+
 		readTable=new JTable(readTableData);
 		readTable.getTableHeader().setReorderingAllowed(false);
 		readTable.getTableHeader().setResizingAllowed(false);
-		readTable.setRowHeight(23);
 		
+		readTable.setRowHeight(23);
 		
 		readTablePane = new JScrollPane(readTable);
 		
@@ -546,6 +549,9 @@ public class WorkPanel extends JPanel {
 		});
 		
 		saveBtn.addActionListener(new ActionListener() {
+			// unchecked, rawtypes를 suppressWarning 안하려면 어떻게 해야하는지?? 
+			// regTableData.getDataVector().elementAt(0)에서 발생
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
@@ -553,9 +559,49 @@ public class WorkPanel extends JPanel {
 				
 				//JOption.YES_OPTION (==0)인 경우 시행할 코드 작성.
 				if(dialogResult==0) {
+					//if(regTable.getColumnCount()==1) {
+						
+						/*
+						product.setpName((String)regTableData.getValueAt(0, 0));
+						product.setpCode((String)regTableData.getValueAt(0, 1));
+						product.setLotNo((String)regTableData.getValueAt(0, 2));
+						product.setQty(Integer.parseInt((String) regTableData.getValueAt(0, 3)));
+						product.setMfgDate((String)regTableData.getValueAt(0, 4));
+						product.setExDate((String)regTableData.getValueAt(0, 5));
+						*/
+						Vector<Object> row = regTableData.getDataVector().elementAt(0);
+						ProductDTO product=new ProductDTO();
+						product.setpName((String)row.get(0));
+						product.setpCode((String)row.get(1));
+						product.setLotNo((String)row.get(2));
+						product.setQty(Integer.parseInt((String)row.get(3)));
+						product.setMfgDate((String)row.get(4));
+						product.setExDate((String)row.get(5));
+						
+						ProductDAO.getInstance().insertProduct(product);
+					} 
+					/*
+					else {
+						Vector<Vector> rows = regTableData.getDataVector();
+						List<ProductDTO> productList = new ArrayList<ProductDTO>();
+						
+						for(Vector<Object> v : rows) {
+							ProductDTO product = new ProductDTO();
+							product.setpName((String)v.get(0));
+							product.setpCode((String)v.get(1));
+							product.setLotNo((String)v.get(2));
+							product.setQty((Integer)v.get(3));
+							product.setMfgDate((String)v.get(4));
+							product.setExDate((String)v.get(5));
+							productList.add(product);
+						}
+						ProductDAO.getInstance().insertProducts(productList);
+						
+					}
+					*/
 					
 					return;
-				} else return;
+				//} else return;
 			}
 		});
 		
@@ -565,80 +611,55 @@ public class WorkPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(readTableData.getRowCount() != 0) {
 					for(int i=0; i<readTableData.getRowCount(); i++) {
-						readTableData.removeRow(i);
+						readTableData.removeRow(0);
 					}
 				}
 				
 				if(readComBox.getSelectedItem().toString().equals("================") && readField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
+					
+				// TextField에 LotNo를 검색하는 경우
+				} else if(!readField.getText().equals("")) {
+					
+					ProductDTO p=ProductDAO.getInstance().searchProduct(readField.getText().replace(" ", ""));
+					Vector<Object> rowData = new Vector<Object>();
+					rowData.add(p.getpName());
+					rowData.add(p.getpCode());
+					rowData.add(p.getLotNo());
+					rowData.add(p.getQty());
+					rowData.add(p.getMfgDate());
+					rowData.add(p.getExDate());
+					readTableData.addRow(rowData);
+					
 				} else if(readComBox.getSelectedItem().toString().equals("Total Inventory")) {
 					
-					TempInven ins = TempInven.instance;
-					ArrayList<Inventory> camera = ins.getList(0);
-					ArrayList<Inventory> battery = ins.getList(1);
-					ArrayList<Inventory> board = ins.getList(2);
-					ArrayList<Inventory> sponge = ins.getList(3);
-					ArrayList<Inventory> fabric = ins.getList(4);
+					List<ProductDTO> pList=ProductDAO.getInstance().searchAll();
 					
-					Object[] readRows= new Object[6];
-					
-					for(int i=0; i<camera.size(); i++) {
-						readRows[0]=camera.get(i).getpName();
-						readRows[1]=camera.get(i).getpCode();
-						readRows[2]=camera.get(i).getLotId();
-						readRows[3]=camera.get(i).getQty();
-						readRows[4]=camera.get(i).getMfgDate();
-						readRows[5]=camera.get(i).getExDate();
-						
-						readTableData.addRow(readRows);
+					for(int i=0; i<pList.size(); i++) {
+						Vector<Object> rowData = new Vector<Object>();
+						rowData.add(pList.get(i).getpName());
+						rowData.add(pList.get(i).getpCode());
+						rowData.add(pList.get(i).getLotNo());
+						rowData.add(pList.get(i).getQty());
+						rowData.add(pList.get(i).getMfgDate());
+						rowData.add(pList.get(i).getExDate());
+						readTableData.addRow(rowData);
 					}
-
-					for(int i=0; i<battery.size(); i++) {
-						readRows[0]=battery.get(i).getpName();
-						readRows[1]=battery.get(i).getpCode();
-						readRows[2]=battery.get(i).getLotId();
-						readRows[3]=battery.get(i).getQty();
-						readRows[4]=battery.get(i).getMfgDate();
-						readRows[5]=battery.get(i).getExDate();
-						
-						readTableData.addRow(readRows);
-					}
-					
-					for(int i=0; i<board.size(); i++) {
-						readRows[0]=board.get(i).getpName();
-						readRows[1]=board.get(i).getpCode();
-						readRows[2]=board.get(i).getLotId();
-						readRows[3]=board.get(i).getQty();
-						readRows[4]=board.get(i).getMfgDate();
-						readRows[5]=board.get(i).getExDate();
-						
-						readTableData.addRow(readRows);
-					}
-					
-					for(int i=0; i<sponge.size(); i++) {
-						readRows[0]=sponge.get(i).getpName();
-						readRows[1]=sponge.get(i).getpCode();
-						readRows[2]=sponge.get(i).getLotId();
-						readRows[3]=sponge.get(i).getQty();
-						readRows[4]=sponge.get(i).getMfgDate();
-						readRows[5]=sponge.get(i).getExDate();
-						
-						readTableData.addRow(readRows);
-					}
-					
-					for(int i=0; i<fabric.size(); i++) {
-						readRows[0]=fabric.get(i).getpName();
-						readRows[1]=fabric.get(i).getpCode();
-						readRows[2]=fabric.get(i).getLotId();
-						readRows[3]=fabric.get(i).getQty();
-						readRows[4]=fabric.get(i).getMfgDate();
-						readRows[5]=fabric.get(i).getExDate();
-						
-						readTableData.addRow(readRows);
+				// JComboBox를 통해 제품을 선택했을 경우
+				} else {
+					List<ProductDTO> pList=ProductDAO.getInstance().searchProducts(readComBox.getSelectedItem().toString());
+					for(int i=0; i<pList.size(); i++) {
+						Vector<Object> rowData = new Vector<Object>();
+						rowData.add(pList.get(i).getpName());
+						rowData.add(pList.get(i).getpCode());
+						rowData.add(pList.get(i).getLotNo());
+						rowData.add(pList.get(i).getQty());
+						rowData.add(pList.get(i).getMfgDate());
+						rowData.add(pList.get(i).getExDate());
+						readTableData.addRow(rowData);
 					}
 				}
-				
 			}
 		});
 		

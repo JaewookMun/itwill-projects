@@ -29,7 +29,7 @@ public class ProductCP {
 			_pds.setInitialPoolSize(3);
 			_pds.setMaxPoolSize(5);
 		} catch (SQLException e) {
-			// getStackTrace()¿Í getMessageÀÇ Â÷ÀÌÁ¡?? 
+			// getStackTrace()Â¿Ã getMessageÃ€Ã‡ Ã‚Ã·Ã€ÃŒÃÂ¡?? 
 			e.getStackTrace();
 		}
 	}

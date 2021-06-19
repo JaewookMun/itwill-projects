@@ -53,6 +53,16 @@ public class WorkPanel extends JPanel {
 	private JTextField readField;
 	private JButton searchBtn, updateBtn, deleteBtn;
 	
+	private UpdateDialog popPnl;
+	
+	public static final int PRODUCT_NAME_INDEX = 0;
+	public static final int PRODUCT_CODE_INDEX = 1;
+	
+	/** lotNo is {@code Primary Key} of {@code TOTAL_PRODUCTS} table */
+	public static final int LOTNO_INDEX = 2;
+	
+	private DefaultTableModel regTableData, readTableData;
+	
 	private JButton tabX1, tabX2;
 	
 	
@@ -253,7 +263,6 @@ public class WorkPanel extends JPanel {
 		
 		JScrollPane regTablePane;
 		JTable regTable;
-		DefaultTableModel regTableData;
 		
 		regTableData = new DefaultTableModel(regRows, regColumns) {
 			// 테이블 행 선택 가능 - 개별 셀 수정 x
@@ -353,7 +362,6 @@ public class WorkPanel extends JPanel {
 		
 		JScrollPane readTablePane;
 		JTable readTable;
-		DefaultTableModel readTableData;
 		
 		readTableData = new DefaultTableModel(readRows, readColumns) {
 			@Override
@@ -444,13 +452,13 @@ public class WorkPanel extends JPanel {
 		
 		
 		exitBtn.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 			
 		});
+		
 		
 		jTree.addTreeSelectionListener(new TreeSelectionListener() {
 			
@@ -482,13 +490,11 @@ public class WorkPanel extends JPanel {
 			}
 		});
 		
-		/*
-		 * "재고등록");
-		readNupdate = new DefaultMutableTreeNode("재고조회/변경")
-		 */
 		
 		
 		
+		
+		// 제품명 선택시 제품에 따른 제품코드 자동 설정
 		regComBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -502,6 +508,7 @@ public class WorkPanel extends JPanel {
 				}
 			}
 		});
+		
 		
 		// regFdarr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6}
 		// regFieldC1.getText(), regFieldC2.getText(), regFieldC3.getText(), regFieldC4.getText(), regFieldC5.getText(), regFieldC6.getText()
@@ -534,16 +541,29 @@ public class WorkPanel extends JPanel {
 		});
 		
 
-		//int row = regTableData.getRowCount();
 		//regTableData.removeRow(row-1);
 		removeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// 등록 : null
 				if(regTableData.getRowCount()==0) {
 					JOptionPane.showMessageDialog(null, "[에러] 제거할 수 있는 항목이 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
-					regTableData.removeRow(regTableData.getRowCount()-1);
+					// 선택 x
+					if(regTable.getSelectedRow()==-1) {
+						regTableData.removeRow(regTableData.getRowCount()-1);
+					
+					//	1줄 선택
+					} else if(regTable.getSelectedRowCount()==1) {
+						regTableData.removeRow(regTable.getSelectedRow());
+					
+					} else {
+						int selectedRows=regTable.getSelectedRowCount();
+						for(int i=0; i<selectedRows; i++) {
+							regTableData.removeRow(regTable.getSelectedRow());
+						}
+					}
 				}
 			}
 		});
@@ -554,111 +574,108 @@ public class WorkPanel extends JPanel {
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
-					, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if(regTableData.getRowCount()==0) {
+					JOptionPane.showMessageDialog(null, "등록된 제품정보가 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 				
-				//JOption.YES_OPTION (==0)인 경우 시행할 코드 작성.
-				if(dialogResult==0) {
-					//if(regTable.getColumnCount()==1) {
+				} else {
+					int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
+							, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 						
-						/*
-						product.setpName((String)regTableData.getValueAt(0, 0));
-						product.setpCode((String)regTableData.getValueAt(0, 1));
-						product.setLotNo((String)regTableData.getValueAt(0, 2));
-						product.setQty(Integer.parseInt((String) regTableData.getValueAt(0, 3)));
-						product.setMfgDate((String)regTableData.getValueAt(0, 4));
-						product.setExDate((String)regTableData.getValueAt(0, 5));
-						*/
-						Vector<Object> row = regTableData.getDataVector().elementAt(0);
-						ProductDTO product=new ProductDTO();
-						product.setpName((String)row.get(0));
-						product.setpCode((String)row.get(1));
-						product.setLotNo((String)row.get(2));
-						product.setQty(Integer.parseInt((String)row.get(3)));
-						product.setMfgDate((String)row.get(4));
-						product.setExDate((String)row.get(5));
-						
-						ProductDAO.getInstance().insertProduct(product);
-					} 
-					/*
-					else {
-						Vector<Vector> rows = regTableData.getDataVector();
-						List<ProductDTO> productList = new ArrayList<ProductDTO>();
-						
-						for(Vector<Object> v : rows) {
-							ProductDTO product = new ProductDTO();
-							product.setpName((String)v.get(0));
-							product.setpCode((String)v.get(1));
-							product.setLotNo((String)v.get(2));
-							product.setQty((Integer)v.get(3));
-							product.setMfgDate((String)v.get(4));
-							product.setExDate((String)v.get(5));
-							productList.add(product);
+						//JOption.YES_OPTION (==0)인 경우 시행할 코드 작성.
+						if(dialogResult==0) {
+							if(regTableData.getRowCount()==1) { // 등록된 
+								
+								/*
+								ProductDTO product=new ProductDTO();
+								product.setpName((String)regTableData.getValueAt(0, 0));
+								product.setpCode((String)regTableData.getValueAt(0, 1));
+								product.setLotNo((String)regTableData.getValueAt(0, 2));
+								product.setQty(Integer.parseInt((String) regTableData.getValueAt(0, 3)));
+								product.setMfgDate((String)regTableData.getValueAt(0, 4));
+								product.setExDate((String)regTableData.getValueAt(0, 5));
+								*/
+								
+								Vector<Object> row = regTableData.getDataVector().elementAt(0);
+								ProductDTO product=new ProductDTO();
+								product.setpName((String)row.get(0));
+								product.setpCode((String)row.get(1));
+								product.setLotNo((String)row.get(2));
+								product.setQty(Integer.parseInt((String)row.get(3)));
+								product.setMfgDate((String)row.get(4));
+								product.setExDate((String)row.get(5));
+								
+								int resultRow=ProductDAO.getInstance().insertProduct(product);
+								if(resultRow==0) {
+									JOptionPane.showMessageDialog(null, "이미 등록된 제품 Batch 정보 입니다. 입력정보의 확인을 부탁드립니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
+								} else {
+									JOptionPane.showMessageDialog(null, resultRow+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
+								}
+								
+							} else {
+								Vector<Vector> rows = regTableData.getDataVector();
+								List<ProductDTO> productList = new ArrayList<ProductDTO>();
+								int tableRows=regTableData.getRowCount();
+								
+								for(Vector<Object> v : rows) {
+									ProductDTO product = new ProductDTO();
+									product.setpName((String)v.get(0));
+									product.setpCode((String)v.get(1));
+									product.setLotNo((String)v.get(2));
+									product.setQty(Integer.parseInt((String) v.get(3)));
+									product.setMfgDate((String)v.get(4));
+									product.setExDate((String)v.get(5));
+									productList.add(product);
+								}
+							    int[] resultRows = ProductDAO.getInstance().insertProducts(productList);
+							    
+							    if(resultRows.length!=tableRows) {
+									JOptionPane.showMessageDialog(null, "이미 등록된 제품 Batch 정보가 존재합니다. 입력정보의 확인을 부탁드립니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
+								} else {
+									JOptionPane.showMessageDialog(null, resultRows.length+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
+								}
+							}
+								
+						} else if(dialogResult!=0) {
+							removeAllRows(regTableData);
 						}
-						ProductDAO.getInstance().insertProducts(productList);
-						
-					}
-					*/
-					
-					return;
-				//} else return;
-			}
+				}
+			}// ActionPerformed() end
 		});
 		
 		
 		searchBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(readTableData.getRowCount() != 0) {
-					for(int i=0; i<readTableData.getRowCount(); i++) {
-						readTableData.removeRow(0);
-					}
-				}
+				removeAllRows(readTableData);
 				
+				// Null
 				if(readComBox.getSelectedItem().toString().equals("================") && readField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 					
-				// TextField에 LotNo를 검색하는 경우
+				// LotNo 검색
 				} else if(!readField.getText().equals("")) {
+					String lotNo=readField.getText().replace(" ", "");
+					showInfoProduct(lotNo);
+
 					
-					ProductDTO p=ProductDAO.getInstance().searchProduct(readField.getText().replace(" ", ""));
-					Vector<Object> rowData = new Vector<Object>();
-					rowData.add(p.getpName());
-					rowData.add(p.getpCode());
-					rowData.add(p.getLotNo());
-					rowData.add(p.getQty());
-					rowData.add(p.getMfgDate());
-					rowData.add(p.getExDate());
-					readTableData.addRow(rowData);
-					
+				// 전체 재고확인
 				} else if(readComBox.getSelectedItem().toString().equals("Total Inventory")) {
+					showInfoAllProducts();
 					
-					List<ProductDTO> pList=ProductDAO.getInstance().searchAll();
-					
-					for(int i=0; i<pList.size(); i++) {
-						Vector<Object> rowData = new Vector<Object>();
-						rowData.add(pList.get(i).getpName());
-						rowData.add(pList.get(i).getpCode());
-						rowData.add(pList.get(i).getLotNo());
-						rowData.add(pList.get(i).getQty());
-						rowData.add(pList.get(i).getMfgDate());
-						rowData.add(pList.get(i).getExDate());
-						readTableData.addRow(rowData);
-					}
-				// JComboBox를 통해 제품을 선택했을 경우
+				// JComboBox를 통해 제품 선택 - 종류별 재고확인
 				} else {
-					List<ProductDTO> pList=ProductDAO.getInstance().searchProducts(readComBox.getSelectedItem().toString());
-					for(int i=0; i<pList.size(); i++) {
-						Vector<Object> rowData = new Vector<Object>();
-						rowData.add(pList.get(i).getpName());
-						rowData.add(pList.get(i).getpCode());
-						rowData.add(pList.get(i).getLotNo());
-						rowData.add(pList.get(i).getQty());
-						rowData.add(pList.get(i).getMfgDate());
-						rowData.add(pList.get(i).getExDate());
-						readTableData.addRow(rowData);
+					String pCode=null;
+	
+					switch (readComBox.getSelectedItem().toString()) {
+					case "Camera-R30 (R3067)": pCode="R3067"; break;
+					case "Battery-T21 (T2166)": pCode="T2166"; break;
+					case "Board-D40 (D4066)": pCode="D4066"; break;
+					case "Sponge-G80 (G8083)": pCode="G8083"; break;
+					case "Fabric-C18 (C1870)": pCode="C1870"; break;
 					}
+					
+					showInfoProducts(pCode);
 				}
 			}
 		});
@@ -667,45 +684,72 @@ public class WorkPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(readTable.getSelectedRowCount()==0) {
+					JOptionPane.showMessageDialog(null, "변경할 대상정보가 존재하지 않습니다.", "Notice", JOptionPane.INFORMATION_MESSAGE);
 					return;
 				} else if (readTable.getSelectedRowCount()==1) {
-					new UpdateDialog(null, "update");
+					
+					popPnl=new UpdateDialog(null, "update");
+					
+					int rowIndex = readTable.getSelectedRow();
+					
+					String productName = (String)readTableData.getValueAt(rowIndex, PRODUCT_NAME_INDEX);
+					String productCode = (String)readTableData.getValueAt(rowIndex, PRODUCT_CODE_INDEX);
+					String lotNo = (String)readTableData.getValueAt(rowIndex, LOTNO_INDEX);
+					
+					
+					//popPnl.comBox.setSelectedIndex(popPnl.products.indexOf(productName));
+					popPnl.fd0.setText(productName);
+					popPnl.fd1.setText(productCode);
+					popPnl.fd2.setText(lotNo);
+					popPnl.fd3.requestFocus();
+					
+					popPnl.updateBtnInPnl.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String[] str=popPnl.getAllTxts();
+							
+							ProductDAO.getInstance().updateProduct(createProductDTO(str));
+							popPnl.dispose();
 
+							removeAllRows(readTableData);
+							showInfoAllProducts();
+						}
+					});
+					
 				} else {
+					JOptionPane.showMessageDialog(null, "선택된 항목을 확인해주세요. \n다수의 배치정보는 동시에 변경할 수 없습니다. ", "Error", JOptionPane.ERROR_MESSAGE);
 					
 				}
 			}
 		});
+		/*
 		
-		
+		*/
 		deleteBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(readTable.getSelectedRow() == -1) {
 					JOptionPane.showMessageDialog(null, "[에러] 삭제할 대상이 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
-				} else {
+				} else if(readTable.getSelectedRowCount()==1) {
 					
-					int dialogResult = JOptionPane.showConfirmDialog(null, "  선택된 대상을 서버에서 삭제하시겠습니까?    \n  [주의] 삭제된 내용은 복구가 불가능합니다.    \n", 
+					int dialogResult = JOptionPane.showConfirmDialog(null, "  선택된 대상을 서버에서 삭제하시겠습니까?    \n  [주의] 삭제된 내용은 복구가 불가능 합니다.    \n", 
 							"Confirm Message", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
-					int[] index =null;
 					
 					if(dialogResult==JOptionPane.YES_OPTION) {
-						if(readTable.getSelectedRowCount() == 1) {
-							readTableData.removeRow(readTable.getSelectedRow());
-						} else {
-							//Q: 여러 줄일 떄 한번에 삭제되지 않는이유가 무엇인가??
-							index = readTable.getSelectedRows();
-							for(int i=0; i<readTable.getSelectedRows().length; i++) {
-								readTableData.removeRow(index[i]);
-							}
-							return;
-						}
+					
+						// lotNo : TOTAL_PRODUCTS의 PK
+						int rowIndex = readTable.getSelectedRow();
+						String lotNoSelected = (String)readTableData.getValueAt(rowIndex, LOTNO_INDEX);
+						int resultRow = ProductDAO.getInstance().deleteProduct(lotNoSelected);
+						
+						JOptionPane.showMessageDialog(null, resultRow+"개의 제품 Batch 정보가 성공적으로 삭제되었습니다.", "Notice", JOptionPane.INFORMATION_MESSAGE);
+						
+						removeAllRows(readTableData);
+						showInfoAllProducts();
 						
 					} else return;
-					
 				}
-				
 			}
 		});
 		
@@ -737,8 +781,140 @@ public class WorkPanel extends JPanel {
 				}
 			
 			}
-		});
+		});		
+
 		
 		setVisible(true);
-	} //WorkPanel 생성자
+	} //WorkPanel 생성자 종료
+	
+	
+	
+	/*
+	 ***********************************************************************
+	 *  << Method area >>
+	 ***********************************************************************  
+	 */
+	
+	
+	public int removeAllRows(DefaultTableModel tableData) {
+		int rows=0;
+		
+		rows=tableData.getRowCount();
+		for(int i=0; i<rows; i++) {
+			tableData.removeRow(0);
+		}
+		
+		return rows;
+	}
+	
+	/**
+	 * Show information on the product which have the lot number.<p>
+	 * 
+	 * add the information of {@code ProductDTO} instance to {@code DefualtTableModel} readTableData
+	 * by swapping to {@code Vector} type of a row with {@code addRow()} method<p>
+	 * {pName, pCode, lotNo, qty, mfgDate, exDate}
+	 * 
+	 * @param product {@code ProductDTO} instances from DataBase
+	 */
+	public void showInfoProduct(String lotNo) {
+		ProductDTO product=ProductDAO.getInstance().searchProduct(lotNo);
+		
+		Vector<Object> rowData = new Vector<Object>();
+		
+		rowData.add(product.getpName());
+		rowData.add(product.getpCode());
+		rowData.add(product.getLotNo());
+		rowData.add(product.getQty());
+		rowData.add(product.getMfgDate());
+		rowData.add(product.getExDate());
+		readTableData.addRow(rowData);
+	}
+	
+	/**
+	 * Show the information of products having the specified properties.<p>
+	 * 
+	 * add the information of {@code ProductDTO} instances, which is 
+	 * selected by productCode {@code pCode}, to {@code DefualtTableModel} readTableData
+	 * by swapping to {@code Vector} type of rows with {@code addRow()} method.
+	 * 
+	 * @param productList a list of {@code ProductDTO} instances from DataBase
+	 */
+	public void showInfoProducts(String productCode) {
+		List<ProductDTO> productList=ProductDAO.getInstance().searchProducts(productCode);
+		
+		Vector<Object> rowData = new Vector<Object>();
+	
+		for(int i=0; i<productList.size(); i++) {
+			
+			rowData.add(productList.get(i).getpName());
+			rowData.add(productList.get(i).getpCode());
+			rowData.add(productList.get(i).getLotNo());
+			rowData.add(productList.get(i).getQty());
+			rowData.add(productList.get(i).getMfgDate());
+			rowData.add(productList.get(i).getExDate());
+			readTableData.addRow(rowData);
+			/*
+			System.out.println("pName = "+productList.get(i).getpName());
+			System.out.println("pCode = "+productList.get(i).getpCode());
+			System.out.println("LotNo = "+productList.get(i).getLotNo());
+			System.out.println("Qty = "+productList.get(i).getQty());
+			System.out.println("mfgDate = "+productList.get(i).getMfgDate());
+			System.out.println("exDate = "+productList.get(i).getExDate());
+			System.out.println("=================================");
+			*/
+		}
+	}
+	
+	/**
+	 * Show all information of the table {@code TOTAL_PRODUCTS}.<p>
+	 * 
+	 * After receiving all table information from {@code Oracle DB} 
+	 * as the list of {@code ProductDTO} instances, add it to {@code DefualtTableModel} readTableData 
+	 * by swapping to {@code Vector} type of rows with {@code addRow()} method.
+	 * 
+	 */
+	public void showInfoAllProducts() {
+		List<ProductDTO> productList=ProductDAO.getInstance().searchAll();
+		
+		Vector<Object> rowData = new Vector<Object>();
+		
+		for(int i=0; i<productList.size(); i++) {
+			
+			rowData.add(productList.get(i).getpName());
+			rowData.add(productList.get(i).getpCode());
+			rowData.add(productList.get(i).getLotNo());
+			rowData.add(productList.get(i).getQty());
+			rowData.add(productList.get(i).getMfgDate());
+			rowData.add(productList.get(i).getExDate());
+			readTableData.addRow(rowData);
+		}
+	}
+	
+	/**
+	 * return ProductDTO instance with information from {@code String} array.
+	 * This array should have proper information
+	 * 
+	 * @param productFeilds 
+	 * @return an instance
+	 */
+	public ProductDTO createProductDTO(String[] productFeilds) {
+		ProductDTO product=new ProductDTO();
+		
+		product.setpName(productFeilds[0]);
+		product.setpCode(productFeilds[1]);
+		product.setLotNo(productFeilds[2]);
+		product.setQty(Integer.parseInt(productFeilds[3]));
+		product.setMfgDate(productFeilds[4]);
+		product.setExDate(productFeilds[5]);
+		
+		return product;
+	}
+	
+	// to be implemented
+	public ProductDTO createProductDTO(Vector<String> productFeilds) {
+		ProductDTO product=new ProductDTO();
+
+		
+		return product;
+	}
 }

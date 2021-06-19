@@ -40,10 +40,8 @@ public class WorkPanel extends JPanel {
 	protected JButton logoutBtn;
 	private JButton infoBtn, exitBtn;
 	
-	private JPanel westPanel;
 	private DefaultMutableTreeNode registration, readNupdate;
 	
-	private String[] products= {"============","Camera-R30", "Battery-T21", "Board-D40", "Sponge-G80", "Fabric-C18"};
 	private JComboBox<String> regComBox;
 	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5;
 	private JButton addBtn, removeBtn, saveBtn;
@@ -57,9 +55,15 @@ public class WorkPanel extends JPanel {
 	
 	public static final int PRODUCT_NAME_INDEX = 0;
 	public static final int PRODUCT_CODE_INDEX = 1;
-	
 	/** lotNo is {@code Primary Key} of {@code TOTAL_PRODUCTS} table */
 	public static final int LOTNO_INDEX = 2;
+	public static final int QUANTITY_INDEX = 3;
+	public static final int MANUFACTURING_DATE_INDEX = 4;
+	public static final int EXPIRATION_DATE_INDEX = 5;
+	
+	
+	
+	
 	
 	private DefaultTableModel regTableData, readTableData;
 	
@@ -122,9 +126,9 @@ public class WorkPanel extends JPanel {
 		 *   좌측 : 메뉴바  /  우측 : 메인기능 
 		 */
 		
-		JSplitPane split1st = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		JSplitPane firstSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		
-		westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JTree jTree;
 		DefaultMutableTreeNode treeList = new DefaultMutableTreeNode("재고관리");
 		
@@ -162,7 +166,7 @@ public class WorkPanel extends JPanel {
 		
 		
 		//CRUD - 상하분할
-		JSplitPane split2nd = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane regPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		
 		JPanel inputPanel = new JPanel();
 		JPanel regSubPanel1, regSubPanel2, regSubPanel3, regSubPanel4, regSubPanel5, regSubPanel6;
@@ -188,6 +192,7 @@ public class WorkPanel extends JPanel {
 		regLabel6 = new JLabel("만료일자 :");
 		
 		//regFieldC1 = new JTextField(15);
+		String[] products= {"============","Camera-R30", "Battery-T21", "Board-D40", "Sponge-G80", "Fabric-C18"};
 		regComBox = new JComboBox<String>(products);
 		regComBox.setBackground(Color.WHITE);
 		regFieldC1 = new JTextField(15);
@@ -291,10 +296,10 @@ public class WorkPanel extends JPanel {
 		*/
 		regTablePane = new JScrollPane(regTable);
 		
-		split2nd.setTopComponent(inputPanel);
-		split2nd.setBottomComponent(regTablePane);
-		split2nd.setDividerSize(8);
-		split2nd.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+		regPane.setTopComponent(inputPanel);
+		regPane.setBottomComponent(regTablePane);
+		regPane.setDividerSize(8);
+		regPane.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 		
 		
 		
@@ -386,7 +391,7 @@ public class WorkPanel extends JPanel {
 		
 		
 		// 전체탭 관리
-		tabs.addTab("register", split2nd);
+		tabs.addTab("register", regPane);
 		tabs.addTab("read", readPanel);
 		//tabs.addTab("update", new JLabel());
 		//tabs.addTab("delete", new JLabel());
@@ -435,10 +440,10 @@ public class WorkPanel extends JPanel {
 		
 		//tabs.setVisible(false);
 		
-		split1st.setLeftComponent(westPanel);
-		split1st.setRightComponent(tabs);
-		split1st.setDividerSize(5);
-		add(split1st, BorderLayout.CENTER);
+		firstSplit.setLeftComponent(westPanel);
+		firstSplit.setRightComponent(tabs);
+		firstSplit.setDividerSize(5);
+		add(firstSplit, BorderLayout.CENTER);
 
 		
 		/**
@@ -470,7 +475,7 @@ public class WorkPanel extends JPanel {
 					tabs.setEnabledAt(0, true);
 					tab1.setVisible(true);
 					tabs.setBackgroundAt(0, Color.WHITE);
-					for(Component c : split2nd.getComponents()) {
+					for(Component c : regPane.getComponents()) {
 						c.setVisible(true);
 					}
 					
@@ -490,8 +495,35 @@ public class WorkPanel extends JPanel {
 			}
 		});
 		
+		tabX1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//tabs.remove(tabs.getSelectedIndex());
+				tabs.setEnabledAt(0, false);
+				tab1.setVisible(false);
+				tabs.setBackgroundAt(0, null);
+				for(Component c : regPane.getComponents()) {
+					c.setVisible(false);
+				}
+				
+			}
+		});
 		
-		
+		tabX2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//tabs.remove(tabs.getSelectedIndex());				
+				tabs.setEnabledAt(1, false);
+				tab2.setVisible(false);
+				tabs.setBackgroundAt(1, null);
+				for(Component c : readPanel.getComponents()) {
+					c.setVisible(false);
+				}
+			
+			}
+		});		
 		
 		
 		// 제품명 선택시 제품에 따른 제품코드 자동 설정
@@ -695,12 +727,19 @@ public class WorkPanel extends JPanel {
 					String productName = (String)readTableData.getValueAt(rowIndex, PRODUCT_NAME_INDEX);
 					String productCode = (String)readTableData.getValueAt(rowIndex, PRODUCT_CODE_INDEX);
 					String lotNo = (String)readTableData.getValueAt(rowIndex, LOTNO_INDEX);
+					int qty = (Integer)readTableData.getValueAt(rowIndex, QUANTITY_INDEX);
+					String mfgDate = (String)readTableData.getValueAt(rowIndex, MANUFACTURING_DATE_INDEX);
+					String exDate = (String)readTableData.getValueAt(rowIndex, EXPIRATION_DATE_INDEX);
 					
 					
 					//popPnl.comBox.setSelectedIndex(popPnl.products.indexOf(productName));
 					popPnl.fd0.setText(productName);
 					popPnl.fd1.setText(productCode);
 					popPnl.fd2.setText(lotNo);
+					popPnl.fd3.setText(Integer.toString(qty));
+					popPnl.fd4.setText(mfgDate);
+					popPnl.fd5.setText(exDate);
+					
 					popPnl.fd3.requestFocus();
 					
 					popPnl.updateBtnInPnl.addActionListener(new ActionListener() {
@@ -722,9 +761,9 @@ public class WorkPanel extends JPanel {
 				}
 			}
 		});
-		/*
 		
-		*/
+		
+		
 		deleteBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -753,35 +792,7 @@ public class WorkPanel extends JPanel {
 			}
 		});
 		
-		tabX1.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//tabs.remove(tabs.getSelectedIndex());
-				tabs.setEnabledAt(0, false);
-				tab1.setVisible(false);
-				tabs.setBackgroundAt(0, null);
-				for(Component c : split2nd.getComponents()) {
-					c.setVisible(false);
-				}
-				
-			}
-		});
 		
-		tabX2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//tabs.remove(tabs.getSelectedIndex());				
-				tabs.setEnabledAt(1, false);
-				tab2.setVisible(false);
-				tabs.setBackgroundAt(1, null);
-				for(Component c : readPanel.getComponents()) {
-					c.setVisible(false);
-				}
-			
-			}
-		});		
 
 		
 		setVisible(true);
@@ -841,10 +852,9 @@ public class WorkPanel extends JPanel {
 	 */
 	public void showInfoProducts(String productCode) {
 		List<ProductDTO> productList=ProductDAO.getInstance().searchProducts(productCode);
-		
-		Vector<Object> rowData = new Vector<Object>();
 	
 		for(int i=0; i<productList.size(); i++) {
+			Vector<Object> rowData = new Vector<Object>();
 			
 			rowData.add(productList.get(i).getpName());
 			rowData.add(productList.get(i).getpCode());
@@ -853,15 +863,6 @@ public class WorkPanel extends JPanel {
 			rowData.add(productList.get(i).getMfgDate());
 			rowData.add(productList.get(i).getExDate());
 			readTableData.addRow(rowData);
-			/*
-			System.out.println("pName = "+productList.get(i).getpName());
-			System.out.println("pCode = "+productList.get(i).getpCode());
-			System.out.println("LotNo = "+productList.get(i).getLotNo());
-			System.out.println("Qty = "+productList.get(i).getQty());
-			System.out.println("mfgDate = "+productList.get(i).getMfgDate());
-			System.out.println("exDate = "+productList.get(i).getExDate());
-			System.out.println("=================================");
-			*/
 		}
 	}
 	
@@ -876,9 +877,9 @@ public class WorkPanel extends JPanel {
 	public void showInfoAllProducts() {
 		List<ProductDTO> productList=ProductDAO.getInstance().searchAll();
 		
-		Vector<Object> rowData = new Vector<Object>();
 		
 		for(int i=0; i<productList.size(); i++) {
+			Vector<Object> rowData = new Vector<Object>();
 			
 			rowData.add(productList.get(i).getpName());
 			rowData.add(productList.get(i).getpCode());
@@ -917,4 +918,7 @@ public class WorkPanel extends JPanel {
 		
 		return product;
 	}
+	
+	
+	
 }

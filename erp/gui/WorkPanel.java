@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -43,15 +44,27 @@ public class WorkPanel extends JPanel {
 	private DefaultMutableTreeNode registration, readNupdate;
 	
 	private JComboBox<String> regComBox;
+	
+	/**
+	 * to be transfer into {@code ProductDTO} class<p>
+	 * 
+	 * {@code regFieldC1} is for product code, {@code pCode} <br>
+	 * {@code regFieldC2} is for lot number, {@code lotNo} <br>
+	 * {@code regFieldC3} is for quantity, {@code qty}<br>
+	 * {@code regFieldC4} is for manufacturing date, {@code mfgDate} <br>
+	 * {@code regFieldC5} is for expiration date, {@code exDate} <br>
+	 */
 	private JTextField regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5;
 	private JButton addBtn, removeBtn, saveBtn;
-	
 	
 	private JComboBox<String> readComBox;
 	private JTextField readField;
 	private JButton searchBtn, updateBtn, deleteBtn;
 	
 	private UpdateDialog popPnl;
+	
+	/** 제품을 등록하기 위해 요구되는 정보 갯수 */
+	public static final int REQ_REGISTRATION_INFO_NO = 6;
 	
 	public static final int PRODUCT_NAME_INDEX = 0;
 	public static final int PRODUCT_CODE_INDEX = 1;
@@ -60,10 +73,6 @@ public class WorkPanel extends JPanel {
 	public static final int QUANTITY_INDEX = 3;
 	public static final int MANUFACTURING_DATE_INDEX = 4;
 	public static final int EXPIRATION_DATE_INDEX = 5;
-	
-	
-	
-	
 	
 	private DefaultTableModel regTableData, readTableData;
 	
@@ -113,9 +122,9 @@ public class WorkPanel extends JPanel {
 		toolbar.addSeparator();
 		toolbar.add(exitBtn);
 		
-			for(int i=0; i<96; i++) {
-				toolbar.addSeparator();
-			}
+		for(int i=0; i<96; i++) {
+			toolbar.addSeparator();
+		}
 			
 		toolbar.add(title);
 		add(toolbar, BorderLayout.NORTH);
@@ -203,9 +212,6 @@ public class WorkPanel extends JPanel {
 		regFieldC4 = new JTextField(15);
 		regFieldC5 = new JTextField(15);
 		
-		//더 효율적인 방법이 존재할 것 같은데 잘 모르겠음..
-		JTextField[] regFdArr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5};
-		
 		addBtn = new JButton("등록");
 		removeBtn = new JButton("제거");
 		saveBtn = new JButton("저장");
@@ -279,8 +285,8 @@ public class WorkPanel extends JPanel {
 		};
 		
 		regTable = new JTable(regTableData);
-		// 테이블 행을 클릭할 수 없다. - 컴퍼넌트 자체가 선택이 안됨.
-		//regTable.setEnabled(false);
+			// 테이블 행을 클릭할 수 없다. - 컴퍼넌트 자체가 선택이 안됨.
+			// regTable.setEnabled(false);
 		regTable.getTableHeader().setReorderingAllowed(false);
 		regTable.getTableHeader().setResizingAllowed(false);
 		
@@ -389,17 +395,13 @@ public class WorkPanel extends JPanel {
 		// Bottom
 		
 		
-		
 		// 전체탭 관리
 		tabs.addTab("register", regPane);
 		tabs.addTab("read", readPanel);
-		//tabs.addTab("update", new JLabel());
-		//tabs.addTab("delete", new JLabel());
 		
 		JPanel tab1 = new JPanel();
 		JLabel lbTab1 = new JLabel("재고등록  ");
 		tabX1 = new JButton("X");
-		//tabX1.setSize(5, 5);
 		tabX1.setBorder(BorderFactory.createEtchedBorder());
 		tabX1.setBorderPainted(false);
 		tabX1.setForeground(Color.GRAY);
@@ -413,7 +415,6 @@ public class WorkPanel extends JPanel {
 		JPanel tab2 = new JPanel();
 		JLabel lbTab2 = new JLabel("재고조회/변경  ");
 		tabX2 = new JButton("X");
-		//tabX2.setSize(5, 5);
 		tabX2.setBorder(BorderFactory.createEtchedBorder());
 		tabX2.setBorderPainted(false);
 		tabX2.setForeground(Color.GRAY);
@@ -431,12 +432,11 @@ public class WorkPanel extends JPanel {
 		tabs.setBackgroundAt(1, Color.WHITE);
 		
 		
-		
-		//tab에 대한 접근여부 설정
-		//tabs.setEnabledAt(2, false);
-		//tabs.setEnabledAt(3, false);
-		//index번호로 JTabbedpane의 활성화 창 선택
-		//tabs.setSelectedIndex(1);
+	// tab에 대한 접근여부 설정
+	// tabs.setEnabledAt(2, false);
+	// tabs.setEnabledAt(3, false);
+	// index번호로 JTabbedpane의 활성화 창 선택
+	// tabs.setSelectedIndex(1);
 		
 		//tabs.setVisible(false);
 		
@@ -455,21 +455,23 @@ public class WorkPanel extends JPanel {
 		 */
 		
 		
-		
 		exitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int answer=JOptionPane.showConfirmDialog(null, "프로그램을 종료하시겠습니까?", "IMS 프로그램 종료 확인"
+						, JOptionPane.YES_NO_OPTION);
+				if(answer==JOptionPane.YES_OPTION) {
+					System.exit(0);
+				} else return;
 			}
-			
 		});
-		
 		
 		jTree.addTreeSelectionListener(new TreeSelectionListener() {
 			
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent();
+
 				if(selectedNode.toString().equals("재고등록")) {
 					// find more efficient way
 					tabs.setEnabledAt(0, true);
@@ -478,9 +480,7 @@ public class WorkPanel extends JPanel {
 					for(Component c : regPane.getComponents()) {
 						c.setVisible(true);
 					}
-					
 				} 
-				
 				if(selectedNode.toString().equals("재고조회/변경")) {
 					
 					tabs.setEnabledAt(1, true);
@@ -489,8 +489,7 @@ public class WorkPanel extends JPanel {
 					for(Component c : readPanel.getComponents()) {
 						c.setVisible(true);
 					}
-					
-				} else 
+				} else  
 					return;
 			}
 		});
@@ -506,7 +505,6 @@ public class WorkPanel extends JPanel {
 				for(Component c : regPane.getComponents()) {
 					c.setVisible(false);
 				}
-				
 			}
 		});
 		
@@ -521,12 +519,13 @@ public class WorkPanel extends JPanel {
 				for(Component c : readPanel.getComponents()) {
 					c.setVisible(false);
 				}
-			
 			}
-		});		
+		});
 		
 		
-		// 제품명 선택시 제품에 따른 제품코드 자동 설정
+		// regPane Components ActionListener
+		
+		// 제품명 선택에 따른 제품코드 설정 및 표시
 		regComBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -538,6 +537,7 @@ public class WorkPanel extends JPanel {
 				case "Fabric-C18" 	: regFieldC1.setText("C1870"); break;
 				default : regFieldC1.setText(""); break;
 				}
+				regFieldC2.requestFocus();
 			}
 		});
 		
@@ -547,31 +547,65 @@ public class WorkPanel extends JPanel {
 		addBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// 유효성 검사를 위한 정규표현식 문장
+				String regLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
+				String regQty="^[0-9]*$";
+				String regMfgDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
+				String regMfgDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
+				String regExDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
+				String regExDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
+				
+				
 				if(regComBox.getSelectedItem().toString().equals("============")
-						&& regFdArr[0].getText().equals("")
-						&& regFdArr[1].getText().equals("")
-						&& regFdArr[2].getText().equals("")
-						&& regFdArr[3].getText().equals("")
-						&& regFdArr[4].getText().equals("")) {
+					|| regFieldC1.getText().equals("")
+					|| regFieldC2.getText().equals("")
+					|| regFieldC3.getText().equals("")
+					|| regFieldC4.getText().equals("")
+					|| regFieldC5.getText().equals("")) {
+					
+						JLabel message = new JLabel("빈 입력란이 존재합니다. 다시 확인해주세요.");
+						JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					
+				} else if(ProductDAO.getInstance().searchProduct(regFieldC2.getText())!=null) {
+					JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+				} else if(!Pattern.matches(regLot, regFieldC2.getText())) {// lotNo 
+					JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					
+				} else if(!Pattern.matches(regQty, regFieldC3.getText())) {// 숫자만입력 
 
-					JOptionPane.showMessageDialog(null, "[에러] 입력된 값이 없습니다. 데이터를 입력해주세요.", "Error", JOptionPane.ERROR_MESSAGE);
-					return;
+					JOptionPane.showMessageDialog(null, "수량은 자연수만 입력가능합니다. 입력하신 수량을 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					
+				} else if(!Pattern.matches(regMfgDateOne, regFieldC4.getText())
+						&& !Pattern.matches(regMfgDateTwo, regFieldC4.getText())) {// 생산일자
+					
+					JOptionPane.showMessageDialog(null, "부적합한 생산일자입니다. 양식에 맞추어 입력바랍니다."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					
+				} else if(!Pattern.matches(regExDateOne, regFieldC5.getText())
+						&& !Pattern.matches(regExDateTwo, regFieldC5.getText())) {// 만료일자
+					
+					JOptionPane.showMessageDialog(null, "부적합한 만료일자입니다. 양식에 맞추어 입력바랍니다."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
 					
 				} else {
-
-					Object[] regValues= new Object[regFdArr.length+1];
+					
+					Object[] regValues= new Object[REQ_REGISTRATION_INFO_NO];
 					
 					regValues[0]=regComBox.getSelectedItem().toString();
-					
-					for(int i=0; i<regFdArr.length; i++) {
-						regValues[i+1]=regFdArr[i].getText();
-					}
+					regValues[1]=regFieldC1.getText();
+					regValues[2]=regFieldC2.getText();
+					regValues[3]=regFieldC3.getText();
+					regValues[4]=regFieldC4.getText().replace("-", "");
+					regValues[5]=regFieldC5.getText().replace("-", "");
 					
 					regTableData.addRow(regValues);
 				}
 			}
 		});
-		
 
 		//regTableData.removeRow(row-1);
 		removeBtn.addActionListener(new ActionListener() {
@@ -579,7 +613,8 @@ public class WorkPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// 등록 : null
 				if(regTableData.getRowCount()==0) {
-					JOptionPane.showMessageDialog(null, "[에러] 제거할 수 있는 항목이 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
+					JLabel message = new JLabel("[에러] 제거할 수 있는 항목이 없습니다.");
+					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					// 선택 x
@@ -589,21 +624,21 @@ public class WorkPanel extends JPanel {
 					//	1줄 선택
 					} else if(regTable.getSelectedRowCount()==1) {
 						regTableData.removeRow(regTable.getSelectedRow());
+						initRegInfo();
 					
+					// 여러줄 선택	
 					} else {
 						int selectedRows=regTable.getSelectedRowCount();
 						for(int i=0; i<selectedRows; i++) {
 							regTableData.removeRow(regTable.getSelectedRow());
 						}
+						initRegInfo();
 					}
 				}
 			}
 		});
 		
 		saveBtn.addActionListener(new ActionListener() {
-			// unchecked, rawtypes를 suppressWarning 안하려면 어떻게 해야하는지?? 
-			// regTableData.getDataVector().elementAt(0)에서 발생
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(regTableData.getRowCount()==0) {
@@ -614,66 +649,35 @@ public class WorkPanel extends JPanel {
 							, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 						
 						//JOption.YES_OPTION (==0)인 경우 시행할 코드 작성.
-						if(dialogResult==0) {
-							if(regTableData.getRowCount()==1) { // 등록된 
-								
-								/*
-								ProductDTO product=new ProductDTO();
-								product.setpName((String)regTableData.getValueAt(0, 0));
-								product.setpCode((String)regTableData.getValueAt(0, 1));
-								product.setLotNo((String)regTableData.getValueAt(0, 2));
-								product.setQty(Integer.parseInt((String) regTableData.getValueAt(0, 3)));
-								product.setMfgDate((String)regTableData.getValueAt(0, 4));
-								product.setExDate((String)regTableData.getValueAt(0, 5));
-								*/
-								
-								Vector<Object> row = regTableData.getDataVector().elementAt(0);
-								ProductDTO product=new ProductDTO();
-								product.setpName((String)row.get(0));
-								product.setpCode((String)row.get(1));
-								product.setLotNo((String)row.get(2));
-								product.setQty(Integer.parseInt((String)row.get(3)));
-								product.setMfgDate((String)row.get(4));
-								product.setExDate((String)row.get(5));
-								
-								int resultRow=ProductDAO.getInstance().insertProduct(product);
-								if(resultRow==0) {
-									JOptionPane.showMessageDialog(null, "이미 등록된 제품 Batch 정보 입니다. 입력정보의 확인을 부탁드립니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
-								} else {
-									JOptionPane.showMessageDialog(null, resultRow+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
-								}
-								
-							} else {
-								Vector<Vector> rows = regTableData.getDataVector();
-								List<ProductDTO> productList = new ArrayList<ProductDTO>();
-								int tableRows=regTableData.getRowCount();
-								
-								for(Vector<Object> v : rows) {
-									ProductDTO product = new ProductDTO();
-									product.setpName((String)v.get(0));
-									product.setpCode((String)v.get(1));
-									product.setLotNo((String)v.get(2));
-									product.setQty(Integer.parseInt((String) v.get(3)));
-									product.setMfgDate((String)v.get(4));
-									product.setExDate((String)v.get(5));
-									productList.add(product);
-								}
-							    int[] resultRows = ProductDAO.getInstance().insertProducts(productList);
-							    
-							    if(resultRows.length!=tableRows) {
-									JOptionPane.showMessageDialog(null, "이미 등록된 제품 Batch 정보가 존재합니다. 입력정보의 확인을 부탁드립니다.", "Error", JOptionPane.INFORMATION_MESSAGE);
-								} else {
-									JOptionPane.showMessageDialog(null, resultRows.length+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
-								}
-							}
-								
-						} else if(dialogResult!=0) {
+					if(dialogResult==0) {
+						// 추가한 제품정보 : 1줄
+						if(regTableData.getRowCount()==1) { 
+							
+							int result=registerProduct();
+							
+							JOptionPane.showMessageDialog(null, result+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
 							removeAllRows(regTableData);
+							initRegInfo();
+							
+						// 추가한 제품정보 : 2줄 이상	
+						} else {  
+							
+							int[] results=registerProducts();
+							
+							JOptionPane.showMessageDialog(null, results.length+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
+							removeAllRows(regTableData);
+							initRegInfo();
 						}
+							
+					} else if(dialogResult!=0) {
+						// removeAllRows(regTableData);
+					}
 				}
 			}// ActionPerformed() end
 		});
 		
+		
+		// readPanel Components ActionListener
 		
 		searchBtn.addActionListener(new ActionListener() {
 			@Override
@@ -740,18 +744,33 @@ public class WorkPanel extends JPanel {
 					popPnl.fd4.setText(mfgDate);
 					popPnl.fd5.setText(exDate);
 					
-					popPnl.fd3.requestFocus();
+					popPnl.fd2.requestFocus();
 					
 					popPnl.updateBtnInPnl.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							String[] str=popPnl.getAllTxts();
-							
-							ProductDAO.getInstance().updateProduct(createProductDTO(str));
-							popPnl.dispose();
-
-							removeAllRows(readTableData);
-							showInfoAllProducts();
+						
+							if(ProductDAO.getInstance().searchProduct(popPnl.fd2.getText())!=null) {
+								JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
+										, "Error", JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								
+								String[] str=popPnl.getAllTxts();
+								
+								ProductDAO.getInstance().updateProduct(createProductDTO(str));
+								popPnl.dispose();
+								
+								removeAllRows(readTableData);
+								
+								switch(readComBox.getSelectedItem().toString()) {
+								case "Total Inventory": showInfoAllProducts(); break;
+								case "Camera-R30 (R3067)": showInfoProducts("R3067"); break;
+								case "Battery-T21 (T2166)": showInfoProducts("T2166"); break;
+								case "Board-D40 (D4066)": showInfoProducts("D4066"); break;
+								case "Sponge-G80 (G8083)": showInfoProducts("G8083"); break;
+								case "Fabric-C18 (C1870)": showInfoProducts("C1870"); break;
+								}
+							}
 						}
 					});
 					
@@ -761,8 +780,6 @@ public class WorkPanel extends JPanel {
 				}
 			}
 		});
-		
-		
 		
 		deleteBtn.addActionListener(new ActionListener() {
 			@Override
@@ -785,15 +802,21 @@ public class WorkPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, resultRow+"개의 제품 Batch 정보가 성공적으로 삭제되었습니다.", "Notice", JOptionPane.INFORMATION_MESSAGE);
 						
 						removeAllRows(readTableData);
-						showInfoAllProducts();
+						
+						// readComBox가 선택되었던 상황에 따라 삭제 후 출력 데이터 설정
+						switch(readComBox.getSelectedItem().toString()) {
+						case "Total Inventory": showInfoAllProducts(); break;
+						case "Camera-R30 (R3067)": showInfoProducts("R3067"); break;
+						case "Battery-T21 (T2166)": showInfoProducts("T2166"); break;
+						case "Board-D40 (D4066)": showInfoProducts("D4066"); break;
+						case "Sponge-G80 (G8083)": showInfoProducts("G8083"); break;
+						case "Fabric-C18 (C1870)": showInfoProducts("C1870"); break;
+						}
 						
 					} else return;
 				}
 			}
 		});
-		
-		
-
 		
 		setVisible(true);
 	} //WorkPanel 생성자 종료
@@ -816,6 +839,81 @@ public class WorkPanel extends JPanel {
 		}
 		
 		return rows;
+	}
+	
+	public void initRegInfo() {
+		regComBox.setSelectedIndex(0);
+		regFieldC2.setText("");
+		regFieldC3.setText("");
+		regFieldC4.setText("");
+		regFieldC5.setText("");
+	}
+	
+	/*
+	Vector<Object> row = regTableData.getDataVector().elementAt(0);
+	ProductDTO product=new ProductDTO();
+	product.setpName((String)row.get(0));
+	product.setpCode((String)row.get(1));
+	product.setLotNo((String)row.get(2));
+	product.setQty(Integer.parseInt((String)row.get(3)));
+	product.setMfgDate((String)row.get(4));
+	product.setExDate((String)row.get(5));
+	
+	int resultRow=ProductDAO.getInstance().insertProduct(product);
+	*/
+	public int registerProduct() {
+
+		int result=0;
+		
+		ProductDTO product=new ProductDTO();
+		product.setpName((String)regTableData.getValueAt(0, PRODUCT_NAME_INDEX));
+		product.setpCode((String)regTableData.getValueAt(0, PRODUCT_CODE_INDEX));
+		product.setLotNo((String)regTableData.getValueAt(0, LOTNO_INDEX));
+		product.setQty(Integer.parseInt((String)regTableData.getValueAt(0, QUANTITY_INDEX)));
+		product.setMfgDate((String)regTableData.getValueAt(0, MANUFACTURING_DATE_INDEX));
+		product.setExDate((String)regTableData.getValueAt(0, EXPIRATION_DATE_INDEX));
+		
+		result=ProductDAO.getInstance().insertProduct(product);
+		return result;
+	}
+
+	
+	/*
+	  < 메소드를 선언하면서 경고가 발생하지 않도록 로직 변경 >
+	Vector<Vector> rows = regTableData.getDataVector(); // unchecked, rawtypes 타입의 warning 발생.
+	List<ProductDTO> productList = new ArrayList<ProductDTO>();
+	int tableRows=regTableData.getRowCount(); 
+	
+	for(Vector<Object> v : rows) {
+		ProductDTO product = new ProductDTO();
+		product.setpName((String)v.get(0));
+		product.setpCode((String)v.get(1));
+		product.setLotNo((String)v.get(2));
+		product.setQty(Integer.parseInt((String) v.get(3)));
+		product.setMfgDate((String)v.get(4));
+		product.setExDate((String)v.get(5));
+		productList.add(product);
+	}
+    int[] resultRows = ProductDAO.getInstance().insertProducts(productList);
+	*/
+	public int[] registerProducts() {
+		int[] results=null;
+		int tableRows=regTableData.getRowCount();
+		List<ProductDTO> productList = new ArrayList<ProductDTO>();
+		
+		for(int i=0; i<tableRows; i++) {
+			ProductDTO product=new ProductDTO();
+			product.setpName((String)regTableData.getValueAt(i, PRODUCT_NAME_INDEX));
+			product.setpCode((String)regTableData.getValueAt(i, PRODUCT_CODE_INDEX));
+			product.setLotNo((String)regTableData.getValueAt(i, LOTNO_INDEX));
+			product.setQty(Integer.parseInt((String)regTableData.getValueAt(i, QUANTITY_INDEX)));
+			product.setMfgDate((String)regTableData.getValueAt(i, MANUFACTURING_DATE_INDEX));
+			product.setExDate((String)regTableData.getValueAt(i, EXPIRATION_DATE_INDEX));
+			productList.add(product);
+		}
+		results=ProductDAO.getInstance().insertProducts(productList);
+		
+		return results;
 	}
 	
 	/**
@@ -918,7 +1016,5 @@ public class WorkPanel extends JPanel {
 		
 		return product;
 	}
-	
-	
 	
 }

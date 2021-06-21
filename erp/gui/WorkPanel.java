@@ -23,10 +23,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -106,14 +108,6 @@ public class WorkPanel extends JPanel {
 		JLabel title = new JLabel("재고관리 시스템");
 		title.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 15));
 		
-		/*
-		infoBtn = new JButton(new ImageIcon(getClass().getResource("/images/infoTest.png")));
-		logoutBtn=new JButton(new ImageIcon(getClass().getResource("/images/logoutTest.png")));
-		
-		logoutBtn.setBounds(1150, 20, 85, 25);
-		logoutBtn.setFont(new Font("굴림", Font.PLAIN, 13));
-		logoutBtn.setBackground(new Color(100, 149, 237));
-		*/
 		
 		toolbar.addSeparator();
 		toolbar.add(infoBtn);
@@ -137,7 +131,21 @@ public class WorkPanel extends JPanel {
 		
 		JSplitPane firstSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		
-		JPanel westPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel westPanel = new JPanel(new BorderLayout());
+		JPanel westTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel westMiddle = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		westMiddle.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		JPanel westBottom = new JPanel();
+		JPanel westWest = new JPanel();
+		JPanel westEast = new JPanel();
+		
+		
+		JTextArea invenInfo = new JTextArea();
+		invenInfo.setText("\n  Inventory Information  ");
+		invenInfo.setFont(new Font("Arial", Font.BOLD, 12));
+		invenInfo.setBackground(null);
+		invenInfo.setEditable(false);
+		
 		JTree jTree;
 		DefaultMutableTreeNode treeList = new DefaultMutableTreeNode("재고관리");
 		
@@ -148,11 +156,29 @@ public class WorkPanel extends JPanel {
 		treeList.add(readNupdate);
 		
 		jTree = new JTree(treeList);
-		jTree.setOpaque(false);
+		//jTree.setOpaque(false);
 		
+		JTextArea botBlank = new JTextArea();
+		botBlank.setText("\nⓒ copyright. Margin");
+		botBlank.setFont(new Font(null, Font.BOLD, 13));
+		botBlank.setBackground(null);
+		botBlank.setEnabled(false);
+		
+		westTop.add(invenInfo);
+		westMiddle.add(jTree);
+		westMiddle.setBackground(Color.WHITE);
+		westBottom.add(botBlank);
+		
+		/*
 		westPanel.add(jTree);
 		westPanel.setBackground(null);
+		*/
 		
+		westPanel.add(westTop, BorderLayout.NORTH);
+		westPanel.add(westMiddle, BorderLayout.CENTER);
+		westPanel.add(westBottom, BorderLayout.SOUTH);
+		westPanel.add(westWest, BorderLayout.WEST);
+		westPanel.add(westEast, BorderLayout.EAST);
 		
 		/**
 		 *  [JPanels for Inventory Register]
@@ -304,7 +330,7 @@ public class WorkPanel extends JPanel {
 		
 		regPane.setTopComponent(inputPanel);
 		regPane.setBottomComponent(regTablePane);
-		regPane.setDividerSize(8);
+		regPane.setDividerSize(5);
 		regPane.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 		
 		
@@ -454,6 +480,14 @@ public class WorkPanel extends JPanel {
 		 *  
 		 */
 		
+		infoBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new InfoDialog();
+				
+			}
+		});
+		
 		
 		exitBtn.addActionListener(new ActionListener() {
 			@Override
@@ -547,63 +581,8 @@ public class WorkPanel extends JPanel {
 		addBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 유효성 검사를 위한 정규표현식 문장
-				String regLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
-				String regQty="^[0-9]*$";
-				String regMfgDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
-				String regMfgDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
-				String regExDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
-				String regExDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
+				isValidated();
 				
-				
-				if(regComBox.getSelectedItem().toString().equals("============")
-					|| regFieldC1.getText().equals("")
-					|| regFieldC2.getText().equals("")
-					|| regFieldC3.getText().equals("")
-					|| regFieldC4.getText().equals("")
-					|| regFieldC5.getText().equals("")) {
-					
-						JLabel message = new JLabel("빈 입력란이 존재합니다. 다시 확인해주세요.");
-						JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-						return;
-					
-				} else if(ProductDAO.getInstance().searchProduct(regFieldC2.getText())!=null) {
-					JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
-							, "Error", JOptionPane.INFORMATION_MESSAGE);
-				} else if(!Pattern.matches(regLot, regFieldC2.getText())) {// lotNo 
-					JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
-							, "Error", JOptionPane.INFORMATION_MESSAGE);
-					
-				} else if(!Pattern.matches(regQty, regFieldC3.getText())) {// 숫자만입력 
-
-					JOptionPane.showMessageDialog(null, "수량은 자연수만 입력가능합니다. 입력하신 수량을 확인해주세요."
-							, "Error", JOptionPane.INFORMATION_MESSAGE);
-					
-				} else if(!Pattern.matches(regMfgDateOne, regFieldC4.getText())
-						&& !Pattern.matches(regMfgDateTwo, regFieldC4.getText())) {// 생산일자
-					
-					JOptionPane.showMessageDialog(null, "부적합한 생산일자입니다. 양식에 맞추어 입력바랍니다."
-							, "Error", JOptionPane.INFORMATION_MESSAGE);
-					
-				} else if(!Pattern.matches(regExDateOne, regFieldC5.getText())
-						&& !Pattern.matches(regExDateTwo, regFieldC5.getText())) {// 만료일자
-					
-					JOptionPane.showMessageDialog(null, "부적합한 만료일자입니다. 양식에 맞추어 입력바랍니다."
-							, "Error", JOptionPane.INFORMATION_MESSAGE);
-					
-				} else {
-					
-					Object[] regValues= new Object[REQ_REGISTRATION_INFO_NO];
-					
-					regValues[0]=regComBox.getSelectedItem().toString();
-					regValues[1]=regFieldC1.getText();
-					regValues[2]=regFieldC2.getText();
-					regValues[3]=regFieldC3.getText();
-					regValues[4]=regFieldC4.getText().replace("-", "");
-					regValues[5]=regFieldC5.getText().replace("-", "");
-					
-					regTableData.addRow(regValues);
-				}
 			}
 		});
 
@@ -724,7 +703,7 @@ public class WorkPanel extends JPanel {
 					return;
 				} else if (readTable.getSelectedRowCount()==1) {
 					
-					popPnl=new UpdateDialog(null, "update");
+					popPnl=new UpdateDialog(null, "Update");
 					
 					int rowIndex = readTable.getSelectedRow();
 					
@@ -848,6 +827,78 @@ public class WorkPanel extends JPanel {
 		regFieldC4.setText("");
 		regFieldC5.setText("");
 	}
+	
+	/**
+	 * check input values whether they are available or not.
+	 * 
+	 * @return {@code true} if they pass the standards
+	 */
+	public boolean isValidated() {
+		boolean results=false;
+		// 유효성 검사를 위한 정규표현식 문장
+		String regLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
+		String regQty="^[0-9]*$";
+		String regMfgDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
+		String regMfgDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
+		String regExDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
+		String regExDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
+		
+		
+		if(regComBox.getSelectedItem().toString().equals("============")
+			|| regFieldC1.getText().equals("")
+			|| regFieldC2.getText().equals("")
+			|| regFieldC3.getText().equals("")
+			|| regFieldC4.getText().equals("")
+			|| regFieldC5.getText().equals("")) {
+			
+				JLabel message = new JLabel("빈 입력란이 존재합니다. 다시 확인해주세요.");
+				JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+				return results;
+			
+		} else if(ProductDAO.getInstance().searchProduct(regFieldC2.getText().replace(" ", ""))!=null) {
+			JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
+					, "Error", JOptionPane.INFORMATION_MESSAGE);
+			return results;
+
+		} else if(!Pattern.matches(regLot, regFieldC2.getText().replace(" ", ""))) {// lotNo 
+			JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
+					, "Error", JOptionPane.INFORMATION_MESSAGE);
+			return results;
+
+		} else if(!Pattern.matches(regQty, regFieldC3.getText().replace(" ", ""))) {// 숫자만입력 
+			JOptionPane.showMessageDialog(null, "수량은 자연수만 입력가능합니다. 입력하신 수량을 확인해주세요."
+					, "Error", JOptionPane.INFORMATION_MESSAGE);
+			return results;
+
+		} else if(!Pattern.matches(regMfgDateOne, regFieldC4.getText().replace(" ", ""))
+				&& !Pattern.matches(regMfgDateTwo, regFieldC4.getText().replace(" ", ""))) {// 생산일자
+			JOptionPane.showMessageDialog(null, "부적합한 생산일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
+					, "Error", JOptionPane.INFORMATION_MESSAGE);
+			return results;
+
+		} else if(!Pattern.matches(regExDateOne, regFieldC5.getText().replace(" ", ""))
+				&& !Pattern.matches(regExDateTwo, regFieldC5.getText().replace(" ", ""))) {// 만료일자
+			JOptionPane.showMessageDialog(null, "부적합한 만료일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
+					, "Error", JOptionPane.INFORMATION_MESSAGE);
+			return results;
+
+		} else {
+			
+			Object[] regValues= new Object[REQ_REGISTRATION_INFO_NO];
+			
+			regValues[0]=regComBox.getSelectedItem().toString();
+			regValues[1]=regFieldC1.getText();
+			regValues[2]=regFieldC2.getText();
+			regValues[3]=regFieldC3.getText();
+			regValues[4]=regFieldC4.getText().replace("-", "");
+			regValues[5]=regFieldC5.getText().replace("-", "");
+			
+			regTableData.addRow(regValues);
+			results=true;
+		}
+		return results;
+	}
+	
 	
 	/*
 	Vector<Object> row = regTableData.getDataVector().elementAt(0);

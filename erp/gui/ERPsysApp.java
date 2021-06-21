@@ -48,7 +48,7 @@ public class ERPsysApp extends JFrame {
 					workPanel.setVisible(isLogOn);
 					setContentPane(workPanel);
 					JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다.");
-				} else if(logPanel.idField.getText()== null && logPanel.pwField.getText()== null ){
+				} else if(logPanel.idField.getText().equals("") || logPanel.pwField.getText().equals("") ){
 					JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력해주세요.", "에러", JOptionPane.ERROR_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(null, "가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.", "에러", JOptionPane.ERROR_MESSAGE);

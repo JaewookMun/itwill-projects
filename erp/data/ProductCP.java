@@ -1,9 +1,12 @@
 package erp.data;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
@@ -21,15 +24,29 @@ public class ProductCP {
 	
 	static {
 		_pds=PoolDataSourceFactory.getPoolDataSource();
+		InputStream in=ProductCP.class.getClassLoader().getResourceAsStream("erp/data/connection.properties");
+		Properties properties = new Properties();
 		try {
-			_pds.setConnectionFactoryClassName("oracle.jdbc.driver.OracleDriver");
-			_pds.setURL("jdbc:oracle:thin:@localhost:1521:xe");
-			_pds.setUser("margin");
-			_pds.setPassword("jack");
-			_pds.setInitialPoolSize(3);
-			_pds.setMaxPoolSize(5);
+			properties.load(in);
+		} catch (IOException e1) {
+			System.out.println("connection.properties ∆ƒ¿œ¿ª √£¿ª ºˆ æ¯Ω¿¥œ¥Ÿ."+e1.getMessage());
+		}
+		String driver=(String)properties.get("driver");
+		String url=(String)properties.get("url");
+		String user=(String)properties.get("user");
+		String passwd=(String)properties.get("passwd");
+		int initalCons = Integer.parseInt((String)properties.get("initialCons"));
+		int maxCons = Integer.parseInt((String)properties.get("maxCons"));
+		
+		try {
+			_pds.setConnectionFactoryClassName(driver);
+			_pds.setURL(url);
+			_pds.setUser(user);
+			_pds.setPassword(passwd);
+			_pds.setInitialPoolSize(initalCons);
+			_pds.setMaxPoolSize(maxCons);
 		} catch (SQLException e) {
-			// getStackTrace()¬ø√ç getMessage√Ä√á √Ç√∑√Ä√å√Å¬°?? 
+			// getStackTrace()øÕ getMessage¿« ¬˜¿Ã¡°?? 
 			e.getStackTrace();
 		}
 	}

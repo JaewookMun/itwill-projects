@@ -2,7 +2,6 @@ package erp.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -45,6 +44,13 @@ public class WorkPanel extends JPanel {
 	
 	private DefaultMutableTreeNode registration, readNupdate;
 	
+	private JTabbedPane motherTab;
+	
+	/** 탭 변경(생성,삭제) 기능 구현을 위한 변수 */
+	private JPanel tabOne, tabTwo;
+	private JButton tabCloseOne, tabCloseTwo;
+	private boolean isRegTab, isReadTab;
+	
 	private JComboBox<String> regComBox;
 	
 	/**
@@ -70,7 +76,7 @@ public class WorkPanel extends JPanel {
 	
 	public static final int PRODUCT_NAME_INDEX = 0;
 	public static final int PRODUCT_CODE_INDEX = 1;
-	/** lotNo is {@code Primary Key} of {@code TOTAL_PRODUCTS} table */
+	/** lotNo is {@code Primary Key} of {@code TOTAL_PRODUCTS} table\n {@code 2} is index in Table */
 	public static final int LOTNO_INDEX = 2;
 	public static final int QUANTITY_INDEX = 3;
 	public static final int MANUFACTURING_DATE_INDEX = 4;
@@ -78,7 +84,7 @@ public class WorkPanel extends JPanel {
 	
 	private DefaultTableModel regTableData, readTableData;
 	
-	private JButton tabX1, tabX2;
+
 	
 	
 	@SuppressWarnings("serial")
@@ -122,10 +128,10 @@ public class WorkPanel extends JPanel {
 			
 		toolbar.add(title);
 		add(toolbar, BorderLayout.NORTH);
-		
 
 		
-		/**  [메인화면 - 좌우분할]
+		/**  
+		 *   [메인화면 - 좌우분할]
 		 *   좌측 : 메뉴바  /  우측 : 메인기능 
 		 */
 		
@@ -196,9 +202,10 @@ public class WorkPanel extends JPanel {
 		 *  하부 : tablePane
 		 */
 		
-		JTabbedPane tabs = new JTabbedPane();
-		tabs.setFont(new Font("Arial", Font.PLAIN, 14));
-		
+		motherTab = new JTabbedPane();
+		motherTab.setFont(new Font("Arial", Font.PLAIN, 14));
+		isRegTab=false;
+		isReadTab=false;
 		
 		//CRUD - 상하분할
 		JSplitPane regPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -218,7 +225,6 @@ public class WorkPanel extends JPanel {
 		regSubPanel5=new JPanel();
 		regSubPanel6=new JPanel();
 		
-		//
 		regLabel1 = new JLabel("제품명 :");
 		regLabel2 = new JLabel("제품코드 :");
 		regLabel3 = new JLabel("Lot No :");
@@ -226,7 +232,6 @@ public class WorkPanel extends JPanel {
 		regLabel5 = new JLabel("생산일자 :");
 		regLabel6 = new JLabel("만료일자 :");
 		
-		//regFieldC1 = new JTextField(15);
 		String[] products= {"============","Camera-R30", "Battery-T21", "Board-D40", "Sponge-G80", "Fabric-C18"};
 		regComBox = new JComboBox<String>(products);
 		regComBox.setBackground(Color.WHITE);
@@ -278,24 +283,9 @@ public class WorkPanel extends JPanel {
 		inputPanel.add(saveBtn);
 				
 		
-		/*
-		 * 프로젝트 진행을 위한 임시정의 
-		 * 
-		 * 제품코드 : 제품꼬리 + 제품명 첫글자의 ASCII코드값
-		 *  
-		 * Lot No : 생산장소+생산일자+제품명+생산파트(오전/오후)
-		 * 
-		 * 	생산장소 - [ 수원: S, 안산: A ]
-		 * 	생산일자 - [yyyymmdd]
-		 * 	제품명  - [ camera: R / battery: T / board: D / sponge: G / Fabric: C ]
-		 * 	생산파트 - [오전조: 1 / 오후조: 2]
-		 * 	e.g.) 2020년 수원공장에서 오전조에 의해 만들어진 카메라 제품의 lot id
-		 *     	   >>  S20201016R1
-		 */
 		
 		
 		String[] regColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
-		//String[][] regRows = new String[0][6]; 
 		String[][] regRows = {}; 
 		
 		JScrollPane regTablePane;
@@ -318,14 +308,6 @@ public class WorkPanel extends JPanel {
 		
 		regTable.setRowHeight(23);
 		
-		/*
-		regTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-		regTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-		regTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-		regTable.getColumnModel().getColumn(3).setPreferredWidth(50);
-		regTable.getColumnModel().getColumn(4).setPreferredWidth(100);
-		regTable.getColumnModel().getColumn(5).setPreferredWidth(100);
-		*/
 		regTablePane = new JScrollPane(regTable);
 		
 		regPane.setTopComponent(inputPanel);
@@ -390,10 +372,9 @@ public class WorkPanel extends JPanel {
 		rTopPanel.add(deleteBtn);
 		rTopPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 7));
 		
-		
 		readPanel.add(rTopPanel, BorderLayout.NORTH);
 		
-		// 중앙 테이블
+		
 		String[] readColumns = {"제품명","제품코드","Lot No","수량(Qty)","생산일자","만료일자"};
 		String[][] readRows = new String[0][6];
 		
@@ -422,40 +403,14 @@ public class WorkPanel extends JPanel {
 		
 		
 		// 전체탭 관리
-		tabs.addTab("register", regPane);
-		tabs.addTab("read", readPanel);
-		
-		JPanel tab1 = new JPanel();
-		JLabel lbTab1 = new JLabel("재고등록  ");
-		tabX1 = new JButton("X");
-		tabX1.setBorder(BorderFactory.createEtchedBorder());
-		tabX1.setBorderPainted(false);
-		tabX1.setForeground(Color.GRAY);
-		tabX1.setContentAreaFilled(false);
-		tabX1.setToolTipText("close this tab");
-		
-		tab1.add(lbTab1);
-		tab1.add(tabX1);
-		tab1.setOpaque(false);
-		
-		JPanel tab2 = new JPanel();
-		JLabel lbTab2 = new JLabel("재고조회/변경  ");
-		tabX2 = new JButton("X");
-		tabX2.setBorder(BorderFactory.createEtchedBorder());
-		tabX2.setBorderPainted(false);
-		tabX2.setForeground(Color.GRAY);
-		tabX2.setContentAreaFilled(false);
-		tabX2.setToolTipText("close this tab");
-		
-		tab2.add(lbTab2);
-		tab2.add(tabX2);
-		tab2.setOpaque(false);
+		//motherTab.addTab("register", regPane);
+		//motherTab.addTab("read", readPanel);
 
-		tabs.setTabComponentAt(0, tab1);
-		tabs.setBackgroundAt(0, Color.WHITE);
-	
-		tabs.setTabComponentAt(1, tab2);
-		tabs.setBackgroundAt(1, Color.WHITE);
+		tabCloseOne=createTabCloseBtn();
+		tabOne=createSmallTapPanel("재고등록  ", tabCloseOne);
+		
+		tabCloseTwo=createTabCloseBtn();
+		tabTwo=createSmallTapPanel("재고조회/변경  ", tabCloseTwo);
 		
 		
 	// tab에 대한 접근여부 설정
@@ -464,21 +419,19 @@ public class WorkPanel extends JPanel {
 	// index번호로 JTabbedpane의 활성화 창 선택
 	// tabs.setSelectedIndex(1);
 		
-		//tabs.setVisible(false);
 		
 		firstSplit.setLeftComponent(westPanel);
-		firstSplit.setRightComponent(tabs);
+		firstSplit.setRightComponent(motherTab);
 		firstSplit.setDividerSize(5);
 		add(firstSplit, BorderLayout.CENTER);
 
 		
-		/**
-		 *  [이벤트 핸들러] - ( ) : 구현 예정
-		 *  JToolbar func k : (info), logout, exit
-		 *  westPanel func k
-		 *  inputPanel func k : add, remove, (save), (update)
-		 *  
+		/*
+		 **********************************************************
+		 *  event handler area
+		 ********************************************************** 
 		 */
+		
 		
 		infoBtn.addActionListener(new ActionListener() {
 			@Override
@@ -487,7 +440,6 @@ public class WorkPanel extends JPanel {
 				
 			}
 		});
-		
 		
 		exitBtn.addActionListener(new ActionListener() {
 			@Override
@@ -507,52 +459,46 @@ public class WorkPanel extends JPanel {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent();
 
 				if(selectedNode.toString().equals("재고등록")) {
-					// find more efficient way
-					tabs.setEnabledAt(0, true);
-					tab1.setVisible(true);
-					tabs.setBackgroundAt(0, Color.WHITE);
-					for(Component c : regPane.getComponents()) {
-						c.setVisible(true);
+					if(!isRegTab) {
+						motherTab.addTab("register", regPane);
+						motherTab.setTabComponentAt(motherTab.indexOfTab("register"), tabOne);
+						motherTab.setBackgroundAt(motherTab.indexOfTab("register"), Color.WHITE);
+						motherTab.setSelectedIndex(motherTab.indexOfTab("register"));
+						isRegTab=true;
+					} else {
+						motherTab.setSelectedIndex(motherTab.indexOfTab("register"));
 					}
-				} 
-				if(selectedNode.toString().equals("재고조회/변경")) {
-					
-					tabs.setEnabledAt(1, true);
-					tab2.setVisible(true);
-					tabs.setBackgroundAt(1, Color.WHITE);
-					for(Component c : readPanel.getComponents()) {
-						c.setVisible(true);
+				} else if (selectedNode.toString().equals("재고조회/변경")) {
+					if(!isReadTab) {
+						motherTab.addTab("read", readPanel);
+						motherTab.setTabComponentAt(motherTab.indexOfTab("read"), tabTwo);
+						motherTab.setBackgroundAt(motherTab.indexOfTab("read"), Color.WHITE);
+						motherTab.setSelectedIndex(motherTab.indexOfTab("read"));
+						isReadTab=true;
+					}else {
+						motherTab.setSelectedIndex(motherTab.indexOfTab("read"));
 					}
-				} else  
-					return;
+				} else return;
 			}
 		});
 		
-		tabX1.addActionListener(new ActionListener() {
+		tabCloseOne.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//tabs.remove(tabs.getSelectedIndex());
-				tabs.setEnabledAt(0, false);
-				tab1.setVisible(false);
-				tabs.setBackgroundAt(0, null);
-				for(Component c : regPane.getComponents()) {
-					c.setVisible(false);
-				}
+				motherTab.remove(motherTab.indexOfTab("register"));
+				isRegTab=false;
 			}
 		});
 		
-		tabX2.addActionListener(new ActionListener() {
+		tabCloseTwo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//tabs.remove(tabs.getSelectedIndex());				
-				tabs.setEnabledAt(1, false);
-				tab2.setVisible(false);
-				tabs.setBackgroundAt(1, null);
-				for(Component c : readPanel.getComponents()) {
-					c.setVisible(false);
-				}
+				
+				motherTab.remove(motherTab.indexOfTab("read"));
+				isReadTab=false;
+				
 			}
 		});
 		
@@ -576,12 +522,69 @@ public class WorkPanel extends JPanel {
 		});
 		
 		
-		// regFdarr = {regFieldC1, regFieldC2, regFieldC3, regFieldC4, regFieldC5, regFieldC6}
-		// regFieldC1.getText(), regFieldC2.getText(), regFieldC3.getText(), regFieldC4.getText(), regFieldC5.getText(), regFieldC6.getText()
 		addBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				isValidated();
+				// 유효성 검사를 위한 정규표현식 문장
+				String regLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(0[0-9]|1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
+				String regQty="^[0-9]*$";
+				String regMfgDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[01])";
+				String regMfgDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(0[0-9]|1[0-9]|2[0-9]|3[01])";
+				String regExDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[01])";
+				String regExDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(0[0-9]|1[0-9]|2[0-9]|3[01])";
+				
+				
+				if(regComBox.getSelectedItem().toString().equals("============")
+					|| regFieldC1.getText().equals("")
+					|| regFieldC2.getText().equals("")
+					|| regFieldC3.getText().equals("")
+					|| regFieldC4.getText().equals("")
+					|| regFieldC5.getText().equals("")) {
+					
+					JLabel message = new JLabel("빈 입력란이 존재합니다. 다시 확인해주세요.");
+					JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+					
+				} else if(ProductDAO.getInstance().searchProduct(regFieldC2.getText().replace(" ", ""))!=null) {
+					JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+
+				} else if(!Pattern.matches(regLot, regFieldC2.getText().replace(" ", ""))) {// lotNo 
+					JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+
+				} else if(!Pattern.matches(regQty, regFieldC3.getText().replace(" ", ""))) {// 숫자만입력 
+					JOptionPane.showMessageDialog(null, "수량은 자연수만 입력가능합니다. 입력하신 수량을 확인해주세요."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+
+				} else if(!Pattern.matches(regMfgDateOne, regFieldC4.getText().replace(" ", ""))
+						&& !Pattern.matches(regMfgDateTwo, regFieldC4.getText().replace(" ", ""))) {// 생산일자
+					JOptionPane.showMessageDialog(null, "부적합한 생산일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+
+				} else if(!Pattern.matches(regExDateOne, regFieldC5.getText().replace(" ", ""))
+						&& !Pattern.matches(regExDateTwo, regFieldC5.getText().replace(" ", ""))) {// 만료일자
+					JOptionPane.showMessageDialog(null, "부적합한 만료일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
+							, "Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+
+				} else {
+					
+					Object[] regValues= new Object[REQ_REGISTRATION_INFO_NO];
+					
+					regValues[0]=regComBox.getSelectedItem().toString();
+					regValues[1]=regFieldC1.getText();
+					regValues[2]=regFieldC2.getText();
+					regValues[3]=regFieldC3.getText();
+					regValues[4]=regFieldC4.getText().replace("-", "");
+					regValues[5]=regFieldC5.getText().replace("-", "");
+					
+					regTableData.addRow(regValues);
+				}
 				
 			}
 		});
@@ -622,8 +625,9 @@ public class WorkPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(regTableData.getRowCount()==0) {
 					JOptionPane.showMessageDialog(null, "등록된 제품정보가 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
-				
+					return;
 				} else {
+					/** save in server or not */
 					int dialogResult = JOptionPane.showOptionDialog(null, "등록한 내용을 서버에 저장하시겠습니까?", "Option Confirm" 
 							, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 						
@@ -637,20 +641,34 @@ public class WorkPanel extends JPanel {
 							JOptionPane.showMessageDialog(null, result+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
 							removeAllRows(regTableData);
 							initRegInfo();
+							return;
 							
 						// 추가한 제품정보 : 2줄 이상	
-						} else {  
-							
-							int[] results=registerProducts();
-							
-							JOptionPane.showMessageDialog(null, results.length+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
-							removeAllRows(regTableData);
-							initRegInfo();
+						} else {
+							// 테이블 모델에 추가한 제품정보에 중복된 LotNo 가 존재할 경우 
+							String lot="";
+							int count=0;
+							for(int i=0; i<regTableData.getRowCount(); i++) {
+								if(lot.equals(regTableData.getValueAt(i, LOTNO_INDEX))) {
+									continue;
+								}
+								lot=(String)regTableData.getValueAt(i, LOTNO_INDEX);
+								count++;
+							}
+							if(count!=regTableData.getRowCount()) {
+								JOptionPane.showMessageDialog(null, "중복된 배치번호는 서버에 저장할 수 없습니다. Lot No를 확인바랍니다.");
+								return;
+							} else {
+
+								int[] results=registerProducts();
+								
+								JOptionPane.showMessageDialog(null, results.length+"개의 제품 Batch 정보가 성공적으로 저장되었습니다.");
+								removeAllRows(regTableData);
+								initRegInfo();
+								return;
+							}
 						}
-							
-					} else if(dialogResult!=0) {
-						// removeAllRows(regTableData);
-					}
+					} else if(dialogResult!=0) {} // removeAllRows(regTableData);
 				}
 			}// ActionPerformed() end
 		});
@@ -670,9 +688,16 @@ public class WorkPanel extends JPanel {
 					
 				// LotNo 검색
 				} else if(!readField.getText().equals("")) {
+					String searchLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(0[0-9]|1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
+					
+					if(!Pattern.matches(searchLot, readField.getText().replace(" ", ""))) {// lotNo 
+						JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
+								, "Error", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					} 
 					String lotNo=readField.getText().replace(" ", "");
 					showInfoProduct(lotNo);
-
+					return;
 					
 				// 전체 재고확인
 				} else if(readComBox.getSelectedItem().toString().equals("Total Inventory")) {
@@ -715,7 +740,6 @@ public class WorkPanel extends JPanel {
 					String exDate = (String)readTableData.getValueAt(rowIndex, EXPIRATION_DATE_INDEX);
 					
 					
-					//popPnl.comBox.setSelectedIndex(popPnl.products.indexOf(productName));
 					popPnl.fd0.setText(productName);
 					popPnl.fd1.setText(productCode);
 					popPnl.fd2.setText(lotNo);
@@ -729,26 +753,21 @@ public class WorkPanel extends JPanel {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 						
-							if(ProductDAO.getInstance().searchProduct(popPnl.fd2.getText())!=null) {
-								JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
-										, "Error", JOptionPane.INFORMATION_MESSAGE);
-							} else {
-								
-								String[] str=popPnl.getAllTxts();
-								
-								ProductDAO.getInstance().updateProduct(createProductDTO(str));
-								popPnl.dispose();
-								
-								removeAllRows(readTableData);
-								
-								switch(readComBox.getSelectedItem().toString()) {
-								case "Total Inventory": showInfoAllProducts(); break;
-								case "Camera-R30 (R3067)": showInfoProducts("R3067"); break;
-								case "Battery-T21 (T2166)": showInfoProducts("T2166"); break;
-								case "Board-D40 (D4066)": showInfoProducts("D4066"); break;
-								case "Sponge-G80 (G8083)": showInfoProducts("G8083"); break;
-								case "Fabric-C18 (C1870)": showInfoProducts("C1870"); break;
-								}
+							// 유효성 미구현 - Lot No의 중복성은 검사할 필요가 없음.	
+							String[] str=popPnl.getAllTxts();
+							
+							ProductDAO.getInstance().updateProduct(createProductDTO(str));
+							popPnl.dispose();
+							
+							removeAllRows(readTableData);
+							
+							switch(readComBox.getSelectedItem().toString()) {
+							case "Total Inventory": showInfoAllProducts(); break;
+							case "Camera-R30 (R3067)": showInfoProducts("R3067"); break;
+							case "Battery-T21 (T2166)": showInfoProducts("T2166"); break;
+							case "Board-D40 (D4066)": showInfoProducts("D4066"); break;
+							case "Sponge-G80 (G8083)": showInfoProducts("G8083"); break;
+							case "Fabric-C18 (C1870)": showInfoProducts("C1870"); break;
 							}
 						}
 					});
@@ -793,6 +812,8 @@ public class WorkPanel extends JPanel {
 						}
 						
 					} else return;
+				} else {
+					JOptionPane.showMessageDialog(null, "2개 이상의 배치정보는 동시에 삭제할 수 없습니다.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -807,6 +828,29 @@ public class WorkPanel extends JPanel {
 	 *  << Method area >>
 	 ***********************************************************************  
 	 */
+	
+	public JPanel createSmallTapPanel(String tabName, JButton closeNo) {
+
+		JPanel smallTapPanel = new JPanel();
+		JLabel lbTab1 = new JLabel(tabName);
+		
+		smallTapPanel.add(lbTab1);
+		smallTapPanel.add(closeNo);
+		smallTapPanel.setOpaque(false);
+		
+		return smallTapPanel;
+	}
+	
+	public JButton createTabCloseBtn() {
+		JButton tabClose=new JButton("X");
+		tabClose.setBorder(BorderFactory.createEtchedBorder());
+		tabClose.setBorderPainted(false);
+		tabClose.setForeground(Color.GRAY);
+		tabClose.setContentAreaFilled(false);
+		tabClose.setToolTipText("close this tab");
+		
+		return tabClose;
+	}
 	
 	
 	public int removeAllRows(DefaultTableModel tableData) {
@@ -828,76 +872,6 @@ public class WorkPanel extends JPanel {
 		regFieldC5.setText("");
 	}
 	
-	/**
-	 * check input values whether they are available or not.
-	 * 
-	 * @return {@code true} if they pass the standards
-	 */
-	public boolean isValidated() {
-		boolean results=false;
-		// 유효성 검사를 위한 정규표현식 문장
-		String regLot="^[S|A](19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])[R|T|D|G|C](1|2)";
-		String regQty="^[0-9]*$";
-		String regMfgDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
-		String regMfgDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
-		String regExDateOne="^(19|20)\\d{2}-(0[1-9]|1[0-2])-(1[0-9]|2[0-9]|3[01])";
-		String regExDateTwo="^(19|20)\\d{2}(0[1-9]|1[0-2])(1[0-9]|2[0-9]|3[01])";
-		
-		
-		if(regComBox.getSelectedItem().toString().equals("============")
-			|| regFieldC1.getText().equals("")
-			|| regFieldC2.getText().equals("")
-			|| regFieldC3.getText().equals("")
-			|| regFieldC4.getText().equals("")
-			|| regFieldC5.getText().equals("")) {
-			
-				JLabel message = new JLabel("빈 입력란이 존재합니다. 다시 확인해주세요.");
-				JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-				return results;
-			
-		} else if(ProductDAO.getInstance().searchProduct(regFieldC2.getText().replace(" ", ""))!=null) {
-			JOptionPane.showMessageDialog(null, "해당 Batch에 대한 정보가 서버에 존재합니다.  입력하신 Lot No를 확인해주세요."
-					, "Error", JOptionPane.INFORMATION_MESSAGE);
-			return results;
-
-		} else if(!Pattern.matches(regLot, regFieldC2.getText().replace(" ", ""))) {// lotNo 
-			JOptionPane.showMessageDialog(null, "정해진 양식에 벗어난 값입니다. 입력하신 Lot No를 확인해주세요."
-					, "Error", JOptionPane.INFORMATION_MESSAGE);
-			return results;
-
-		} else if(!Pattern.matches(regQty, regFieldC3.getText().replace(" ", ""))) {// 숫자만입력 
-			JOptionPane.showMessageDialog(null, "수량은 자연수만 입력가능합니다. 입력하신 수량을 확인해주세요."
-					, "Error", JOptionPane.INFORMATION_MESSAGE);
-			return results;
-
-		} else if(!Pattern.matches(regMfgDateOne, regFieldC4.getText().replace(" ", ""))
-				&& !Pattern.matches(regMfgDateTwo, regFieldC4.getText().replace(" ", ""))) {// 생산일자
-			JOptionPane.showMessageDialog(null, "부적합한 생산일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
-					, "Error", JOptionPane.INFORMATION_MESSAGE);
-			return results;
-
-		} else if(!Pattern.matches(regExDateOne, regFieldC5.getText().replace(" ", ""))
-				&& !Pattern.matches(regExDateTwo, regFieldC5.getText().replace(" ", ""))) {// 만료일자
-			JOptionPane.showMessageDialog(null, "부적합한 만료일자입니다. 양식에 맞추어 입력바랍니다.\n 입력양식은 'yyyy-mm-dd' 또는 'yyyymmdd' 입니다."
-					, "Error", JOptionPane.INFORMATION_MESSAGE);
-			return results;
-
-		} else {
-			
-			Object[] regValues= new Object[REQ_REGISTRATION_INFO_NO];
-			
-			regValues[0]=regComBox.getSelectedItem().toString();
-			regValues[1]=regFieldC1.getText();
-			regValues[2]=regFieldC2.getText();
-			regValues[3]=regFieldC3.getText();
-			regValues[4]=regFieldC4.getText().replace("-", "");
-			regValues[5]=regFieldC5.getText().replace("-", "");
-			
-			regTableData.addRow(regValues);
-			results=true;
-		}
-		return results;
-	}
 	
 	
 	/*

@@ -15,7 +15,7 @@ public interface DAO {
 	public int insertProduct(ProductDTO product);
 	public int[] insertProducts(List<ProductDTO> products);
 
-	public int deleteProduct(int lotNo);
+	public int deleteProduct(String lotNo);
 
 	public int updateProduct(ProductDTO product);
 	

@@ -2,11 +2,12 @@ package erp.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,30 +17,53 @@ import javax.swing.SwingConstants;
 
 public class UpdateDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private JComboBox<String> comBox;
-	private JTextField fd1, fd2, fd3, fd4, fd5;
-	private JButton updateBtn, cancelBtn;
-	
-	
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
+	/**
+	 * to be transfer into {@code ProductDTO} class<p>
+	 * 
+	 * {@code fd0} is for product name, {@code pCode} <br>
+	 * {@code fd1} is for product code, {@code pCode} <br>
+	 * {@code fd2} is for lot number, {@code lotNo} <br>
+	 * {@code fd3} is for quantity, {@code qty}<br>
+	 * {@code fd4} is for manufacturing date, {@code mfgDate} <br>
+	 * {@code fd5} is for expiration date, {@code exDate} <br>
+	 */
+	protected JTextField fd0, fd1, fd2, fd3, fd4, fd5;
+	protected JButton updateBtnInPnl;
+	protected Vector<String> products;
+	
+	private JButton cancelBtn;
+
 	public UpdateDialog(JFrame frame, String title) {
 		super(frame, title);
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(InfoDialog.class.getResource("/images/box.png")));
+		
 		setSize(400, 566);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		
 		
 		JPanel mainPnl = new JPanel();
 		
-		String[] products= {"============","Camera-R30", "Battery-T21", "Board-D40", "Sponge-G80", "Fabric-C18"};
+		products=new Vector<String>();
+		products.add("============");
+		products.add("Camera-R30");
+		products.add("Battery-T21");
+		products.add("Board-D40");
+		products.add("Sponge-G80");
+		products.add("Fabric-C18");
+		
 		mainPnl.setLayout(null);
 		
 		setContentPane(mainPnl);
 		
 		
 		JLabel subTitle = new JLabel("정보변경");
+		subTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		subTitle.setFont(new Font("SansSerif", Font.BOLD | Font.ITALIC, 14));
-		subTitle.setBounds(33, 24, 94, 30);
+		subTitle.setBounds(23, 24, 94, 30);
 		mainPnl.add(subTitle);
 		
 		
@@ -79,17 +103,18 @@ public class UpdateDialog extends JDialog {
 		lbl6.setBounds(33, 364, 114, 44);
 		mainPnl.add(lbl6);
 		
-		
-		comBox = new JComboBox(products);
-		comBox.setBounds(205, 71, 114, 31);
-		comBox.setBackground(Color.WHITE);
-		mainPnl.add(comBox);
-		
+		fd0 = new JTextField();
+		fd0.setColumns(10);
+		fd0.setBounds(205, 71, 114, 31);
+		fd0.setEditable(false);
+		fd0.setForeground(Color.GRAY);
+		mainPnl.add(fd0);
+
 		fd1 = new JTextField();
 		fd1.setColumns(10);
 		fd1.setBounds(205, 133, 114, 30);
-		fd1.setFocusable(false);
-		fd1.setBackground(null);
+		fd1.setEditable(false);
+		fd1.setForeground(Color.GRAY);
 		mainPnl.add(fd1);
 		
 		fd2 = new JTextField();
@@ -112,32 +137,18 @@ public class UpdateDialog extends JDialog {
 		fd5.setBounds(205, 370, 114, 30);
 		mainPnl.add(fd5);
 		
-		updateBtn = new JButton("update");
-		updateBtn.setFont(new Font("Serif", Font.PLAIN, 14));
-		updateBtn.setBounds(79, 434, 80, 30);
-		updateBtn.setFocusPainted(false);
-		mainPnl.add(updateBtn);
+		updateBtnInPnl = new JButton("Update");
+		updateBtnInPnl.setFont(new Font("Serif", Font.PLAIN, 14));
+		updateBtnInPnl.setBounds(79, 434, 80, 30);
+		updateBtnInPnl.setFocusPainted(false);
+		mainPnl.add(updateBtnInPnl);
 		
-		cancelBtn = new JButton("cancel");
+		cancelBtn = new JButton("Cancel");
 		cancelBtn.setFont(new Font("Serif", Font.PLAIN, 14));
-		cancelBtn.setBounds(217, 434, 80, 30);
+		cancelBtn.setBounds(226, 434, 80, 30);
 		cancelBtn.setFocusPainted(false);
 		mainPnl.add(cancelBtn);
 		
-		
-		comBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switch (comBox.getSelectedItem().toString()) {
-				case "Camera-R30" 	: fd1.setText("R3067"); break;
-				case "Battery-T21" 	: fd1.setText("T2166"); break;
-				case "Board-D40" 	: fd1.setText("D4066"); break;
-				case "Sponge-G80" 	: fd1.setText("G8083"); break;
-				case "Fabric-C18" 	: fd1.setText("C1870"); break;
-				default : fd1.setText(""); break;
-				}
-			}
-		});
 		
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
@@ -150,4 +161,24 @@ public class UpdateDialog extends JDialog {
 		
 		setVisible(true);
 	}
+	
+	
+	/**
+	 * return all texts of components in {@code UpdateDialog} class.
+	 * 
+	 * @return {@code String[]}
+	 */
+	public String[] getAllTxts() {
+		String[] txts = new String[6];
+		
+		txts[0]=fd0.getText();
+		txts[1]=fd1.getText();
+		txts[2]=fd2.getText();
+		txts[3]=fd3.getText();
+		txts[4]=fd4.getText();
+		txts[5]=fd5.getText();
+		
+		return txts;
+	}
+	
 }

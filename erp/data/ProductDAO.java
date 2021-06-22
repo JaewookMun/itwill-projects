@@ -66,9 +66,11 @@ public class ProductDAO extends ProductCP implements DAO {
 			con=getConnection();
 			con.setAutoCommit(false);
 			String sql="INSERT INTO total_products VALUES(?,?,?,?,?,?)";
+			pstmt=con.prepareStatement(sql);
 			
+			// con.prepareStatement() 를 for문 안에 넣으면 원하는 명령을 수행하지 못함. 
+			// - 지역변수로 처리되어 초기화된다고 생각됨.
 			for(int i=0; i<products.size(); i++) {
-				pstmt=con.prepareStatement(sql);
 				pstmt.setString(1, products.get(i).getpName());
 				pstmt.setString(2, products.get(i).getpCode());
 				pstmt.setString(3, products.get(i).getLotNo());
@@ -94,7 +96,7 @@ public class ProductDAO extends ProductCP implements DAO {
 	}
 
 	@Override
-	public int deleteProduct(int lotNo) {
+	public int deleteProduct(String lotNo) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		int rows=0;
@@ -104,7 +106,7 @@ public class ProductDAO extends ProductCP implements DAO {
 			
 			String sql = "DELETE FROM TOTAL_PRODUCTS WHERE lotNo=?";
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, lotNo);
+			pstmt.setString(1, lotNo);
 			
 			rows=pstmt.executeUpdate();
 
@@ -170,8 +172,8 @@ public class ProductDAO extends ProductCP implements DAO {
 				product.setpCode(rs.getString("pCode"));
 				product.setLotNo(rs.getString("lotNo"));
 				product.setQty(rs.getInt("qty"));
-				product.setMfgDate(rs.getString("mfgDate"));
-				product.setExDate(rs.getString("exDate"));
+				product.setMfgDate(rs.getString("mfgDate").substring(0,10));
+				product.setExDate(rs.getString("exDate").substring(0,10));
 			}
 		} catch (SQLException e) {
 			System.out.println("[Error] searchProduct() : "+e.getMessage());
@@ -201,8 +203,8 @@ public class ProductDAO extends ProductCP implements DAO {
 				product.setpCode(rs.getString("pCode"));
 				product.setLotNo(rs.getString("lotNo"));
 				product.setQty(rs.getInt("qty"));
-				product.setMfgDate(rs.getString("mfgDate"));
-				product.setExDate(rs.getString("exDate"));
+				product.setMfgDate(rs.getString("mfgDate").substring(0,10));
+				product.setExDate(rs.getString("exDate").substring(0,10));
 				
 				productList.add(product);
 			}

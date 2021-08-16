@@ -1,0 +1,279 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div id="container">
+	<div id="contents">
+		<div class="sub_content">
+
+				<!-- //side_cont -->
+<div class="content">
+<div class="board_zone_sec">
+    <div class="board_zone_tit">
+        <h2>REVIEW</h2>
+    </div>
+	
+	<div class="board_zone_cont" style="padding-top:19px;">
+        <div class="board_zone_list" align="left">
+			<div class="reviewList">
+				<div class="list head" data-bd-id='goodsreview' data-sno="223157"  data-auth="y">
+					<div class="div1">
+						<span class="rating_star">
+							<span style="width:100%;">별 다섯개중 다섯개</span>
+						</span>
+					</div>
+					<div class="div2">
+						<a>
+							<!-- <img src="/data/goods/19/10/43/40/40_main_013.png" width="160" height="145" class="js_image_load"/> -->
+							
+							<span class="s1">시타 듀 실드 크림</span>
+							
+							<span class="s2"><img src="/data/skin/front/mime/board/skin/review/img/icon/icon_board_notice.png" alt="공지" style="margin:1px 8px 0 0" />여름에 쓰기 너무 좋아요 ㅠㅠ 저한테 유독 잘맞는건지 ...
+							<!-- <img src="/data/skin/front/mime/board/skin/review/img/icon/icon_board_attach_img.png" alt="이미지첨부 있음"/> -->
+							</span>
+						</a>
+					</div>
+					<div class="div4">네이버페이 구매자</div>
+					<div class="div5">2021-08-06</div>
+				</div>
+				<div class="view cont"  style="display:none;">
+					<div class="review_text">
+						<p class="word">여름에 쓰기 너무 좋아요 ㅠㅠ 저한테 유독 잘맞는건지 잘 모르겠지만  화장 지우고 이것저것 발라도 속당김이 심했는데 이건 얘하나 발라도 당기거나 불편한 느낌이 하나도 없어요 ㅋㅋㅋ 올해 초부터 쓰고있는데 아예 대용량으로 만들어주시면 좋을 것 같아요ㅠㅠㅠ  앰플은 대용량 있던데 저 잘때 왕창 바르고 자서 꼭 필요합니다.....</p>
+					</div>
+				</div>
+			</div>
+
+            <div class="pagination"><ul><li class="on"><span>1</span></li><li><a href="./list.php?page=2&amp;bdId=goodsreview">2</a></li><li><a href="./list.php?page=3&amp;bdId=goodsreview">3</a></li><li><a href="./list.php?page=4&amp;bdId=goodsreview">4</a></li><li><a href="./list.php?page=5&amp;bdId=goodsreview">5</a></li><li><a href="./list.php?page=6&amp;bdId=goodsreview">6</a></li><li><a href="./list.php?page=7&amp;bdId=goodsreview">7</a></li><li><a href="./list.php?page=8&amp;bdId=goodsreview">8</a></li><li><a href="./list.php?page=9&amp;bdId=goodsreview">9</a></li><li><a href="./list.php?page=10&amp;bdId=goodsreview">10</a></li><li class="btn_page btn_page_next"><a aria-label="Next" href="./list.php?page=11&amp;bdId=goodsreview"><img src=/admin/gd_share/img/icon_arrow_page_r.png class=img-page-arrow>다음</a></li><li class="btn_page btn_page_last"><a aria-label="Last" href="./list.php?page=19702&amp;bdId=goodsreview"><img src=/admin/gd_share/img/icon_arrow_page_rr.png class=img-page-arrow>맨뒤</a></li></ul></div>
+        </div>
+    </div>
+</div>
+
+<div id="layerDim" class="dn">&nbsp;</div>
+
+
+<script type="text/javascript" src="/data/skin/front/mime/js/gd_board_list.js" charset="utf-8"></script>
+<script>
+$(document).ready(function () {
+    $('img.js_image_load').error(function () {
+                $(this).css('background', 'url("/data/skin/front/mime/board/skin/review/img/etc/noimg.png") no-repeat center center');
+                $(this).attr('src', '/data/skin/front/mime/img/etc/blank.gif');
+            })
+            .each(function () {
+                $(this).attr("src", $(this).attr("src"));
+            })
+});
+</script>
+<script>
+$(document).ready(function(){
+	//Add Inactive Class To All Accordion Headers
+	$('.list.head').toggleClass('inactive-header');
+	
+	//Set The Accordion Content Width
+	var contentwidth = $('.list.head').width();
+	$('.view.cont').css({'width' : contentwidth });
+	
+
+	// The Accordion Effect
+	//codefix
+    $('.list.head').click(function () {
+
+        if($(this).is('.inactive-header') ) {
+
+            var auth = $(this).data('auth');
+
+            var target = $(this);
+
+            switch (auth) {
+                case 'n' :
+                case 'y' :
+                    codefixViewContent(target);
+                    break;
+                case 'c' :
+                    passwordListLayer.show();
+                    passwordListLayer.inputEl.bind('keydown', function () {
+                        if (event.keyCode == 13) {
+                            passwordListLayer.btnEl.trigger('click');
+                        }
+                    });
+                    passwordListLayer.btnEl.unbind('click').bind('click', function () {
+                        if (passwordListLayer.inputEl.val() == '') {
+                            alert(__('비밀번호를 입력해주세요.'));
+                            return false;
+                        }
+
+                        $("#lyPassword .ly_close ").click();
+                        codefixViewContent(target,auth);
+
+
+                    });
+                    break;
+            }
+
+
+        }else {
+            $(this).toggleClass('active-header').toggleClass('inactive-header');
+            $(this).next().slideToggle().toggleClass('open-content');
+        }
+    });
+    //codefix
+	
+	//return false;
+});
+
+
+function codefixViewContent(target,auth) {
+
+    var sno = $(target).data('sno');
+    var bdId = $(target).data('bd-id');
+
+    if(auth =='c') {
+
+        $.ajax({
+            method: "POST",
+            url: "../board/board_ps.php",
+            data:{mode: 'viewContent', sno: sno, bdId: bdId, writerPw: $("#frmWritePassword input[name='writerPw']").val()},
+            dataType: 'json'
+        }).success(function (data) {
+
+            if (data['result'] == 'ok') {
+                $(target).next('div.view').html(data.msg);
+                $('.active-header').toggleClass('active-header').toggleClass('inactive-header').next().slideToggle().toggleClass('open-content');
+                $(target).toggleClass('active-header').toggleClass('inactive-header');
+                $(target).next().slideToggle().toggleClass('open-content');
+            } else {
+                alert(data['msg']);
+                return;
+            }
+
+        }).error(function (e) {
+            if(e.responseText)
+                alert(e.responseText);
+        });
+
+    } else {
+
+        $('.active-header').toggleClass('active-header').toggleClass('inactive-header').next().slideToggle().toggleClass('open-content');
+        $(target).toggleClass('active-header').toggleClass('inactive-header');
+        $(target).next().slideToggle().toggleClass('open-content');
+
+    }
+
+}
+
+
+$(document).ready(function(){
+	$( ".sortBox" ).click(function() {
+		$( this ).toggleClass( "on" );
+	});
+	$('html').click(function(e) { 
+		if (!$(e.target).is('.sortingBox')) {
+			if($('#sortingBox').hasClass('on')){
+				$('#sortingBox').removeClass('on')
+			}
+		}
+	});
+});
+</script>
+
+<script type="text/javascript">
+    // DOM 로드
+    $(function () {
+        $('.scroll_right_cont').todayGoods();
+    });
+
+    // 최근본상품 리스트 페이징 처리 플러그인
+    $.fn.todayGoods = function () {
+        // 기본값 세팅
+        var self = $(this);
+        var setting = {
+            page: 1,
+            total: 0,
+            rowno: 4
+        };
+        var element = {
+            goodsList: self.find('ul > li'),
+            closeButton: self.find('ul > li > button'),
+            prev: self.find('.scr_paging > .bnt_scroll_prev'),
+            next: self.find('.scr_paging > .bnt_scroll_next'),
+            paging: self.find('.scr_paging')
+        };
+
+        // 페이지 갯수 설정
+        setting.total = Math.ceil(element.goodsList.length / setting.rowno);
+
+        // 화면 초기화 및 갱신 (페이지 및 갯수 표기)
+        var init = function () {
+            if (setting.total == 0) {
+                setting.page = 0;
+                element.paging.hide();
+            }
+            self.find('ul').hide().eq(setting.page - 1).show();
+            self.find('.scr_paging .js_current').text(setting.page);
+            self.find('.scr_paging .js_total').text(setting.total);
+        }
+
+        // 삭제버튼 클릭
+        element.closeButton.click(function(e){
+            $.post('../goods/goods_ps.php', {
+                'mode': 'delete_today_goods',
+                'goodsNo': $(this).data('goods-no')
+            }, function (data, status) {
+                // 값이 없는 경우 성공
+                if (status == 'success' && data == '') {
+                    location.reload(true);
+                }
+                else {
+                    console.log('request fail. ajax status (' + status + ')');
+                }
+            });
+        });
+
+        // 이전버튼 클릭
+        element.prev.click(function (e) {
+            setting.page = 1 == setting.page ? setting.total : setting.page - 1;
+            init();
+        });
+
+        // 다음버튼 클릭
+        element.next.click(function (e) {
+            setting.page = setting.total == setting.page ? 1 : setting.page + 1;
+            init();
+        });
+
+        // 화면 초기화
+        init();
+    };
+</script>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Enliple Common Tracker v3.6 [공용] start -->
+<script type="text/javascript">
+    <!--
+    function mobRf() {
+        var rf = new EN();
+        rf.setData("userid", "demar3adm");
+        rf.setSSL(true);
+        rf.sendRf();
+    }
+    //-->
+</script>
+<script src="https://cdn.megadata.co.kr/js/en_script/3.6/enliple_min3.6.js" defer="defer" onload="mobRf()"></script>
+<!-- Enliple Common Tracker v3.6 [공용] end -->
+
+<!-- WIDERPLANET HOME SCRIPT START 2019.12.17 -->
+<div id="wp_tg_cts" style="display:none;"></div>
+<script type="text/javascript">var wp_conf = 'ti=47892&v=1&device=web';</script>
+<script type="text/javascript" defer src="//cdn-aitg.widerplanet.com/js/wp_astg_2.0_mall.js"></script>
+<!-- // WIDERPLANET HOME SCRIPT END 2019.12.17 -->
+
+
+<!-- 외부 스크립트 -->
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2B84RG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --><!-- WIDERPLANET HOME SCRIPT START 2016.10.12 -->
+        <div id="wp_tg_cts" style="display:none;"></div>
+        <script type="text/javascript">var wp_conf = 'ti=47892&v=1&device=web';</script>
+        <script type="text/javascript" defer src="//cdn-aitg.widerplanet.com/js/wp_astg_2.0_mall.js"></script>
+        <!-- // WIDERPLANET HOME SCRIPT END 2016.10.12 -->

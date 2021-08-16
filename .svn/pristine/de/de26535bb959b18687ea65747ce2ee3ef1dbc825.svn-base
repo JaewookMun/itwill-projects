@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<style type="text/css">
+	.i-main-body {
+	}
+	
+	.i-main-body li {
+		list-style: none;
+		text-align: center;
+	}
+</style>
+<div class="i-main-body">
+	<h4>관리자 페이지에 오신 것을 환영합니다.</h4>
+	<hr>
+	<ul>
+		<li>3조 - 꽉자바</li>
+		<li>&nbsp;</li>
+		<li>문재욱</li>
+		<li>감리라</li>
+		<li>박지수</li>
+		<li>정채린</li>
+		<li>주해성</li>
+		<li>진주현</li>
+	</ul>
+</div>

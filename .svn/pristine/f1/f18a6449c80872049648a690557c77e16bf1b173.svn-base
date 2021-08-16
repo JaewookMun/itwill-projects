@@ -1,0 +1,92 @@
+package web.data.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import web.data.dto.NoticeDTO;
+
+public class NoticeDAO extends JdbcDAO {
+	private static NoticeDAO _dao;{
+		
+	}
+	
+	private NoticeDAO() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	static {
+		_dao=new NoticeDAO();
+	}
+	
+	public static NoticeDAO getDao() {
+		return _dao;
+		
+	}
+	//공지사항 입력
+	public int insertNotice(NoticeDTO notice) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		int rows=0;
+		
+		try {
+			con=getConnection();
+			
+			String sql="insert into notice values(?,?,sysdate,?)";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, notice.getnNum());
+			pstmt.setString(2, notice.getnTitle());
+			pstmt.setString(3, notice.getnContent());
+			
+			rows=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("[에러]insertNotice() 메소드의 SQL 오류 = "+e.getMessage());
+		} finally {
+			close(con, pstmt, rs);
+		} 
+		return rows;
+	}
+	
+	public int updateNotice(NoticeDTO notice) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int rows=0;
+		try {
+			con=getConnection();
+			String sql="update notice set title=?, content=? where=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, notice.getnTitle());
+			pstmt.setString(2, notice.getnContent());
+			pstmt.setInt(3, notice.getnNum());
+			
+			rows=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("[에러]updateNotice() 메소드의 SQL 오류 = "+e.getMessage());		
+		} finally {
+			close(con, pstmt);
+		}
+		return rows;
+	}
+	
+	public int deleteNotice(int nNum) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		int rows=0;
+		try {
+			con=getConnection();
+			
+			String sql="delete from notice where=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, nNum);
+			
+			rows=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("[에러]deleteNotice() 메소드의 SQL 오류 = "+e.getMessage());
+		} finally {
+			close(con, pstmt);
+		}
+		return rows;
+	}
+}

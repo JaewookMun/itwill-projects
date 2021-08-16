@@ -1,4 +1,3 @@
-[README.md]
 
 ### itwill-semi
 team project on the shopping mall

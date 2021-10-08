@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.CourseMapper">
+	<insert id="insertCourse">
+		<selectKey resultType="int" keyProperty="category" order="BEFORE">
+			select olle_load_seq.nextval from dual
+		</selectKey>
+		insert into olle_load values(
+			#{category},#{titleNo},#{mapImg},#{thumb},#{vmap},#{totLoad}
+			,#{totTime},#{levelStar},#{graph},#{courseTxt},#{wheelStar},#{wheelLoad}
+			,#{wheelStar},#{wheelContent},#{tip},#{friendName},#{friendImg},#{friendSq}
+			,#{friendLoc},#{friendLevel},#{friendCourse},#{friendLink},#{friendInfo}
+			,#{startImg},#{endImg},#{gallery},#{spotImg},#{spotName},#{spotTxt}
+			,#{stayName},#{stayAdd},#{stayNumber},#{foodName},#{foodAdd},#{foodNumber}
+			
+			)
+	</insert>
+
+	<select id="selectCourseList" resultType="Course">
+		select * from olle_load
+		where category = #{category} 
+	</select>
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.ScheduleMapper">
+	<!-- 참고 : jack 프로젝트 practice.test.CalendarTest.java -->
+	<insert id="insertSchedule">
+		<selectKey resultType="int" keyProperty="scheduleNo" order="BEFORE">
+			select schedule_seq.nextval from dual
+		</selectKey>
+		INSERT INTO
+			schedule 
+		VALUES(
+			#{scheduleNo}, #{scheduleType}, sysdate, #{scheduleTitle}, 
+			#{scheduleCourse}, 
+			to_date(#{departureDatetime}, 'YYYY-MM-DD HH24:MI'), 
+			#{departureLocation}, #{volunteer}, 
+	    	#{preparation}, #{scheduleContent}, 1
+	    )
+	</insert>
+
+	<update id="updateSchedule">
+		UPDATE
+			schedule 
+		<set>
+			<if test="scheduleTitle!=null and scheduleTitle!=''">
+				schedule_title=#{scheduleTitle},
+			</if>
+			<if test="scheduleCourse!=null and scheduleCourse!=''">
+				schedule_course=#{scheduleCourse},
+			</if>
+			<if test="departureDatetime!=null and departureDatetime!=''">
+				departure_datetime=to_date(#{departureDatetime}, 'YYYY-MM-DD HH24:MI'),
+			</if>
+			<if test="departureLocation!=null and departureLocation!=''">
+				departure_location=#{departureLocation},
+			</if>
+			<if test="volunteer!=null and volunteer!=''">
+				volunteer=#{volunteer},
+			</if>
+			<if test="preparation!=null and preparation!=''">
+				preparation=#{preparation},
+			</if>
+			<if test="scheduleContent!=null and scheduleContent!=''">
+				schedule_content=#{scheduleContent}
+			</if>
+		</set>
+    	WHERE
+    		schedule_no=#{scheduleNo}
+	</update>
+	
+	<delete id="deleteSchedule">
+		UPDATE schedule SET status=-1 WHERE schedule_no=#{schedule_no}
+	</delete>
+	
+	<select id="selectScheduleCount" resultType="_int">
+		SELECT count(*) FROM schedule
+	</select>
+	
+	<select id="selectSchedule" resultType="Schedule">
+		SELECT 
+			schedule_no, schedule_type, schedule_post_date, schedule_title, 
+			schedule_course, departure_datetime, departure_location, volunteer, 
+			preparation, schedule_content 
+		FROM 
+			schedule 
+		WHERE 
+			schedule_no=#{scheduleNo} AND status=1
+	</select>
+		
+	<select id="selectMonthScheduleList" resultType="Schedule">
+		SELECT 
+			schedule_no, schedule_type, schedule_title, 
+			schedule_course, departure_datetime, volunteer,
+			schedule_content
+		FROM 
+			schedule 
+		WHERE 
+			status=1 AND TO_CHAR(departure_datetime, 'yyyy-MM-dd') LIKE #{month} || '%'
+	</select>
+	
+	<select id="selectAllScheduleList" resultType="Schedule">
+		SELECT * 
+		FROM 
+			(SELECT rownum rn, temp.* FROM (SELECT * FROM schedule WHERE status=1 ORDER BY schedule_no desc) temp)  
+    	WHERE 
+    		rn BETWEEN #{startRow} AND #{endRow}
+	</select>	
+
+</mapper>

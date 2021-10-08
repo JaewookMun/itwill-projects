@@ -1,0 +1,114 @@
+@charset "UTF-8";
+/*----------패스포트 할인업체-------------------*/
+table.passport, table.passport td {
+	border: 1px solid #ddd;
+	height: auto;
+	font-size: 14px;
+	text-align: center;
+	line-height: 20px;
+	color: #555;
+	vertical-align: middle;
+	overflow-x: auto;
+}
+
+table.passport {
+	width: 100%;
+	height: auto;
+	margin: 40px 0px 20px 0px;
+	background-color: #fff;
+}
+
+table.passport th {
+	line-height: 24px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+	vertical-align: middle;
+	border-right: 1px solid #aaa;
+	background-color: #ddd;
+	color: #444;
+	padding: 6px;
+}
+
+table.passport th:nth-child(1) {
+	width: 20%;
+}
+
+table.passport th:nth-child(2) {
+	width: 50%;
+}
+
+table.passport th:nth-child(3) {
+	width: 30%;
+}
+
+table.passport td:nth-child(3) {
+	text-align: left;
+}
+
+table.passport th:nth-child(3) {
+	border-right: 0px solid #aaa;
+}
+
+table.passport td {
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 20px;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #ddd;
+	color: #555;
+	word-spacing: -0.5px;
+}
+
+table.passport th.th_01 {
+	line-height: 24px;
+	height: 40px;
+	font-size: 16px;
+	font-weight: 500;
+	text-align: center;
+	vertical-align: middle;
+	color: #fff;
+	padding: 6px;
+	background-color: #78808c;
+}
+
+table.passport td.r_01 {
+	text-align: left;
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 20px;
+	padding: 10px;
+	vertical-align: middle;
+	color: #555;
+}
+
+table.passport td.r_02 {
+	background: #F0FAFF;
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 20px;
+	padding: 10px;
+	vertical-align: middle;
+	color: #555;
+}
+
+table.passport span {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+	vertical-align: middle;
+	text-align: center;
+	display: block;
+	color: #333;
+}
+
+table.passport a {
+	display: block;
+}
+
+table.passport a:hover {
+	color: #08b2f5;
+	text-decoration: underline;
+}

@@ -1,0 +1,1262 @@
+@charset "UTF-8";
+
+.sub_tit {
+	width: 100%;
+	font-size: 36px;
+	font-weight: 500;
+	position: relative;
+	display: block;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.sub_wrap {
+	width: 1100px;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	padding: 50px;
+	margin-bottom: 80px;
+	border: 0px solid red;
+}
+
+.sub_wrap, .sub_tit {
+	width: 100%;
+	height: auto;
+	padding-top: 20px;
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	margin: 0 auto;
+	border: 0px solid red;
+}
+
+.sub_wrap, .sub_tit .nuder {
+	width: 60px;
+	height: 6px;
+	background: #08b2f5;
+	position: relative;
+	display: inline-block;
+	margin: 0 auto;
+}
+
+.contents_warp {
+	widows: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin: 50px;
+	border: 0px solid red;
+}
+
+.contents_warp, .con_tit_area {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+}
+
+.course_all {
+	width: 140px;
+	height: 30px;
+	font-size: 15px;
+	line-height: 28px;
+	padding: 0px 14px;
+	margin-top: -27px;
+	font-weight: 300;
+	color: #555;
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	border: 1px solid #888;
+	box-sizing: border-box;
+	float: right;
+}
+
+.course_alll p {
+	width: 124px;
+	height: 30px;
+	position: relative;
+	display: inline-block;
+	border: 1px solid red;
+}
+
+.course_all:hover {
+	color: #fff;
+	background-color: #08b2f5;
+	border: 1px solid #08b2f5;
+}
+
+/*전체보기*/
+.course_slc {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	display: inline-block;
+	margin-top: -32px;
+}
+
+.course_list {
+	width: 48%;
+	position: relative;
+	display: inline-block;
+	text-align: left;
+	padding: 20px 30px;
+	background: #3a414e;
+	float: right;
+	z-index: 1;
+}
+
+.course_list_tit {
+	width: 48%;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.course {
+	width: 18%;
+	height: 40px;
+	margin-right: 2%;
+	position: relative;
+	display: inline-block;
+	margin-bottom: 44px;
+	float: left;
+}
+
+.course_slc_close {
+	width: 100%;
+	height: 40px;
+	position: absolute;
+	display: inline-block;
+	margin-top: -5px;
+	background-image:
+		url('../img/course/all_course/close.png')
+		no-repeat right;
+	z-index: 10;
+}
+
+.course a {
+	width: 70px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 24px;
+	text-align: center;
+	color: #b8c2d1;
+	position: relative;
+	display: block;
+	float: left;
+}
+
+.course_list .course a:hover {
+	font-weight: 500;
+	color: #fff;
+	text-decoration: underline #fff;
+}
+
+.course_list .course  li {
+	position: relative;
+	display: block;
+	float: left;
+}
+
+.course_list li .course img {
+	width: 70px;
+	height: 46px;
+}
+
+.course_slc_close {
+	width: 100%;
+	height: 40px;
+	position: absolute;
+	display: inline-block;
+	margin-top: -5px;
+	background:
+		url('../img/course/all_course/close.png')
+		no-repeat right;
+	z-index: 10;
+}
+
+.course_slc_close:hover {
+	position: absolute;
+	display: inline-block;
+	background:
+		url('../img/course/all_course/close_r.png')
+		no-repeat right;
+	z-index: 10;
+}
+
+.con_tit_area {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+}
+
+span.all_arw {
+	width: 110px;
+	height: 29px;
+	position: absolute;
+	display: block;
+}
+
+.course_view_area {
+	width: 100%;
+	height: 500px;
+	position: relative;
+	display: inline-block;
+	border: 1px solid #ddd;
+	margin-top: 20px;
+}
+
+.course_info {
+	width: 180px;
+	height: 498px;
+	position: relative;
+	display: inline-block;
+	margin-top: -498px;
+	border: 0px solid red;
+	float: right;
+}
+
+.location {
+	position: relative;
+	display: block;
+}
+
+.icon_info {
+	width: 180px;
+	height: 321px;
+	display: block;
+}
+
+.btn_audio {
+	width: 100%;
+	height: 51px;
+	line-height: 50px;
+	font-weight: 300;
+	position: relative;
+	display: inline-block;
+	color: #fff;
+	cursor: pointer;
+	background-color: #08b2f5;
+}
+
+.btn_audio:before {
+	position: absolute;
+	width: 24px;
+	height: 20px;
+	margin-top: 15px;
+	margin-left: 20px;
+	content: '';
+}
+
+.btn_audio span {
+	font-size: 14px;
+	font-weight: 300;
+	margin-left: 56px;
+	color: #fff;
+	position: relative;
+	display: inline-block;
+}
+
+.btn_audio:hover {
+	background-color: #008fe9;
+}
+
+.visual_map, .info_txt_area {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 30px;
+	padding-top: 10px;
+}
+
+.left_area {
+	width: 47.9%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-top: 30px;
+}
+
+.level_info {
+	width: 100%;
+	font-size: 16px;
+	line-height: 40px;
+	font-weight: 300;
+	text-align: center;
+	position: relative;
+	display: inline-block;
+	color: #333;
+	border: 1px solid #ddd;
+	background: #f3f3f3;
+}
+
+.level_info span {
+	line-height: 40px;
+	font-weight: 500;
+	text-align: center;
+}
+
+.level_info .graph img {
+	width: 100%;
+	height: auto;
+	vertical-align: center;
+	text-align: center;
+}
+
+.level_star {
+	width: 46px;
+	height: 15px;
+	margin-left: 4px;
+	margin-top: -3px;
+	vertical-align: middle;
+	position: relative;
+	display: inline-block;
+}
+
+.left_area {
+	width: 50;
+	font-size: 16px;
+	line-height: 40px;
+	font-size: 300;
+	text-align: center;
+	position: relative;
+	display: inline-block;
+	color: #333;
+	background: white;
+}
+
+.right_area, .right_con {
+	width: 50%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	float: right;
+}
+
+.righr_area, .con_txt h3 {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 26px;
+	position: relative;
+	letter-spacing: -0.4;
+	text-align: justify;
+	color: #555;
+}
+
+.con_btn, .con_btn02 {
+	width: 160px;
+	height: 26px;
+	font-size: 15px;
+	line-height: 26px;
+	font-weight: 400;
+	text-align: center;
+	position: relative;
+	display: inline-block;
+	color: #fff;
+	background: #08b2f5;
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+/* 휠체어 코스 */
+.wheelchair_area {
+	width: 100%;
+	height: 30px;
+	position: relative;
+	text-align: center;
+	margin-top: 10px;
+	z-index: 100;
+}
+
+.wheelchair {
+	width: 20%;
+	height: 30px;
+	border: 1px solid #08b2f5;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 28px;
+	margin-left: -1px;
+	margin-top: -1px;
+	right: 0;
+	color: #555;
+	display: inline-block;
+	float: left;
+}
+
+.wheelchair:hover {
+	background: #08b2f5;
+	border: 1px solid #08b2f5;
+	font-weight: 500;
+	color: #fff;
+}
+/* 휠체어 코스 끝 */
+.con_box {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.left_con {
+	width: 47.9%;
+	position: relative;
+	display: inline-block;
+	letter-spacing: -1px;
+}
+
+.up {
+	width: 30px;
+	height: 3px;
+	background: #08b2f5;
+	position: relative;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+.con_txt h2 {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 500;
+	position: relative;
+	letter-spacing: -0.4px;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+.con_txt span {
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 28px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.con_txt h2 {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 500;
+	position: relative;
+	letter-spacing: -0.4px;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+.con_txt h3 {
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	word-spacing: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.keeper_box {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	padding: 26px;
+	text-align: justify;
+	background: #f7f7f7;
+}
+
+.sub_bull, .sub_bull02 {
+	width: 100%;
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	margin-left: 0%;
+	vertical-align: middle;
+}
+
+.sub_bull:before, .sub_bull02:before, .sub_bull03:before, .sub_bull04:before
+	{
+	position: absolute;
+	display: block;
+	top: 12px;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: #08b2f5;
+	content: '';
+}
+
+.sub_bull:before {
+	top: 6px;
+}
+
+.sub_bull span, .sub_bull02 span, .sub_bull04 span {
+	font-size: 17px;
+	font-weight: 500;
+	margin-left: 14px;
+	color: #333;
+	display: block;
+}
+
+.keeper_box h5 {
+	font-size: 15px;
+	color: #555;
+	font-weight: 300;
+	line-height: 22px;
+	letter-spacing: -0.4px;
+	margin-left: 15px;
+	margin-right: 0px;
+	margin-top: 10px;
+	position: relative;
+	display: inline-block;
+	border: 0px solid yellow;
+}
+
+.right_keeper {
+	width: 44%;
+	height: 90px;
+	position: absolute;
+	display: inline-block;
+	margin-top: -22px;
+	margin-left: 30px;
+	border: 0px solid red;
+	float: right;
+}
+
+.right_keeper li {
+	width: 44%;
+	height: 80px;
+	display: inline-block;
+}
+
+.keeper img {
+	width: 80px;
+	height: 80px;
+	position: relative;
+	display: inline-block;
+	border-radius: 50%;
+	margin-right: 8px;
+	background: no-repeat;
+	float: left;
+}
+
+.keeper_name {
+	width: 44%;
+	line-height: 20px;
+	position: absolute;
+	margin-right: 10px;
+	border: 0px solid red;
+	font-size: 14px;
+	font-weight: 400;
+	color: #555;
+	text-align: left;
+	margin-left: 90px;
+	margin-top: 30px;
+}
+
+.dashline_box {
+	width: 100%;
+	height: auto;
+	margin-top: 30px;
+	padding-top: 30px;
+	position: relative;
+	display: inline-block;
+	border-top: 1px dashed #ddd;
+}
+
+.left_con {
+	width: 47.9%;
+	position: relative;
+	display: inline-block;
+	letter-spacing: -1px;
+}
+
+.con_txt h1 {
+	font-size: 24px;
+	line-height: 30px;
+	font-weight: 700;
+	position: relative;
+	letter-spacing: -0.4px;
+	color: #08b2f5;
+	margin-bottom: 10px;
+}
+
+.con_txt h3 {
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.infobox, .infobox02 {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	padding: 22px;
+	word-wrap: break-word;
+	word-spacing: -0.3px;
+	background: #f7f7f7;
+	margin-top: 40px;
+}
+
+.infobox span {
+	font-size: 15px;
+	font-weight: 500;
+	color: #333;
+	line-height: 26px;
+	letter-spacing: -1px;
+	position: relative;
+	display: inline-block;
+}
+
+.infobox h3 {
+	font-size: 15px;
+	color: #555;
+	line-height: 24px;
+	margin-left: 14px;
+	margin-right: 0px;
+	display: inline-block;
+	font-weight: 300;
+}
+
+.infobox h5 {
+	font-size: 14px;
+	font-weight: 300;
+	color: #08b2f5;
+	line-height: 24px;
+	letter-spacing: -0.4px;
+	position: relative;
+	display: inline-block;
+}
+
+.info_txt_area02 {
+	border-bottom: 0px solid #ddd;
+}
+
+.con_txt h1 {
+	font-size: 24px;
+	line-height: 30px;
+	font-weight: 700;
+	position: relative;
+	letter-spacing: -0.4px;
+	color: #08b2f5;
+	margin-bottom: 10px;
+}
+
+.con_txt h3 {
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.traffic_info {
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin-top: 20px;
+}
+
+.traffic_from {
+	width: 26%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-right: 28px;
+	text-align: center;
+	margin-bottom: 0px;
+	border: 0px solid red;
+}
+
+a, a:hover, a:focus {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+}
+
+.traffic_icon {
+	width: 40px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	border: 0px solid red;
+	overflow: hidden;
+}
+
+.traffic icon {
+	width: 40px;
+	height: 40px;
+	position: relative;
+	text-align: center;
+	display: inline-block;
+	margin-bottom: 10px;
+	background-size: no-repeat center;
+}
+
+.traffic_text {
+	font-size: 14px;
+	color: #555;
+	font-weight: 300;
+	position: relative;
+	text-align: center;
+	display: block;
+}
+
+.traffic_info p {
+	font-size: 14px;
+	font-weight: 300;
+	color: #08b2f5;
+	letter-spacing: -0.4px;
+	position: relative;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.right_area {
+	margin-top: 30px;
+}
+
+.dashline_box {
+	width: 100%;
+	height: auto;
+	margin-top: 30px;
+	padding-top: 30px;
+	position: relative;
+	display: inline-block;
+	border-top: 1px dashed #ddd;
+}
+
+.traffic_list_wrap .traffic_form:nth-child(4n) {
+	margin-right: 0px;
+}
+
+.traffic_info p {
+	font-size: 14px;
+	font-weight: 300;
+	color: #08b2f5;
+	letter-spacing: -0.4px;
+	position: relative;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.traffic_bull {
+	width: 100%;
+	line-height: 27px;
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	margin-left: 0%;
+	vertical-align: middle;
+}
+
+.traffic_bull img {
+	position: relative;
+	display: inline-block;
+	width: 18px;
+	background: no-repeat;
+}
+
+.traffic_bull sapn {
+	font-size: 18px;
+	font-weight: 500;
+	margin-left: 14px;
+	color: #333;
+	position: relative;
+	display: inline-block;
+}
+
+.traffic_list {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	border: 1px solid #ddd;
+	text-align: left;
+	margin: 20px 0px 30px 0px;
+	padding: 30px 22px;
+}
+
+.traffic_list li {
+	width: 220px;
+	min-height: auto;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-right: 24px;
+	float: left;
+}
+
+.traffic_list li .traffic_img img {
+	width: 220px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+}
+
+.traffic_img02 img {
+	width: 220px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-bottom: 55px;
+}
+
+.traffic_img03 img {
+	width: 220px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-bottom: 70px;
+}
+
+.traffic_list li:nth-child(5) {
+	margin-top: 40px;
+	float: left;
+}
+
+.traffic_list li:nth-child(6) {
+	margin-top: 40px;
+}
+
+.traffic_bull {
+	width: 100%;
+	line-height: 27px;
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	margin-left: 0%;
+	vertical-align: middle;
+}
+
+.sub_wrap02 {
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	margin-top: -100px;
+	border: 0px solid red;
+	background: #000;
+}
+
+.contents_warp02 {
+	width: 1100px;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	padding: 50px;
+	margin-bottom: 0px;
+	border: 0px solid red;
+}
+
+.gallery_wrap {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin: 0 auto;
+	padding-top: 30px;
+	margin-bottom: 60px;
+}
+
+.gallery_wrap h1 {
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 40px;
+	color: #08b2f5;
+}
+
+.slideshow_container {
+	max-width: 1000px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.watermark img {
+	width: 100%;
+	height: 667px;
+	position: absolute;
+	display: block;
+	margin: 0 auto;
+	top: 0;
+	z-index: 20;
+}
+
+.prev, .next {
+	cursor: pointer;
+	position: absolute;
+	top: 48.5%;
+	width: auto;
+	padding: 16px;
+	margin-top: -22px;
+	font-weight: 500;
+	font-size: 30px;
+	transition: 0.6s ease;
+	z-index: 30;
+	user-select: none;
+}
+
+.next {
+	right: 0;
+}
+
+.sub_wrap03 {
+	width: 1100px;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	padding: 50px;
+	margin-bottom: 80px;
+	border: 0px solid red;
+}
+
+.sub_wrap03 {
+	padding: 24px 50px 0px 50px;
+}
+
+.contents_wrap {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-top: 50px;
+	border: 0px solid red;
+}
+
+/* 주변관광지 */
+.btn_area {
+	width: 100%;
+	height: 40px;
+	position: relative;
+	text-align: center;
+}
+
+.btn_spot {
+	width: 18%;
+	height: 40px;
+	border: 1px solid #08b2f5;
+	border-radius: 30px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 38px;
+	margin-right: 10px;
+	color: #08b2f5;
+	display: inline-block;
+	float: left;
+}
+
+.btn_spot_on {
+	width: 18%;
+	height: 40px;
+	border: 1px solid #08b2f5;
+	font-size: 16px;
+	font-weight: 500;
+	border-radius: 30px;
+	line-height: 38px;
+	margin-right: 10px;
+	color: #08b2f5;
+	display: inline-block;
+	float: left;
+	background: #08b2f5;
+	color: #fff;
+	display: inline-block;
+	float: left;
+}
+
+.btn_spot:hover {
+	background: #08b2f5;
+	font-weight: 500;
+	color: #fff;
+}
+
+.spot_list_wrap {
+	width: 100%;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 30px;
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.spot_form {
+	width: 223px;
+	height: auto;
+	display: inline-block;
+	margin-right: 34px;
+	margin-top: 14px;
+	border: 0px solid red;
+}
+
+.spot_img {
+	width: 223px;
+	height: auto;
+	border: 1px solid #ddd;
+	overflow: hidden;
+}
+
+.spot_img img {
+	width: 223px;
+	height: 142px;
+	object-fit: cover;
+}
+
+.spot_form:nth-child(4n) {
+	margin-right: 0px;
+}
+
+.spot_text {
+	font-size: 16px;
+	color: #333;
+	font-weight: 500;
+	position: relative;
+	display: inline-block;
+	margin: 10px 0;
+}
+
+.spot_text p {
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 20px;
+	margin-top: 10px;
+	text-align: justify;
+	letter-spacing: -0.8px;
+	color: #555;
+}
+
+.spot_info {
+	width: 100%;
+	position: relative;
+	display: block;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.spot_info  li {
+	font-size: 14px;
+	font-weight: 300;
+	color: #08b2f5;
+	line-height: 20px;
+	position: relative;
+	display: block;
+	margin-right: 10px;
+	margin-bottom: 6px;
+}
+
+.spot_info  li.spot img {
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	margin-right: 4px;
+}
+
+/*주변 숙박*/
+table.around_t {
+	text-align: center;
+	padding: 14px;
+	vertical-align: middle;
+	overflow-x: auto;
+	word-break: keep-all;
+	border: 1px solid #ddd;
+}
+
+table.around_t {
+	width: 100%;
+	height: auto;
+	margin: 10px 0px;
+	background-color: #fff;
+}
+
+table.around_t th {
+	line-height: 30px;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+	vertical-align: middle;
+	border-right: 1px solid #aaa;
+	background: #78808c;
+	color: #fff;
+	padding: 6px;
+}
+
+table.around_t th:nth-child(1) {
+	width: 30%;
+}
+
+table.around_t th:nth-chlid(2) {
+	width: 70%;
+}
+
+table.around_t td {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 24px;
+	padding: 14px;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #ddd;
+	color: #555;
+}
+
+table.around_t td.r_01 {
+	text-align: left;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 24px;
+	padding: 14px 24px;
+	vertical-align: middle;
+	color: #555;
+}
+
+/*우정의 길*/
+.dashline_box {
+	width: 100%;
+	height: auto;
+	margin-top: 30px;
+	padding-top: 30px;
+	position: relative;
+	display: inline-block;
+	border-top: 1px dashed #ddd;
+}
+
+.friends02 p {
+	font-size: 20px;
+	font-weight: 300;
+	color: #08b2f5;
+	position: relative;
+	margin-top: 20px;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.friends02 img {
+	max-width: 479px;
+	width: auto;
+	height: auto;
+	position: relative;
+	display: inline-block;
+}
+
+.con_txt h3 {
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.con_txt h2 {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 500;
+	position: relative;
+	letter-spacing: -0.4px;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+.con_txt span {
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 28px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.friends_info {
+	position: relative;
+	display: inline-block;
+	margin-top: -10px;
+}
+
+.friends_info img {
+	max-width: 84px;
+	width: auto;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.friends_info ul {
+	position: relative;
+	display: inline-block;
+	margin-top: 20px;
+	margin-left: 16px;
+}
+
+.friends_info li {
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 20px;
+	position: relative;
+	display: block;
+}
+
+.friends_info span {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 20px;
+	position: relative;
+	display: inline-block;
+}
+
+.friends_btn {
+	width: 160px;
+	height: 26px;
+	font-size: 15px;
+	line-height: 26px;
+	font-weight: 400;
+	text-align: center;
+	position: relative;
+	display: inline-block;
+	color: #fff;
+	margin: 20px 0px 10px 0px;
+	background: #08b2f5;
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+.con_txt h3 {
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	word-break: keep;
+	position: relative;
+	letter-spacing: -0.4px;
+	text-align: justify;
+	color: #555;
+}
+
+.participate02 p, h3 {
+	line-height: 40px;
+	font-size: 15px;
+	font-weight: 300;
+	border-bottom: 0px solid #78808c;
+	display: inline-block;
+	margin-left: 4px;
+}

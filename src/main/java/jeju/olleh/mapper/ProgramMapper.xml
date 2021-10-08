@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.ProgramMapper">
+	
+	<select id="selectProgramInfo" resultType="Program">
+		SELECT 
+			program_type, program_name, program_description, program_content, program_instruction 
+    	FROM 
+    		program 
+    	WHERE 
+    		program_type=#{programType}
+	</select>
+	
+	<select id="selectProgramList" resultType="Program">
+		SELECT
+			program_type, program_name, program_description, program_content, program_instruction 
+    	FROM
+    		program 
+    	ORDER BY 
+    		program_type
+	</select>
+	
+</mapper>

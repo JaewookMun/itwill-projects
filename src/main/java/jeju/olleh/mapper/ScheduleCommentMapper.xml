@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.ScheduleCommentMapper">
+	<!-- comment_code refer to 회원번호 -->
+	
+	<insert id="insertComment">
+		INSERT INTO 
+			schedule_comment 
+		VALUES
+			(#{scheduleKey}, #{commentNo}, #{commentCode}, #{commentContent}, sysdate,
+		<choose>
+			<when test="refNo!=null and refNo!=''">
+				#{refNo}, 1)
+			</when>
+			<otherwise>
+				#{commentNo}, 0)
+			</otherwise>
+		</choose>
+	</insert>
+	
+	<delete id="deleteComment">
+		DELETE FROM 
+			schedule_comment 
+		WHERE 
+			schedule_key=#{scheduleKey} 
+    	AND 
+    		commnet_no=#{commentNo}
+	</delete>
+	
+	<update id="updateComment">
+		UPDATE 
+			schedule_comment 
+		SET
+			comment_content=#{commentContent}
+		WHERE 
+			schedule_key=#{scheduleKey}
+			
+		AND
+			commnet_no=#{commentNo}
+	</update>
+	
+	<select id="selectNextSeqNo" resultType="int">
+		SELECT sch_comment_seq.nextval FROM dual
+	</select>
+	
+	
+	<!-- resultMap : schedule_comment & member -->
+	<resultMap type="ScheduleCommentMember" id="commentMemberMap">
+	
+		<association property="comment" javaType="ScheduleComment">
+			<id column="schedule_key" property="scheduleKey" />
+			<result column="comment_code" property="commentCode"/>
+			<result column="comment_no" property="commentNo"/>
+			<result column="comment_content" property="commentContent"/>
+			<result column="comment_date" property="commentDate"/>
+			<result column="ref_no" property="refNo"/>
+			<result column="re_level" property="reLevel"/>
+		</association>
+	
+		<association property="member" javaType="Member">
+			<id column="no" property="no"/>
+			<result column="id" property="id"/>
+			<result column="name" property="name"/>
+			<result column="pw" property="pw"/>
+			<result column="birth" property="birth"/>
+			<result column="gender" property="gender"/>
+			<result column="phone" property="phone"/>
+			<result column="main_address" property="mainAddress"/>
+			<result column="detail_address" property="detailAddress"/>
+			<result column="status" property="status"/>
+			<result column="join_date" property="joinDate"/>
+			<result column="out_reason" property="outReason"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectCommentList" resultMap="commentMemberMap">
+		SELECT
+			schedule_key, comment_no, comment_code, name, comment_content, comment_date, re_level 
+		FROM 
+			schedule_comment 
+		JOIN 
+			member 
+		ON 
+			comment_code=no 
+		WHERE 
+			schedule_key=#{scheduleKey}
+		ORDER BY 
+			ref_no DESC, re_level
+	</select>
+
+	<!-- resultMap : schedule & schedule_comment & member -->
+	<resultMap type="ScheduleCommentMemberWitSchedule" id="commentMemberScheduleMap">
+			<association property="schedule" javaType="Schedule">
+			<id column="schedule_no" property="scheduleNo" />
+			<result column="schedule_type" property="scheduleType"/>
+			<result column="schedule_post_date" property="schedulePostDate"/>
+			<result column="schedule_title" property="scheduleTitle"/>
+			<result column="schedule_course" property="scheduleCourse"/>
+			<result column="departure_datetime" property="departureDatetime"/>
+			<result column="departure_location" property="departureLocation"/>
+			<result column="volunteer" property="volunteer"/>
+			<result column="preparation" property="preparation"/>
+			<result column="schedule_content" property="scheduleContent"/>
+			<result column="status" property="status"/>
+		</association>
+	
+		<association property="comment" javaType="ScheduleComment">
+			<id column="schedule_key" property="scheduleKey" />
+			<result column="comment_code" property="commentCode"/>
+			<result column="comment_no" property="commentNo"/>
+			<result column="comment_content" property="commentContent"/>
+			<result column="comment_date" property="commentDate"/>
+			<result column="ref_no" property="refNo"/>
+			<result column="re_level" property="reLevel"/>
+		</association>
+	
+		<association property="member" javaType="Member">
+			<id column="no" property="no"/>
+			<result column="id" property="id"/>
+			<result column="name" property="name"/>
+			<result column="pw" property="pw"/>
+			<result column="birth" property="birth"/>
+			<result column="gender" property="gender"/>
+			<result column="phone" property="phone"/>
+			<result column="main_address" property="mainAddress"/>
+			<result column="detail_address" property="detailAddress"/>
+			<result column="status" property="status"/>
+			<result column="join_date" property="joinDate"/>
+			<result column="out_reason" property="outReason"/>
+		</association>
+	</resultMap>
+	
+
+	<!-- MyPage에서 조회할 수 있는 '내가 작성한 댓글 목록' -->
+	<select id="selectMyCommentList" resultMap="commentMemberScheduleMap">
+		SELECT
+			comment_no, comment_code, schedule_title, comment_content, comment_date 
+		FROM 
+			schedule_comment 
+		JOIN
+			schedule ON schedule_no=schedule_key 	
+		JOIN 
+			member ON comment_code=no 
+		WHERE 
+			no=#{no}
+		ORDER BY 
+			comment_no DESC, re_level
+	</select>
+	
+</mapper>

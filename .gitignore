@@ -1,0 +1,9 @@
+.classpath
+.project
+.springBeans
+
+# setting info hiding
+/src/main/webapp/WEB-INF/spring/root-context.xml
+
+# svn info
+.svn

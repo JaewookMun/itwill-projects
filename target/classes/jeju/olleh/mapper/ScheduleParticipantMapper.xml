@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.ScheduleParticipantMapper">
+	
+	<!-- 'participant_code' refer to MEMBER(no) -->
+	
+	<insert id="insertParticipant">
+		INSERT INTO schedule_participant VALUES(#{scheduleKey}, #{participantCode}, #{participantNo}, sysdate)
+	</insert>
+	
+	
+	<delete id="deleteParticipant">
+		DELETE FROM schedule_participant 
+		WHERE schedule_key=#{scheduleKey} AND participant_code=#{participantCode}
+	</delete>
+	
+	
+	<update id="updateParticipant">
+		UPDATE
+			schedule_participant 
+		<set>
+			<if test="participantCode!=null and participantCode!=''">
+				participant_code=#{participantCode},
+			</if>
+			<if test="participantNo!=null and participantNo!=''">
+				participant_no=#{participantNo}
+			</if>
+		</set>	
+		WHERE 
+			schedule_key=#{scheduleKey}
+	</update>
+	
+	<!-- resultMap : schedule_participant & member -->
+	<resultMap type="ScheduleParticipantMember" id="participantMemberMap">
+		<association property="participant" javaType="ScheduleParticipant">
+			<id column="schedule_key" property="scheduleKey" />
+			<result column="participant_code" property="participantCode"/>
+			<result column="participant_no" property="participantNo"/>
+			<result column="apply_date" property="applyDate"/>
+		</association>
+	
+		<association property="member" javaType="Member">
+			<id column="no" property="no"/>
+			<result column="id" property="id"/>
+			<result column="name" property="name"/>
+			<result column="pw" property="pw"/>
+			<result column="birth" property="birth"/>
+			<result column="gender" property="gender"/>
+			<result column="phone" property="phone"/>
+			<result column="main_address" property="mainAddress"/>
+			<result column="detail_address" property="detailAddress"/>
+			<result column="zipcode" property="zipcode"/>
+			<result column="member_img" property="memberImg"/>
+			<result column="status" property="status"/>
+			<result column="join_date" property="joinDate"/>
+			<result column="out_reason" property="outReason"/>
+		</association>
+	</resultMap>
+	
+	
+	<select id="selectScheduleParticipant" resultMap="participantMemberMap">
+		SELECT
+			schedule_key, participant_code, name, participant_no, apply_date, member_img
+		FROM
+			schedule_participant 
+		JOIN 
+			member ON participant_code=no
+		WHERE
+			schedule_key=#{scheduleKey}
+		AND
+			participant_code=#{participantCode}
+	</select>
+	
+	
+	<select id="selectScheduleParticipantInfoList" resultMap="participantMemberMap">
+		SELECT
+			schedule_key, participant_code, name, participant_no, apply_date, member_img
+		FROM
+			schedule_participant 
+		JOIN 
+			member ON participant_code=no
+		WHERE
+		<choose>
+			<when test="scheduleKey!=null and scheduleKey!=''">
+				schedule_key=#{scheduleKey} ORDER BY apply_date
+			</when>
+			<otherwise>
+				participant_code=#{participantCode} ORDER BY apply_date desc
+			</otherwise>
+		</choose>		
+	</select>
+	
+	<!-- ######################################################################################################### -->	
+	<!-- ######################################################################################################### -->	
+
+	<resultMap type="ParticipantMemberWithSchedule" id="participantMemberScheduleMap">
+		<association property="schedule" javaType="Schedule">
+			<id column="schedule_no" property="scheduleNo" />
+			<result column="schedule_type" property="scheduleType"/>
+			<result column="schedule_post_date" property="schedulePostDate"/>
+			<result column="schedule_title" property="scheduleTitle"/>
+			<result column="schedule_course" property="scheduleCourse"/>
+			<result column="departure_datetime" property="departureDatetime"/>
+			<result column="departure_location" property="departureLocation"/>
+			<result column="volunteer" property="volunteer"/>
+			<result column="preparation" property="preparation"/>
+			<result column="schedule_content" property="scheduleContent"/>
+			<result column="status" property="status"/>
+		</association>
+		
+		<association property="participant" javaType="ScheduleParticipant">
+			<id column="schedule_key" property="scheduleKey" />
+			<result column="participant_code" property="participantCode"/>
+			<result column="participant_no" property="participantNo"/>
+			<result column="apply_date" property="applyDate"/>
+		</association>
+	
+		<association property="member" javaType="Member">
+			<id column="no" property="no"/>
+			<result column="id" property="id"/>
+			<result column="name" property="name"/>
+			<result column="pw" property="pw"/>
+			<result column="birth" property="birth"/>
+			<result column="gender" property="gender"/>
+			<result column="phone" property="phone"/>
+			<result column="main_address" property="mainAddress"/>
+			<result column="detail_address" property="detailAddress"/>
+			<result column="zipcode" property="zipcode"/>
+			<result column="member_img" property="memberImg"/>
+			<result column="status" property="status"/>
+			<result column="join_date" property="joinDate"/>
+			<result column="out_reason" property="outReason"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectScheduleParticipantsWithNo" resultMap="participantMemberScheduleMap">
+		SELECT
+			schedule_no, participant_code, schedule_title, name, participant_no, apply_date
+		FROM
+			schedule
+		JOIN
+			schedule_participant ON schedule_no=schedule_key 
+		JOIN 
+			member ON participant_code=no
+		WHERE
+			no=#{no} ORDER BY apply_date desc
+	</select>
+	
+</mapper>

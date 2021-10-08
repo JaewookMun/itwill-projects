@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.HonorMapper">
+
+	<insert id="insertHonor">
+		<selectKey resultType="int" keyProperty="num" order="BEFORE">
+		select honor_seq.nextval from dual
+		</selectKey>
+		insert into honor values(#{title},#{finish},#{content},#{origin}, #{num},#{upload})
+	</insert>
+	
+	<update id="updateHonor">
+		update Honor set title=#{title}, finish=#{finish}, content=#{content}, where num=#{num}
+	</update>
+	
+	<delete id="deleteHonor">
+		delete from honor where num=#{num}
+	</delete>
+	
+	<select id="selectHonorCount" resultType="int">
+		select count(*) from honor
+	</select>
+	
+	<select id="selectHonor" resultType="honor">
+		select * from honor where num=#{num}
+	</select>
+	
+	<select id="selectHonorList" resultType="honor">
+		select * from (select rownum rn, honor.* from (select * from honor
+		order by num desc) honor) where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="selectAllHonorList" resultType="honor">
+		select * from honor order by num desc
+	</select>
+	
+</mapper>

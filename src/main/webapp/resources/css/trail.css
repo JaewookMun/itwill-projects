@@ -1,0 +1,280 @@
+@charset "UTF-8";
+
+.sub_wrap, .sub_wrap03 {
+	width: 1100px;
+	height: auto;
+	position: relative;
+	margin: 0 auto;
+	padding: 50px;
+	margin-bottom: 80px;
+	border: 0px solid red;
+}
+
+.contents_wrap {
+	width: 100%;
+	height: auto;
+	position: relative;
+	display: inline-block;
+	margin-top: 50px;
+	border: 0px solid red;
+}
+
+.sub_tit {
+	width: 100%;
+	height: auto;
+	padding-top: 20px;
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	margin: 0 auto;
+	border: 0px solid red;
+}
+
+.sub_tit h1 {
+	width: 100%;
+	font-size: 36px;
+	font-weight: 500;
+	position: relative;
+	display: block;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.under {
+	width: 60px;
+	height: 6px;
+	background: #08b2f5;
+	position: relative;
+	display: inline-block;
+	margin: 0 auto;
+}
+
+
+/******** j from program **********/
+.sub_bull, .sub_bull02, .sub_bull03, .sub_bull04 {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin-left: 0%;
+    vertical-align: middle;
+}
+
+.con_list li {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 24px;
+    word-break: normal;
+    letter-spacing: -0.2px;
+    color: #555;
+    position: relative;
+    word-wrap: break-all;
+    margin-top: 6px;
+    margin-bottom: 0.5em;
+    padding-left: 1em;
+}
+
+.dashline_box {
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+    padding-top: 30px;
+    position: relative;
+    display: inline-block;
+    border-top: 1px dashed #ddd;
+}
+
+.left_con {
+    width: 47.9%;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -1px;
+    text-align: left;
+}
+
+.left_area {
+    width: 47.9%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    margin-top: 30px;
+}
+
+.olle_txt_area02 {
+    width: 63%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    float: right;
+}
+
+.olle_summary {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 24px;
+    color: #444;
+    text-align: justify;
+    letter-spacing: -0.4px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: keep;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.olle_thumb {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    position: relative;
+    display: inline-block;
+    border: 0px solid #ddd;
+}
+
+/* volunteer */
+
+.right_area, .right_con {
+    width: 47.9%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    float: right;
+    text-align: left;
+}
+
+.right_area {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.up {
+    width: 30px;
+    height: 3px;
+    background: #08b2f5;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.con_txt h2 {
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 500;
+    position: relative;
+    letter-spacing: -0.4px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.con_txt h3 {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 26px;
+    word-break: keep;
+    position: relative;
+    letter-spacing: -0.4px;
+    text-align: justify;
+    color: #555;
+}
+
+.keeper_box, .con_info_box {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    padding: 26px;
+    text-align: justify;
+    background: #f7f7f7;
+}
+
+/* with */
+
+.con_txt02 h1 {
+    font-size: 24px;
+    line-height: 40px;
+    font-weight: 700;
+    position: relative;
+    letter-spacing: -0.4px;
+    text-align: center;
+    color: #08b2f5;
+    margin-bottom: 30px;
+}
+
+.guide_list_wrap {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 30px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    border: 0px solid red;
+}
+
+/* 프로그램 글씨 */
+
+.con_txt h4 {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 22px;
+    word-break: normal;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.4px;
+    text-justify: inter-word;
+    color: #089FF4;
+}
+
+.con_btn {
+	margin-top: 10px;	
+}
+
+.con_btn, .con_btn02 {
+    width: 160px;
+    height: 26px;
+    font-size: 15px;
+    line-height: 26px;
+    font-weight: 400;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    background: #08b2f5;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.con_list li h3 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -1px;
+    color: #555;
+    position: relative;
+}
+
+.con_list li h5 {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 24px;
+    word-break: normal;
+    margin-top: 8px;
+    margin-bottom: 14px;
+    letter-spacing: -0.4px;
+    color: #555;
+    position: relative;
+}
+
+.red_list li {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 26px;
+    word-break: normal;
+    letter-spacing: -0.2px;
+    color: #444;
+    position: relative;
+    margin-bottom: 6px;
+    padding-left: 1em;
+}

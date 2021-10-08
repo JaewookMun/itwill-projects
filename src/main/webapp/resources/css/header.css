@@ -1,0 +1,178 @@
+@charset "UTF-8";
+.top_wrap{
+	width:100%;
+	height:160px;
+	position:relative;
+	display:inline-block;
+	margin:0 auto;
+	background:#fff;
+	border-bottom: 2px solid #ddd;
+}
+
+.util_wrap{
+	width:100%;
+	height:40px;
+	position:relative;
+	background:#f3f3f3;
+	margin:0 auto;
+}
+
+.util{
+	width:1100px;
+	height:40px;
+	margin:0 auto;
+	position:relative;
+}
+
+.on_site01 {
+	width:124px;
+	height:40px;
+	font-size:14px;
+	font-weight:400;
+	line-height:38px;
+	position:relative;
+	color:#666;
+	text-align:center;
+	display:inline-block;
+	cursor:pointer;
+	color:#333;
+	background:#fff;
+}
+
+
+.top_util{
+	width:53%;
+	height:40px;
+	margin:0 auto;
+	position:relative;
+	/* display: inline-block; */
+	text-align:right;
+	float:right;
+
+}
+
+.top_util li.top_bull, .top_util li.top_bull02, .top_util li.top_bull03, .top_util li.top_bull04{
+	position:relative;
+	display: inline-block;
+	margin-left:10px;
+ 	/* float: right; */
+}
+.top_util li.top_bull03{margin-right:10px;}
+
+.top_util  a{
+	font-size:14px;
+	font-weight:300;
+	line-height:38px;
+	text-align:center;
+	margin-left:14px;
+	color:#666;
+	position: relative; 
+	display:inline-block;
+}
+
+.top_util a:hover{color:#333; text-decoration:underline;}
+
+.top_util li.top_bull:before{ 
+	width: 2px;
+	height: 2px;
+	background: #666 no-repeat scroll 0 0; 
+    display: block;
+	top:18px;
+    position: absolute;   
+	border-radius: 4px;
+    content: '';
+   }
+.top_util li.top_bull02 img{ 
+	width: 14px;
+	height: 15px;
+	top:12px;
+	margin-right:8px;
+	margin-left:-14px;
+    display: inline-block;
+    position: relative; 
+}
+
+.nav{
+	width:1100px;
+	height:120px;
+	position:relative;
+	margin:0 auto;
+}
+
+nav::after {
+	content: ''; 
+	display:block; 
+	clear: both;
+}
+
+.logo{
+	width:91px;
+	height:48px;
+	margin-top:36px;
+	background:url('../img/logo.png') no-repeat;
+	position:absolute;
+	cursor:pointer;
+}
+
+.gnb{
+    position: absolute;
+	display:block;
+    top:52px;
+	margin-left:124px;
+    height:auto;
+}
+.gnb li{
+    display:inline-block;
+    text-align: center;
+}   
+.gnb li a{
+    display: block;
+    color: #222;
+    font-size: 18px;
+	font-weight:500;
+    line-height: 20px;
+	margin-right:50px;
+	height: 32px;
+	font-weight: bold;
+} 
+.gnb li a:hover{ border-bottom: 3px solid #08b2f5; }
+.gnb li .gnb li a:nth-child(8){margin-right:0px;}
+
+
+/* 관리자 header - program */
+.sub-area {
+	position: absolute !important;
+	top: 35px;
+	left: 192px;
+	width: 600px;
+	display: none;
+}
+
+.sub-area li {
+	float: left;
+	margin-right: 10px;
+}
+
+
+.sub-area li a {
+	font-size: 13px !important;
+	margin-right: 0px;
+	font-weight: 400;
+}
+
+.sub-area li span {
+	color: #c0c0c0;
+	font-weight: 200
+}
+
+.sub-area li a:hover {
+	color: #08b2f5;
+	border-bottom: 0px solid black;
+}
+
+.admin-on {
+	display: block;
+}
+
+
+

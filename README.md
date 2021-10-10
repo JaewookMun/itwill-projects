@@ -1,7 +1,6 @@
 
-### itwill-semi
-Link - http://itwill.xyz/samjo/
-<br>team project on the shopping mall
+### itwill-semi [web Link] - http://itwill.xyz/samjo/
+team project on the shopping mall
 
 1. feature
 The porject design is based on 'Demar3 company' : https://www.demar3.co.kr/index.php

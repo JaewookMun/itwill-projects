@@ -550,7 +550,13 @@ function makeCalendar(){// 현재 달 달력 만들기
 		}
 		
 		function nextAjax(){
-			var month=today.getFullYear()+"-"+(today.getMonth()+1);
+			var month;
+			if(today.getMonth()+1<10){
+				month=today.getFullYear()+"-0"+(today.getMonth()+1);
+			} else if (today.getMonth()+1>=10){
+				month=today.getFullYear()+"-"+(today.getMonth()+1);
+			}
+			
 			$.ajax({
 				type: "get",
 				url: "month_schedule",

@@ -1,7 +1,7 @@
-## Web Link : http://itwill.xyz/jeju/
+### Web Link : http://itwill.xyz/jeju/
 
 ## Final project 목적
-학습한 기술들을 활용한 웹사이트 구축<br>
+학습한 기술들을 활용하여 웹사이트 구축<br>
 참고사이트: 제주 올레 ( https://www.jejuolle.org/trail/kor/ )
 
 ## Team 개요
@@ -27,8 +27,8 @@
 - 기존 : 달력 변동 시 페이지 이동(쿼리스트링)<br>
    -> Ajax 를 통해 동적페이지로 구성
 
-- 기존 : 대댓글 작성시 대댓글 창의 접힘기능 없음
-  -> JS의 'classList.toggle()'을 사용하여 접힘기능 
+- 기존 : 대댓글 작성시 대댓글 창의 접힘기능 없음<br>
+  classList.toggle() 함수를 사용하여 접힘기능 설정
 
 <br>
 

@@ -11,5 +11,5 @@ This team is composed of 6 people.
 
 3. about three weeks
 
-4. used : Java (Servlet, JSP, Spring), Oracle DB, CSL(HTML, CSS, JavaScript [BootStrap])
+4. used : Java (Servlet, JSP), Oracle DB, CSL(HTML, CSS, JavaScript [BootStrap])
 

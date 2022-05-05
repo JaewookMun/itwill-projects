@@ -1,0 +1,14 @@
+<%@page import="web.data.dao.NoticeDAO"%>
+<%@page import="web.data.dto.NoticeDTO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+
+	
+	
+	
+	//제품목록 출력페이지 이동
+	out.println("<script type='text/javascript'>");
+	out.println("location.href='"+request.getContextPath()+"/admin/admin_page.jsp?group=board&work=notice_manager';");
+	out.println("</script>");	
+%>

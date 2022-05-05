@@ -1,0 +1,414 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ include file="/security/login_check.jspf" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style type="text/css">
+#container {margin-top: 80px;}
+</style>
+
+<div id="wrap">
+<div class="gnb_allmenu_wrap">
+
+<!-- //header -->
+	</div>
+	<!-- //header_warp -->
+	
+	<div id="container">
+		<div id="contents">
+		<!-- 본문 시작 -->
+
+			<!-- //location_wrap -->
+
+			<div class="sub_content">
+
+
+<%-- 페이지 이동 링크 - MY PAGE --%>
+<%@ include file="/mypage/mypage_transition.jspf" %>
+
+
+
+<div class="content">
+    <div class="mypage_cont">
+
+        <!-- 마이페이지 회원 요약정보 -->
+        <div class="mypage_top3">
+	<ul>
+		<li class="r1"><a href="../mypage/coupon.php"><span class="tit">COUPON</span> <span class="txt">1</span></a></li>
+		<li class="r2"><a href="../mypage/mileage.php"><span class="tit">MILEAGE</span> <span class="txt">0</span></a></li>
+		<li class="r3"><span class="tit">MY GRADE</span>
+<span class="txt groupW">W</span>		<a href="/main/html.php?htmid=service/customer.html&sub=depth1e" class="btn">등급혜택보기</a></li>
+	</ul>
+</div>
+
+        <!-- 마이페이지 회원 요약정보 -->
+		<form method="get" name="frmDateSearch">
+			<div class="mypage_tit01">
+				<h3>주문/배송조회</h3>
+				<div class="date_check_list" data-target-name="wDate[]">
+					<button type="button" data-value="0">오늘</button>
+					<button type="button" data-value="7">7일</button>
+					<button type="button" data-value="15">15일</button>
+					<button type="button" data-value="30">1개월</button>
+					<button type="button" data-value="90">3개월</button>
+					<button type="button" class="oneYear" data-value="365">1년</button>
+				
+				</div>
+				<div class="date_check_calendar" style="display:none">
+					<input type="text" id="picker2" name="wDate[]" class="anniversary js_datepicker" value="2021-08-02"> ~ <input type="text" name="wDate[]" class="anniversary js_datepicker" value="2021-08-09">
+				</div>
+
+				<button type="submit" class="btn" style="display:none;">조회</button>
+			</div>
+		</form>
+        <div class="mypage_lately_info">
+
+            <div class="mypage_lately_info_cont">
+                <span class="pick_list_num" style="display:none">
+                    주문목록 / 배송조회 내역 총 <strong>0</strong> 건
+                </span>
+                <!-- 주문상품 리스트 -->
+                <div class="mypage_table_type">
+    <table>
+        <colgroup>
+            <col>					<!-- 상품명/옵션 -->
+            <col style="width:120px"> <!-- 상품금액/수량 -->
+            <col style="width:80px"> <!-- 주문상태 -->
+            <col style="width:200px"> <!-- 확인/리뷰 -->
+            <col style="width:167px"> <!-- 날짜/주문번호 -->
+        </colgroup>
+        <thead>
+		<tr>
+			<th>Product</th>
+			<th>Quantity</th>
+			<th>Price</th>
+			<th>Status<div style="display:none">
+                확인/리뷰
+</div>
+			</th>
+			<th>Date/Order number</th>
+		</tr>
+
+        </thead>
+        <tbody>
+
+        <tr>
+            <td colspan="6"><p class="no_data">조회내역이 없습니다.</p></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 사유 레이어 -->
+<div id="lyReason" class="layer_wrap reason_layer dn" data-remote="../mypage/layer_order_refund_reason.php"></div>
+<!--//사유 레이어 -->
+<div id="lyWritePop" class="layer_wrap board_write_layer dn"></div>
+
+<!-- 네이버페이 상세정보 레이어 -->
+<div id="orderDetailReasonLayer" class="layer_wrap reason_layer dn" data-remote="../mypage/layer_order_naverpay_reason.php"></div>
+<!--//네이버페이 상세정보 레이어 -->
+
+<!-- 배송방식 상태 확인 레이어(택배제외) -->
+<div id="deliveryMethodLayer" class="layer_wrap dn" data-remote="../mypage/layer_order_delivery_method.php"></div>
+<!-- 배송방식 상태 확인 레이어(택배제외) -->
+
+<script type="text/javascript">
+    $(function () {
+        // 구매취소
+        $('.js_btn_order_cancel').click(function (e) {
+            if (confirm("주문취소 처리를 하시겠습니까?")) {
+                var params = {
+                    mode: 'cancelRegist',
+                    orderNo: $(this).closest('tr').data('order-no'),
+                    orderGoodsNo: $(this).closest('tr').data('order-goodsno'),
+                    orderStatus: $(this).closest('tr').data('order-status')
+                };
+
+                $.post('../mypage/order_ps.php', params, function (data) {
+                    alert(data.message);
+                    if (data.code == 200) {
+                        location.reload(true);
+                    }
+                });
+            }
+        });
+
+        // 구매확정
+        $('.js_btn_order_settle').click(function (e) {
+            if (confirm("구매확정 처리를 하시겠습니까?")) {
+                var params = {
+                    mode: 'settleRegist',
+                    orderNo: $(this).closest('tr').data('order-no'),
+                    orderGoodsNo: $(this).closest('tr').data('order-goodsno')
+                };
+
+                $.post('../mypage/order_ps.php', params, function (data) {
+                    alert(data.message);
+                    if (data.code == 200) {
+                        location.reload(true);
+                    }
+                });
+            }
+        });
+
+        // 수취확인
+        $('.js_btn_order_delivery').click(function (e) {
+            if (confirm("수취확인 처리를 하시겠습니까?")) {
+                var params = {
+                    mode: 'deliveryCompleteRegist',
+                    orderNo: $(this).closest('tr').data('order-no'),
+                    orderGoodsNo: $(this).closest('tr').data('order-goodsno')
+                };
+
+                $.post('../mypage/order_ps.php', params, function (data) {
+                    alert(data.message);
+                    if (data.code == 200) {
+                        location.reload(true);
+                    }
+                });
+            }
+        });
+
+        // 배송추적
+        $('.js_btn_delivery_trace').click(function (e) {
+            win = gd_popup({
+                url: '../share/delivery_trace.php?invoiceCompanySno=' + $(this).data('invoice-company-sno') + '&invoiceNo=' + $(this).data('invoice-no'),
+                target: 'trace',
+                width: 650,
+                height: 660,
+                resizable: 'yes',
+                scrollbars: 'yes'
+            });
+            win.focus();
+            return win;
+        });
+
+        // 레이어 오픈 바인딩
+        $('.btn_open_layer').bind('click', function (e) {
+            e.preventDefault();
+            // 일반 레이어 호출
+            if ($(this).attr('href') == '#lyReason') {
+                gd_call_layer_handler($(this));
+
+                // 리뷰쓰기 레이어 호출
+            } else if ($(this).attr('href') == '#writeReviewLayer') {
+                var bdId = $(this).data('id');
+                var goodsNo = $(this).data('goods-no');
+                var sno = $(this).data('sno');
+                gd_open_write_layer(bdId, goodsNo,sno);
+
+            } else if($(this).attr('href') == '#writeReviewLayer2') {
+                var bdId = $(this).data('id');
+                var goodsNo = $(this).data('goods-no');
+                var sno = $(this).data('sno');
+                $.ajax({
+                    method: "GET",
+                    url: "../goods/goods_review_write.php",
+                    data: {mode: 'write', bdId: bdId, goodsNo: goodsNo, orderGoodsNo : sno},
+                    dataType: 'text'
+                }).success(function (data) {
+                    writerLayer.show(data);
+                    gd_center_layer();
+                }).error(function (e) {
+                    alert(e.responseText);
+                });
+
+                // 레이어 confirm 호출
+            } else if ($(this).attr('href') == '#orderDetailReasonLayer') {
+                var orderGoodsNo = $(this).data('goods-no');
+                var target = $(this).attr('href');
+                var url = $(target).data('remote');
+                var params = {
+                    orderNo: $(this).closest('tr').data('order-no'),
+                    orderGoodsNo : orderGoodsNo
+                };
+
+                $(target).empty();
+                $.post(url, params, function (data) {
+                    if (!_.isUndefined(data.code) && data.code == 0) {
+                        alert(data.message);
+                        gd_close_layer();
+                        return false;
+                    }
+                    $(target).empty().html(data);
+                    $(target).find('>div').center();
+                });
+                // 레이어 confirm 호출
+            }
+            else if($(this).attr('href') == "#deliveryMethodLayer"){
+                gd_call_layer_handler($(this));
+            }
+            else {
+                if (confirm($(this).text() + "처리를 하시겠습니까?")) {
+                    gd_call_layer_handler($(this));
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        function gd_call_layer_handler(obj) {
+            var target = obj.attr('href');
+            var url = $(target).data('remote');
+            var params = {
+                orderNo: obj.closest('tr').data('order-no'),
+                orderGoodsNo: obj.closest('tr').data('order-goodsno'),
+                orderStatus: obj.closest('tr').data('order-status'),
+                userHandleSno: obj.closest('tr').data('order-userhandlesno')
+            };
+
+            $(target).empty();
+            $.post(url, params, function (data) {
+                if (!_.isUndefined(data.code) && data.code == 0) {
+                    alert(data.message);
+                    gd_close_layer();
+                    return false;
+                }
+                $(target).empty().html(data);
+                $(target).find('>div').center();
+            });
+        }
+
+        // 클레임 리스트일 경우 전체선택
+        if ($('.gd_checkbox_all').length) {
+            $('.gd_checkbox_all').trigger('click');
+        }
+
+        // 클레임신청 수량 초과 체크
+        $('input[name*="claimGoodsCnt"]').on('keyup', function(){
+            var mode = $(this).data('mode');
+            var orginCnt = parseInt($(this).attr('max'));
+            var claimCnt = parseInt($(this).val());
+            switch (mode) {
+                case 'refundRegist' :
+                    mode = "환불";
+                    break;
+                case 'backRegist' :
+                    mode = "반품";
+                    break;
+                case 'exchangeRegist' :
+                    mode = "교환";
+                    break;
+            }
+            if (claimCnt > orginCnt || claimCnt <= 0) {
+                alert(mode + '수량은 주문수량 ' + orginCnt + ' 보다 큰값 또는 0 값을 입력할 수 없습니다.');
+                $(this).val(orginCnt);
+            }
+        });
+
+        // 체크박스 전체 선택상태에 따른 체크박스 변경처리
+        $('input:checkbox[name="orderGoodsNo[]"]').click(function () {
+            var checkedCount = 0;
+            var eachCheckBox = $(this).closest('table').find('tbody input[name="orderGoodsNo[]"]:checkbox');
+            eachCheckBox.each(function () {
+                if ($(this).prop('checked') === true) {
+                    checkedCount++;
+                }
+            });
+            if (eachCheckBox.length == checkedCount) {
+                $(this).closest('table').find('thead > tr > th:nth-child(2) input[id="allCheck"]').prop('checked', true);
+                $(this).closest('table').find('thead > tr > th:nth-child(2) label[for="allCheck"]').addClass('on');
+            } else {
+                $(this).closest('table').find('thead > tr > th:nth-child(2) input[id="allCheck"]').prop('checked', false);
+                $(this).closest('table').find('thead > tr > th:nth-child(2) label[for="allCheck"]').removeClass('on');
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="/data/skin/front/mime/js/gd_board_goods.js" charset="utf-8"></script>
+                <!--// 주문상품 리스트 -->
+            </div>
+            <!-- //mypage_lately_info_cont -->
+        </div>
+        <!-- //mypage_lately_info -->
+
+        <div class="pagination">
+            <div class="pagination"><ul></ul></div>
+        </div>
+        <!-- //pagination -->
+
+    </div>
+    <!-- //mypage_cont -->
+
+</div>
+<!-- //content -->
+
+<script type="text/javascript">
+    $(function(){
+        // 인풋박스 선택 이벤트
+        if ($('.js_datepicker').length) {
+            var today = new Date();
+            var minDate = new Date();
+            minDate.setDate(today.getDate() - 365);
+            minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+
+            $('.js_datepicker').datetimepicker({
+                locale: 'ko',
+                format: 'YYYY-MM-DD',
+                dayViewHeaderFormat: 'YYYY MM',
+                viewMode: 'days',
+                ignoreReadonly: true,
+                debug: false,
+                keepOpen: false,
+                maxDate: today,
+                //minDate: minDate
+            });
+
+            //1년 이상 데이터 조회시 1년기간버튼 선택 이벤트
+            $inputDate = $('input[name="wDate[]"]');
+            var startDate = ($($inputDate[0]).val()).split('-');
+            startDate = new Date(startDate[0], startDate[1], startDate[2]);
+
+            var endDate = ($($inputDate[1]).val()).split('-');
+            endDate = new Date(endDate[0], endDate[1], endDate[2]);
+            var period = (endDate-startDate)/(24*3600*1000);
+
+            if(period > 365){
+                $('.date_check_list button').removeClass('on');
+                $('.oneYear').addClass('on');
+            }
+        }
+
+        // 기간버튼 선택 이벤트
+        if ($('.date_check_list').length) {
+            $('.date_check_list button').click(function (e) {
+                $startDate = $endDate = '';
+                $period = $(this).data('value');
+                $elements = $('input[name="' + $(this).closest('.date_check_list').data('target-name') + '"]');
+                $format = $($elements[0]).data('DateTimePicker').format();
+                if ($period >= 0) {
+                    $startDate = moment().hours(0).minutes(0).seconds(0).subtract($period, 'days').format($format);
+                    $endDate = moment().hours(0).minutes(0).seconds(0).format($format);
+                }
+                $($elements[0]).val($startDate);
+                $($elements[1]).val($endDate);
+                $('.date_check_list button').removeClass('on');
+                $(this).addClass('on');
+            });
+
+            // 선택된 버튼에 따른 값 초기화
+            $elements = $('input[name*=\'' + $('.date_check_list').data('target-name') + '\']');
+            if ($elements.length && $elements.val() != '') {
+                $interval = moment($($elements[1]).val()).diff(moment($($elements[0]).val()), 'days');
+                $('.date_check_list').find('button[data-value="' + $interval + '"]').trigger('click');
+            } else {
+                $('.date_check_list').find('button[data-value="-1"]').trigger('click');
+            }
+        }
+
+		// 조회이벤트(sunny)
+		$( '.date_check_list button' ).click( function() {
+			console.log("클릭했음");
+			$('.mypage_tit01 .btn').click();
+		} );
+    });
+</script>
+
+			</div>
+			<!-- //sub_content -->
+		</div>
+		<!-- //본문 끝 contents -->
+	</div>
+	<!-- //container -->
+</div>
+<!-- //wrap -->

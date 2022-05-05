@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/security/login_check.jspf" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<%-- 페이지 이동 링크 - MY PAGE --%>
+<%@ include file="/mypage/mypage_transition.jspf" %>
+
+<div class="content">
+    <div class="mypage_cont">
+        <div class="mypage_lately_info">
+            <div class="mypage_lately_info_cont">
+                <!-- 상품후기 리스트 -->
+                <div class="mypage_table_type">
+                	<button type="button" id="review_write" style="float: right; margin-bottom: 20px; font-size: 20px;">후기작성</button>
+				    <table>
+				        <colgroup>
+				        	<col style="width:120px">
+				            <col>
+				            <col style="width:130px">
+				            <col style="width:200px">
+				        </colgroup>
+				        <thead>
+						<tr>
+							<th>Number</th>
+							<th>Product</th>
+							<th>Review Context</th>
+							<th>Date</th>
+						</tr>
+				        </thead>
+				        <tbody>
+				        <tr>
+				       		<td class="td_left"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+				        </tr>
+				        </tbody>
+				    </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$("#review_write").click(function() {
+	location.href = "<%=request.getContextPath()%>/index.jsp?workgroup=mypage&work=review_write";
+});
+</script>

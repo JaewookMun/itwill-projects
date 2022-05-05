@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<link type="text/css" rel="stylesheet" href="css/board.css">
+
+<style type="text/css">
+.content {margin-top: 110px;}
+</style>
+ 
+<div class="content">
+<div class="side_cont">
+<div class="sub_menu_box">
+    <h2>CS CENTER</h2>
+    <ul class="sub_menu">
+        <li><a href="<%= request.getContextPath() %>/index.jsp?workgroup=faq&work=faq_list">FAQ</a></li>
+        <li><a href="<%= request.getContextPath() %>/index.jsp?workgroup=notice&work=notice_list">공지사항</a></li>
+    </ul>
+</div>
+<!-- //sub_menu_box -->
+
+<div class="board_zone_sec">
+	<div class="board_zone_cont" style="padding-top:19px;">
+		<div class="board_zone_list" align="center">
+			<table class="board_list_table" style="width:100%" "="">
+				<colgroup>
+					<col style="width:*;">
+					<col style="width:144px"><!-- 날짜 -->
+				</colgroup>
+				<thead>
+				<tr>
+					<th>제목</th>
+					<th>등록일</th>
+
+				</tr>
+				</thead>
+				<tbody>
+				
+				<tr data-sno="25" data-auth="y" style="height:10px">
+					<td class="board_tit">
+		
+						<a href="<%= request.getContextPath() %>/index.jsp?workgroup=notice&work=notice3">
+							<strong>선제품 판매 중단 관련 안내</strong>
+						</a>
+					</td>
+					<td> 2021.08.10 </td>
+				</tr>
+				<tr style="height:10px">
+					<td class="board_tit">
+						<a href="<%= request.getContextPath() %>/index.jsp?workgroup=notice&work=notice2">
+							<strong>[공지] 묶음배송(합배송) 배송비 관련 안내</strong>
+						</a>
+					</td>
+					<td> 2021.08.10 </td>
+				</tr>
+
+				<tr data-sno="103" data-auth="y" style="height:10px">
+					<td class="board_tit">
+						
+						<a href="<%= request.getContextPath() %>/index.jsp?workgroup=notice&work=notice1">
+							<strong>디마르 개인정보처리방침 개정 안내</strong>
+						</a>
+					</td>
+					<td> 2021.04.16 </td>
+				</tr>
+				
+
+				</tbody>
+			</table>
+
+
+			<div class="pagination"><ul><li class="on"><span>1</span></li></ul></div>
+
+			<!-- //pagination -->
+
+			<div class="board_search_box" style="display:none">
+				<form name="frmList" id="frmList" action="list.php" method="get">
+					<input type="hidden" name="bdId" value="notice">
+					<input type="hidden" name="memNo" value="">
+					<input type="hidden" name="noheader" value="">
+
+					<select class="chosen-select" name="searchField" style="display: none;">
+						<option value="subject">제목</option>
+						<option value="contents">내용</option>
+						<option value="writerNm">작성자</option>
+					</select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="width: 0px;" title=""><a class="chosen-single"><span>제목</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div>
+
+					<input type="text" class="text" name="searchWord" value="">
+					<button class="btn_board_search"><em>검색</em></button>
+				</form>
+			</div>
+			<!-- //board_search_box -->
+		</div>
+		<!-- //board_zone_list -->
+	</div>
+	<!-- //board_zone_cont -->
+</div>
+
+</div>
+</div>

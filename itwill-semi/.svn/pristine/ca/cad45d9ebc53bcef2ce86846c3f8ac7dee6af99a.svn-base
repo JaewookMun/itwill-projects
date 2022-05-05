@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+    <div id="header_in">
+	<ul class="h_menu">
+		<li><a href="<%= request.getContextPath() %>/index.jsp"><img src="images/deamr3_logo.png" alt="디마르3 로고"></a></li>
+<!--		<li><a href="/goods/shop.php?sno=8&sort=soldOut asc">Shop</a></li>-->
+		<li><a href="<%= request.getContextPath() %>/index.jsp?workgroup=product&work=shop">Shop</a></li>
+		<li><a href="">Review</a></li>
+		<li><a href="">CS center</a></li>
+	</ul>
+	<ul class="h_util">
+		<li><a href="">LOGIN</a></li>
+		<li><a href="">MYPAGE</a></li>
+		<li><a href="" class="ico_bag"><span class="cart_count">0</span></a></li>
+	</ul>
+</div>

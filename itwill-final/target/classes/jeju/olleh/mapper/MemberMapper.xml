@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.MemberMapper">
+
+	<insert id="insertMember">
+		<selectKey resultType="int" keyProperty="no" order="BEFORE">
+			select
+			member_seq.nextval from dual
+		</selectKey>
+		insert into member values(
+		#{no}, #{id}, #{name}, #{pw}, #{birth}, #{phone},
+		#{mainAddress}, #{detailAddress}, #{zipcode}, null, 1,
+		sysdate
+		)
+	</insert>
+
+	<update id="updateMember">
+		update member
+		<set>
+			<if test="name!=null and name!=''">
+				name = #{name},
+			</if>
+			<if test="birth!=null and birth!=''">
+				birth = #{birth},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone = #{phone},
+			</if>
+			<if test="mainAddress!=null and mainAddress!=''">
+				main_address = #{mainAddress},
+			</if>
+			<if test="detailAddress!=null and detailAddress!=''">
+				detail_address = #{detailAddress},
+			</if>
+			<if test="zipcode!=null and zipcode!=''">
+				zipcode = #{zipcode},
+			</if>
+			<if test="memberImg!=null and memberImg!=''">
+				member_img = #{memberImg}
+			</if>
+		</set>
+		where
+		id = #{id}
+	</update>
+
+	<!-- 비번 찾기 -->
+	<update id="updatePw">
+		update member
+		set
+		pw = #{pw}
+		where
+		name = #{name} and id = #{id}
+	</update>
+
+	<update id="deleteMember">
+		update member
+		set
+		status = 0
+		where
+		id = #{id}
+	</update>
+	
+	<update id="updateStatus">
+		update member
+		set
+		status = #{status}
+		where
+		id = #{id}
+	</update>
+
+	<select id="selectMember" resultType="Member">
+		select *
+		from
+		member
+		where
+		id = #{id}
+	</select>
+
+	<!-- 아이디 찾기 -->
+	<select id="selectId" resultType="string">
+		select id
+		from
+		member
+		where
+		name = #{name} and birth = #{birth}
+	</select>
+
+	<select id="selectMemberList" resultType="Member">
+		select *
+		from
+		member
+		order by no
+	</select>
+
+	<!-- 관리자 -->
+	<select id="selectAdmin" resultType="Member">
+		select * from member where
+		status = ${status}
+	</select>
+
+	<select id="memberCount" resultType="int">
+		select count(*) from member
+	</select>
+
+	<select id="memberListPage" resultType="Member">
+		select * from (select
+		rownum rn, temp.* from (select * from member
+		order by no desc) temp) where rn between #{startRow} and #{endRow}
+	</select>
+</mapper>

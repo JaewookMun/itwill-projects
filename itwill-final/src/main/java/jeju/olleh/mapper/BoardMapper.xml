@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jeju.olleh.mapper.BoardMapper">
+   <resultMap id="boardForm" type="BoardForm">
+		<id column="no" property="no"/>
+		<result column="title" property="title"/>
+		<result column="name" property="userName"/>
+		<result column="register_date" property="date"/>
+		<result column="content" property="content"/>
+	</resultMap>
+
+
+    <insert id="insertBoard">
+        <selectKey resultType="int" keyProperty="no" order="BEFORE">
+            select board_seq.nextval from dual
+        </selectKey>
+        insert into board
+        values( #{no},
+        #{member_no},
+        #{title},
+        #{content},
+        sysdate,
+        sysdate,
+        #{register_ip},
+        #{view_num},
+        #{recommend_num},
+        #{category},
+        #{status},
+        #{period} )
+    </insert>
+
+    <update id="updateBoard">
+        update board
+        set title       = #{title},
+            content     = #{content},
+            modify_date = sysdate
+        where no =#{no}
+    </update>
+
+    <delete id="deleteBoard">
+    	update board
+        set status = 2
+        where no =#{no}
+    </delete>
+
+    <select id="selectBoard" resultMap="boardForm">
+        select board.no,
+               board.title,
+               member.name,
+               board.register_date,
+               board.content
+        from board
+                 join member on (board.member_no = member.no)
+        where board.no = #{no}
+    </select>
+    
+    
+    <select id="selectBoardListCount" resultType="int">
+		select count(*) 
+		from board 
+		where category = #{category} and board.status != 2
+    </select>
+    
+    <select id="getBoardCountSearch" resultType="int">
+		select count(*) 
+		from board 
+		where category = #{category} and board.status != 2
+		 <if test="searchText != null and searchText != ''">
+    		and board.title like '%' || #{searchText} || '%'
+    		or board.content like '%' || #{searchText} || '%'
+    	</if>
+    </select>
+    
+<!--  
+    <select id="selectBoardList" resultType="boardForm">
+        select board.no as no,
+               board.title as title,
+               member.name as userName,
+               board.register_date as date,
+               board.content as content
+        from board
+                 join member on (board.member_no = member.no)
+        where board.category = #{category}
+        order by board.no desc
+    </select>
+-->
+
+    <select id="selectBoardList" resultMap="boardForm">
+        select board.no,
+               board.title,
+               member.name,
+               board.register_date,
+               board.content
+        from board
+                 join member on (board.member_no = member.no)
+        where board.category = #{category}
+        order by board.no desc
+    </select>
+ 	
+ 	<!-- join 추가해서 해야함 
+ 	<select id="getBoradList" resultMap="boardForm">
+		select * 
+		from (select rownum rn, board.* 
+				from (select * 
+					  from board 
+						order by num desc) board) 
+		where rn between #{startRow} and #{endRow} 
+	</select>
+ 	-->
+ 	<select id="selectBoardNoticeList" resultMap="boardForm">
+		select board3.no,
+        		board3.title,
+        		board3.name,
+        		board3.register_date,
+        		board3.content
+    	from (select rownum rn, board2.no,
+                            	board2.title,
+                            	board2.name,
+                            	board2.register_date,
+                            	board2.content
+				from (select board.no,
+							board.title,
+							member.name,
+                        	board.register_date,
+                        	board.content
+                    	from board
+                        	join member on (board.member_no = member.no)
+                    	where board.status = 9 and board.status != 2
+                    	order by board.no desc) board2) board3
+    	where board3.rn between 1 and 5
+	</select>
+	
+	
+ 	<select id="getBoradList" resultMap="boardForm">
+		select board3.no,
+        		board3.title,
+        		board3.name,
+        		board3.register_date,
+        		board3.content
+    	from (select rownum rn, board2.no,
+                            	board2.title,
+                            	board2.name,
+                            	board2.register_date,
+                            	board2.content
+				from (select board.no,
+							board.title,
+							member.name,
+                        	board.register_date,
+                        	board.content
+                    	from board
+                        	join member on (board.member_no = member.no)
+                    	where board.category = #{category} and board.status != 2
+        <if test="searchText != null and searchText != ''">
+    					and board.title like '%' || #{searchText} || '%'
+    					or board.content like '%' || #{searchText} || '%'
+    	</if>
+                    	order by board.no desc) board2) board3
+    	where board3.rn between #{startRow} and #{endRow} 
+	</select>
+</mapper>

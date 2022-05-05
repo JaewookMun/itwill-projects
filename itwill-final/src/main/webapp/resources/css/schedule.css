@@ -1,0 +1,785 @@
+@charset "UTF-8";
+
+/*****************************************************************************************/
+	/* 프로그램(스케쥴) 설명 */
+	#programInfoContainer {
+		margin-top: 30px;
+		padding-bottom: 30px;
+		border-bottom: 2px solid #08b2f5;
+	}
+	
+	#programInfo {
+    	width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    padding: 20px 30px;
+	    background: #F0FAFF;
+	}
+	
+	#programInfo h3 {
+	    width: 100%;
+	    font-size: 18px;
+	    font-weight: 500;
+	    line-height: 40px;
+	    word-break: normal;
+	    letter-spacing: 0px;
+	    color: #333;
+	    position: relative;
+	    text-align: center;
+	    margin: 0 auto;
+	    margin-bottom: 10px;
+	}
+	
+	#programInfo p {
+		width: 100%;
+	    font-size: 15px;
+	    font-weight: 300;
+	    line-height: 24px;
+	    word-break: normal;
+	    letter-spacing: 0px;
+	    color: #333;
+	    position: relative;
+	    text-align: center;
+	    margin: 0 auto;
+	}
+	
+	
+	.view-header {
+		width: 100%;
+	    padding: 30px 50px;
+	    position: relative;
+	    display: inline-block;
+	    border-bottom: 1px solid #ddd;
+	}
+	
+	.view-title {
+		font-size: 22px;
+	    font-weight: 500;
+	    line-height: 26px;
+	    color: #333;
+	    letter-spacing: -2px;
+	}
+	
+	/* 본문 영역 */
+	.view-body {
+		padding: 50px;
+	    font-size: 16px;
+	    border-bottom: 1px solid #dddddd;
+	    word-break: break-all;
+	    /* word-break : 오버플로우 시 줄바꿈관련 css 속성 */
+	}
+	
+	.view-body input:focus, .view-body textarea:focus {outline: none;}
+	
+/*****************************************************************************************/
+	/* 스케쥴 정보 테이블 */
+	
+	.info-table {
+		width: 100%;
+	    border-collapse: collapse;
+	    border-spacing: 0;
+	    border-width: 0px;
+	    border-style: solid;
+	    position: relative;
+	    display: inline-block;
+	    border: 0px solid red;
+	    vertical-align: middle;
+	    margin-right: 10px;
+	}
+	
+	.info-table tr{
+		width: 100%;
+	    height: 36px;
+	    font-size: 16px;
+	    border-style: solid;
+	    border-width: 0px;
+	    overflow: hidden;
+	    position: relative;
+	    word-break: normal;
+	    color: #333;
+	    border: 0px solid red;
+	    padding: 6px;
+	}
+	
+	.info-table .col-01 {
+		width: 200px;
+	    font-weight: 500;
+	    font-size: 15px;
+	    line-height: 24px;
+	    position: relative;
+	    text-align: left;
+	    border-bottom: 1px solid #fff;
+	    padding: 10px 20px;
+	    background: #f3f3f3;
+	    vertical-align: middle;
+	}
+	
+	
+	.info-table .col-02 {
+		width: 700px;
+	    font-size: 16px;
+	    font-weight: 300;
+	    line-height: 24px;
+	    position: relative;
+	    color: #555;
+	    padding: 10px 20px;
+	    text-align: left;
+	    border-bottom: 1px solid #f3f3f3;
+	    border-right: 1px solid #f3f3f3;
+	    vertical-align: middle;
+	}
+
+/*****************************************************************************************/
+	/* content 영역 - 공지사항 및 작성내용 */
+	.content-area {
+		width: 100%;
+	    height: auto;
+	    font-size: 16px;
+	    line-height: 24px;
+	    word-spacing: -0.04em;
+	
+		text-align: left;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	
+	
+/*****************************************************************************************/
+	/*default class*/
+	
+	.sub_bull02 {
+		width: 100%;
+	    position: relative;
+	    display: inline-block;
+	    overflow: hidden;
+	    margin-left: 0%;
+	    vertical-align: middle;
+	}
+	
+	/*
+	.sub_bull:before, .sub_bull02:before, .sub_bull03:before, .sub_bull04:before {
+	    position: absolute;
+	    display: block;
+	    top: 12px;
+	    width: 6px;
+	    height: 6px;
+	    border-radius: 50%;
+	    background-color: #08b2f5;
+	    content: '';
+	}
+	*/	
+
+	
+	.sub_bull02 span {
+	    font-size: 17px;
+	    font-weight: 500;
+	    margin-left: 14px;
+	    color: #333;
+	    display: block;
+	}
+	
+	
+/*****************************************************************************************/
+	
+	/* 안내사항 박스 */
+	#noticeBox {
+		width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    padding: 20px 30px 16px 30px;
+	    margin-top: 10px;
+	    background: #fff;
+	    border: 1px solid #ddd;
+	    
+	    text-align: left;
+	}
+	
+	#noticeBox p {
+		height: 20px;
+		margin-bottom: 5px;
+		margin-top: 10px;
+	}
+	
+	#noticeBox .sub_bull02:before {
+		position: absolute;
+	    display: block;
+		top: 6px;
+		width: 6px;
+	    height: 6px;
+	    border-radius: 50%;
+	    background-color: #08b2f5;
+	    content: '';
+	}
+	
+	
+	
+	
+/*****************************************************************************************/
+	/* 참가신청 */
+	#participate {
+		width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    background: #fff;
+	    padding: 40px 0px 40px;
+	    margin-bottom: 0px;
+	    border-bottom: 1px dashed #ddd;
+	
+	}
+	
+	.p-area-1, .p-area-2 {
+		position: relative;
+	    display: inline-block;
+	    margin: 0 auto;
+	    width: 100%;
+	    background: #f7f7f7;
+	    padding: 20px;
+	    border: 0px solid red;
+	
+	}
+	
+	.p-area-1 {
+		padding-top: 0px;
+	}
+	
+	.p-area-2 {
+		background: #fff;
+	    padding: 0px;
+	    margin-bottom: 40px;
+	}
+	
+	/*  p1 영역 */
+	.partial-area-left {
+		width: 47%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    border: 0px solid red;	
+	}
+	
+	
+	.partial-area-right {
+		width: 52%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    float: right;
+	    border: 0px solid red;
+	    margin-bottom: 6px;
+	}
+	
+	#applyForm {
+		width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    margin: 0 auto;
+	    text-align: center;
+	    border: 0px solid red;
+	    margin-top: 44px;
+	}
+	
+	#participate h2, form {display: inline-block;}
+	
+	#participate span, h3 {
+	    line-height: 40px;
+	    font-size: 15px;
+	    font-weight: 300;
+	    border-bottom: 0px solid #78808c;
+	    display: inline-block;
+	    margin-left: 4px;
+	}
+	
+	#participate input {
+		display: inline-block;
+	    vertical-align: middle;
+	    height: 32px;
+	    line-height: 25px;
+	    padding: 0 10px;
+	    background: #fff;
+	    box-sizing: border-box;
+	    border: 1px solid #ddd;
+	    color: #333;
+	    font-weight: normal;
+	    width: 56.6px;
+	    margin-left: 20px;	
+	}
+	
+	
+	#joinBtn {
+		position: relative;
+	    display: inline-block;
+	    width: 100px;
+	    height: 40px;
+	    background-color: #78808c;
+	    text-align: center;
+	    font-size: 15px;
+	    color: #fff;
+	    line-height: 40px;
+	    cursor: pointer;
+	    margin-left: 10px;
+	    z-index: 10;
+	    border: 0px;
+	}
+	
+	#joinBtn:hover {
+		background: #08b2f5;
+	}
+	
+	
+	.area_subtext {
+	    width: 100%;
+	    height: auto;
+	    line-height: 30px;
+	    font-size: 15px;
+	    font-weight: 300;
+	    position: relative;
+	    display: block;
+	    padding-left: 20px;
+	    margin-top: 20px;
+	    text-align: left;
+	    border: 0px solid red;
+	}
+	
+	.red_list li {
+	    font-size: 15px;
+	    font-weight: 300;
+	    line-height: 26px;
+	    word-break: normal;
+	    letter-spacing: -0.2px;
+	    color: #444;
+	    position: relative;
+	    margin-bottom: 6px;
+	    padding-left: 1em;
+	}
+	
+	.red_list li:before {
+	    content: "·";
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	}
+	
+	.con_btn02 {
+    	width: 140px;
+	    height: 22px;
+	    font-size: 14px;
+	    line-height: 20px;
+	    font-weight: 400;
+	    text-align: center;
+	    position: relative;
+	    display: inline-block;
+	    color: #fff;
+	    background: #08b2f5;
+	    border-radius: 15px;
+	    cursor: pointer;	
+	}
+	
+	.con_btn02:hover{
+		background:#008fe9; 
+	}
+	
+	
+	/* 참가신청자 리스트 영역 */
+	#applierList {
+	    width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    outline-style: none;
+	    border: 0px solid red;
+	    margin: 0 auto;
+	    margin-top: 30px;
+	    display: flex;
+	    flex-wrap: wrap;
+	}
+	
+	
+	#applierList .sub_bull02:before {
+	    position: absolute;
+	    display: block;
+	    top: 17px;
+	    width: 6px;
+	    height: 6px;
+	    border-radius: 50%;
+	    background-color: #08b2f5;
+	    content: '';
+	}
+	
+	
+	#applierList span {
+		font-size: 15px;
+	    font-weight: 500;
+	    margin-left: 0px;
+	    position: relative;
+	    display: inline-block;
+	    margin-top: -6px;
+	    color: #555;
+	}
+	
+	#applierList h3 {
+		font-size: 15px;
+	    font-weight: 400;
+	    margin-left: 0px;
+	    color: #08b2f5;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	/*************************************************************************************/
+	/* 추가된 참가 신청자들 css */
+	.info_box_01 {
+	    width: 216px;
+	    height: 60px;
+	    position: relative;
+	    margin: 0 auto;
+	    border: 1px solid #ddd;
+	    background: #fff;
+	    padding: 10px 20px;
+	    margin-top: 10px;
+	    margin-right: 12px;
+	    
+	    position: relative;
+	}
+	
+	
+	.info_box_01:nth-child(n) {
+	    margin-left: 9px;
+	    margin-right: 0px;
+	}
+	
+	.profile_img {
+		text-align: left;
+	}
+	
+	.profile_img img {
+	    width: 40px;
+	    height: 40px;
+	    position: absolute;
+	    display: inline-block;
+	    border-radius: 50%;
+	    margin-left: 0px;
+	    background: #ddd no-repeat center;
+	    object-fit: cover;
+	}
+	
+	.unit_info {
+	    width: 70%;
+	    border-collapse: collapse;
+	    border-spacing: 0;
+	    border-width: 0px;
+	    border-style: solid;
+	    position: relative;
+	    display: inline-block;
+	    border: 0px solid yellow;
+	    vertical-align: middle;
+	    margin-left: 56px;
+	    margin-top: 0px;
+	    
+	    text-align: left;
+	}
+	
+	.unit_info li {
+	    width: 100%;
+	    font-size: 14px;
+	    line-height: 20px;
+	    border-style: solid;
+	    font-weight: 500;
+	    color: #555;
+	    border: 0px solid red;
+	    padding-left: 4px;
+	}
+	
+	.unit_info p {
+	    font-size: 14px;
+	    line-height: 18px;
+	    border-style: solid;
+	    font-weight: 300;
+	    color: #555;
+	    border: 0px solid red;
+	    display: inline-block;
+	    margin-left: 6px;
+	}
+	
+	
+	
+	/***************************************************************************************/
+	/* 문의 댓글 */
+	#commentForm {
+		text-align: left;
+		width: 100%;
+	}
+	
+	#commentArea {
+	    width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    padding: 30px 0px 0px 0px;
+	    margin-top: 40px;
+	    background: #fff;
+	}
+	
+	.comment_title {
+		font-size: 15px;
+	    line-height: 18px;
+	    font-weight: 500;
+	    margin-left: -2px;
+	    color: #08b2f5;
+	    position: relative;
+	}
+	
+	.comment_input_box {
+		width: 100%;
+	    margin: 15px 0px 40px 0px;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	.comment-box-style {
+		width: 80%;
+	    height: 60px;
+	    border: 1px solid #cccccc;
+	    padding-top: 10px;
+	    padding-bottom: 10px;
+	    padding-left: 10px;
+	    margin-bottom: 15px;
+	    color: #555;
+	    position: absolute;
+	    margin-top: -3px;
+	    display: inline-block;
+	}
+	
+	#commentBtn {
+	    width: 20%;
+	    height: 60px;
+	    font-weight: 400;
+	    font-size: 15px;
+	    line-height: 60px;
+	    background: #78808c;
+	    color: #fff;
+	    text-align: center;
+	    position: relative;
+	    display: inline-block;
+	    cursor: pointer;
+	    margin-top: -3px;
+	    float: right;
+	    border: 0px;
+	}
+	
+	#commentBtn:hover, #toList:hover {
+		background: #08b2f5; 
+	}
+	
+	#commentBox {
+		width: 100%;
+	    height: auto;
+	    position: relative;
+	    display: inline-block;
+	    margin-bottom: 20px;
+	    text-align: left;
+	}
+	
+	#commentBox h2 {
+		line-height: 40px;
+	    font-size: 15px;
+	    font-weight: 500;
+	    position: relative;
+	    color: #08b2f5;
+	    border-bottom: 2px solid #78808c;
+	}
+	
+	#toList {
+		font-size: 15px;
+	    font-weight: 400;
+	    width: 160px;
+	    height: 40px;
+	    line-height: 40px;
+	    text-align: center;
+	    color: #fff;
+	    background-color: #78808c;
+	    position: relative;
+	    display: inline-block;
+	    margin-top: 30px;
+	    cursor: pointer;
+	}
+	
+	textarea:focus::-webkit-input-placeholder {
+  		color: transparent;
+	}
+	
+	/****************************************************************************************************/
+	/* 스케쥴 상세페이지 - 제목부분 (코스이름, 봉사자, 작성일자, etc.) */
+	
+	.veiw-title {
+		font-size: 22px;
+	    font-weight: 500;
+	    line-height: 26px;
+	    color: #333;
+	    letter-spacing: -2px;
+	    text-align: left;
+	}
+
+	.view-header ul {
+	    float: left;
+	    font-size: 15px;
+	    text-align: top;
+	    border: 0px solid red;
+        margin-bottom: 20px;
+		padding-top: 20px;
+        color: #555555;
+        font-weight: 300;
+	}
+	
+	.view-header .bar {
+		display: inline-block;
+		width: 1px;
+		height: 15px;
+		line-height: 15px;
+		text-indent: -999em;
+		background: #555555;
+		margin: 0 17px;
+	}
+	
+	/*****************************************************************************************/
+	/* 문의 리스트 from DB */
+	.reply_txt, .reply_txt02, .comment_txt {
+	    width: 100%;
+	    height: auto;
+	    padding: 10px 0px;
+	    position: relative;
+	    display: inline-block;
+	    background: #fff;
+	    border-bottom: 1px dashed #ddd;
+	}
+	
+	.reply_txt h3, .comment_txt h3 {
+	    font-size: 14px;
+	    line-height: 26px;
+	    font-weight: 400;
+	    margin-left: -1px;
+	    color: #555;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	.modify {
+	    position: relative;
+	    display: inline-block;
+	    top: 0px;
+	    float: right;
+	}
+	
+	.reply_txt h4, .comment_txt h4 {
+	    font-size: 14px;
+	    line-height: 20px;
+	    font-weight: 300;
+	    margin-top: 4px;
+	    margin-left: 0px;
+	    margin-bottom: 3px;
+	    color: #555;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	.reply_txt02 {
+	    margin: 10px 0px;
+	    padding: 14px 14px;
+	    background: #f3f3f3;
+	    border-bottom: 0px solid #ddd;
+	}
+	
+	.reply_txt a {
+	    color: #555555;
+	    font-weight: 300;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	/******************************************************************/
+	/* for toggle */
+	.on {
+		display: block !important;
+	}
+	
+	/* 대댓글 */
+	.reply_txt02 {
+	    margin: 10px 0px;
+	    padding: 14px 14px;
+	    background: #f3f3f3;
+	    border-bottom: 0px solid #ddd;
+	}
+	
+	.reply_text_box_style {
+	    width: 80%;
+	    height: 60px;
+	    border: 1px solid #cccccc;
+	    padding-top: 10px;
+	    padding-bottom: 10px;
+	    padding-left: 10px;
+	    margin-bottom: 15px;
+	    color: #555;
+	    display: inline-block;
+	}
+	
+	.reply_btn {
+	    width: 174px;
+	    height: 60px;
+	    font-weight: 400;
+	    font-size: 15px;
+	    line-height: 60px;
+	    background: #78808c;
+	    color: #fff;
+	    text-align: center;
+	    position: relative;
+	    display: inline-block;
+	    cursor: pointer;
+	    margin-top: -3px;
+	    float: right;
+	    top: 3px;
+	    border: 0px;
+	}
+	
+	.reply_btn:hover {
+		background: #08b2f5; 
+	}
+	
+	/* 대댓글 */
+	.reply_txt02 {
+	    margin: 10px 0px;
+	    padding: 14px 14px;
+	    background: #f3f3f3;
+	    border-bottom: 0px solid #ddd;
+	}
+	
+	.reply_a_box {
+	    width: 40px;
+	    height: 20px;
+	    color: #fff;
+	    font-size: 13px;
+	    background: #78808c;
+	    line-height: 20px;
+	    text-align: center;
+	}
+	
+	.reply_txt02 h3 {
+	    font-size: 14px;
+	    line-height: 26px;
+	    font-weight: 400;
+	    color: #444;
+	    position: relative;
+	    display: inline-block;
+	}
+	
+	.reply_txt02_a {
+	    font-size: 14px;
+	    line-height: 22px;
+	    font-weight: 300;
+	    padding: 10px 2px;
+	    color: #555;
+	    position: relative;
+	    display: inline-block;
+	}

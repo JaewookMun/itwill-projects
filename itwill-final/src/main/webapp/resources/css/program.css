@@ -1,0 +1,166 @@
+@charset "UTF-8";
+
+/***********************************************************/
+/* container */
+#container {
+	width: 1100px;
+	margin: 0 auto;
+	height: auto;
+	padding: 50px;
+	margin-bottom: 80px;
+	text-align: center;
+	position: relative;
+	
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.cont-title {
+	padding-top: 20px;
+	width: 100%;
+}
+
+.cont-title h1 {
+	/*margin: 0px;*/
+	width: 100%;
+    font-size: 36px;
+    font-weight: 500;
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.cont-title span {
+	width: 60px;
+    height: 6px;
+    background: #08b2f5;
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.cont-nav {
+	text-align: center;
+	width: 100%;
+	margin-top: 50px;
+}
+
+.cont-nav ul {
+	padding-left: 0px;
+}
+
+.link-tab {
+	display: inline-block;
+	list-style: none;
+	border: 1px solid #e2e2e2;
+	width: 16.66%;
+	height: 50px;
+	color: #b29a95;
+}
+
+.link-tab a {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+	width: 100%;
+	height: 100%;
+	padding-top: 15px;
+}
+
+.link-tab:hover, .on {
+	background-color: #08b2f5;
+	color: #ffffff;
+}
+
+
+/***************************************************************************/
+/* sub menebar 아카자봉 ~ 길동무 */
+
+.visual_map, .info_txt_area, .info_txt_area02 .info_txt_area03 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 40px;
+    padding-top: 10px;
+}
+
+.mt_30 {
+    margin-top: 30px;
+}
+
+
+/*****************************************************************/
+/* left area */
+
+
+.left_area {
+    width: 47.9%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.con_img02 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: flex;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+
+.infobox, .infobox02 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    padding: 22px;
+    word-wrap: break-word;
+    word-spacing: -0.3px;
+    background: #f7f7f7;
+    margin-top: 40px;
+}
+
+/*****************************************************************/
+
+.with_form {
+    width: 30%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    margin-right: 16px;
+    margin-left: 16px;
+    margin-bottom: 20px;
+    border: 0px solid red;
+}
+
+.with_text {
+    height: 250px;
+    font-size: 15px;
+    color: #555;
+    font-weight: 300;
+    line-height: 26px;
+    position: relative;
+    display: inline-block;
+    margin: 10px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    text-align: justify;
+    letter-spacing: -0.6px;
+}
+
+.program_info {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    padding: 20px 30px;
+    background: #F0FAFF;
+}
+
+
